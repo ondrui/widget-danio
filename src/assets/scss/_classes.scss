@@ -1,0 +1,57 @@
+.primary.container-item {
+  background-color: $color-primary-light;
+}
+.primary .topInfo {
+  color: $color-primary-darker;
+  background-color: $color-primary-dark;
+}
+.primary .time {
+  color: $color-white;
+  background-color: $color-primary-darker;
+}
+.primary .text {
+  color: $color-primary-darker;
+}
+.warning.container-item {
+  background-color: $color-warning-light;
+}
+.warning .topInfo {
+  color: $color-warning-darker;
+  background-color: $color-warning-dark;
+}
+.warning .time {
+  color: $color-white;
+  background-color: $color-warning-darker;
+}
+.warning .block {
+  background-color: $color-white;
+  border: 1px solid $color-warning-border-text;
+  border-radius: 30px;
+  margin: 16px 7px 15px 6px;
+}
+.warning .text {
+  padding: 10px 14px 12px 8px;
+  color: $color-warning-font;
+  background-color: $color-white;
+  border-radius: 30px;
+  //max-height: 4em;
+  hyphens: auto;
+}
+.warning .icon {
+  margin-left: 19px;
+}
+.danger.container-item {
+  background-color: $color-danger-light;
+}
+.danger .topInfo {
+  color: $color-danger-darker;
+  background-color: $color-danger-dark;
+}
+.danger .time {
+  color: $color-white;
+  background-color: $color-danger-darker;
+}
+.danger .text {
+  color: $color-danger-darker;
+  margin-left: 8px;
+}

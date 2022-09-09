@@ -117,8 +117,10 @@ export default defineComponent({
   flex-direction: column;
   row-gap: 20px;
   min-height: 0;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
   padding: 10px 0;
+  flex-basis: 100%;
 }
 @media screen and (max-width: 595px) {
   .wrapper {

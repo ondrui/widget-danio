@@ -78,36 +78,31 @@ export default defineComponent({
     },
     setTimeEvent(): string {
       if (typeof this.event.eventTime === "number") {
-        let date = new Date(this.event.eventTime).toLocaleTimeString(
-          undefined,
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-          }
-        );
+        let date = new Date(this.event.eventTime).toLocaleTimeString("ru", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
         return date;
       } else {
-        let date1 = new Date(this.event.eventTime[0]).toLocaleTimeString(
-          undefined,
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-          }
-        );
-        let date2 = new Date(this.event.eventTime[1]).toLocaleTimeString(
-          undefined,
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-          }
-        );
+        let date1 = new Date(this.event.eventTime[0]).toLocaleTimeString("ru", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        let date2 = new Date(this.event.eventTime[1]).toLocaleTimeString("ru", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
 
-        let dayNow = new Date().getDate();
-        let dayDate1 = new Date(this.event.eventTime[0]).getDate();
-        let dayDate2 = new Date(this.event.eventTime[1]).getDate();
+        let midnightTodayTimestamp = new Date().setHours(0, 0, 0, 0);
+        // let midnightTodayTimestamp = 1664485200000; //30.09.2022 00:00
+        const allDayMs = 86400000;
+        let timeStamp1 = this.event.eventTime[0];
+        let timeStamp2 = this.event.eventTime[1];
 
-        let diffDate1 = dayNow - dayDate1;
-        let diffDate2 = dayDate2 - dayNow;
+        let diffDate1 = midnightTodayTimestamp - timeStamp1;
+        let diffDate2 = (timeStamp2 - midnightTodayTimestamp) / allDayMs;
+
+        console.log(date1, date2);
 
         const setDate1 = (diff: number, curr: string): string => {
           if (diff > 0) {
@@ -118,10 +113,11 @@ export default defineComponent({
         };
 
         const setDate2 = (diff: number, curr: string): string => {
-          // console.log(diff);
           if (diff > 0 && diff <= 1) {
+            return `${curr}`;
+          } else if (diff > 1 && diff <= 2) {
             return `${curr} завтра`;
-          } else if (diff > 1) {
+          } else if (diff > 2) {
             return `${curr} послезавтра`;
           } else {
             return `${curr}`;
@@ -201,10 +197,10 @@ export default defineComponent({
 .time {
   line-height: 16px;
   text-align: center;
-  padding: 2px 8px 2px 8px;
+  padding: 4px 8px 2px 8px;
 }
 .title {
-  padding: 2px 15px 3px 11px;
+  padding: 4px 15px 3px 11px;
   max-width: 250px;
   white-space: nowrap;
   overflow: hidden;
@@ -216,7 +212,7 @@ export default defineComponent({
 }
 .icon {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin: 6px;
 }
 .text {

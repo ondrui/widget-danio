@@ -1,14 +1,23 @@
 <template>
+  <div
+    :class="index !== 0 ? 'day-info' : 'day-info day-info-zero-index'"
+    v-show="event.isDayShow && setDayInDayInfo[0]"
+  >
+    <span class="day-info-name">
+      <strong>{{ setDayInDayInfo[0] }}: </strong>
+    </span>
+    <span class="day-info-number-month">{{ setDayInDayInfo[1] }}</span>
+  </div>
   <div class="container-item" :class="setEvent">
-    <div class="topInfo">
-      <div class="time">{{ setTime }}</div>
-      <div class="title">{{ dataItem.titleText }}</div>
+    <div class="top-info">
+      <div class="time">{{ setTimeEvent }}</div>
+      <div class="title">{{ event.titleText }}</div>
     </div>
     <div class="block">
-      <div v-if="dataItem.iconCode" class="icon">
+      <div v-if="event.iconCode" class="icon">
         <img :src="setUrlIcon" alt="icon" />
       </div>
-      <div class="text">{{ dataItem.eventText }}</div>
+      <div class="text">{{ event.eventText }}</div>
     </div>
   </div>
 </template>
@@ -24,6 +33,7 @@ interface Data {
   titleText: string;
   eventText: string;
   iconCode?: number;
+  isDayShow: boolean;
 }
 
 interface CodeColor {
@@ -36,10 +46,11 @@ interface IconItem {
 
 export default defineComponent({
   props: {
-    dataItem: {
+    event: {
       type: Object as PropType<Data>,
       required: true,
     },
+    index: Number,
   },
   data() {
     return {
@@ -56,37 +67,34 @@ export default defineComponent({
   },
   computed: {
     setEvent(): string {
-      return this.dataItem.eventType
-        ? this.codeColor[this.dataItem.eventType]
+      return this.event.eventType
+        ? this.codeColor[this.event.eventType]
         : (console.log("несуществующий код eventType"), "primary");
     },
     setUrlIcon(): string {
-      return this.dataItem.iconCode
-        ? require(`@/assets/images/${
-            this.iconItem[this.dataItem.iconCode]
-          }.svg`)
+      return this.event.iconCode
+        ? require(`@/assets/images/${this.iconItem[this.event.iconCode]}.svg`)
         : (console.log("нет иконки"), "#");
     },
-    setTime() {
-      if (typeof this.dataItem.eventTime === "number") {
-        let date = new Date(this.dataItem.eventTime).toLocaleTimeString(
+    setTimeEvent(): string {
+      if (typeof this.event.eventTime === "number") {
+        let date = new Date(this.event.eventTime).toLocaleTimeString(
           undefined,
           {
             hour: "2-digit",
             minute: "2-digit",
           }
         );
-        // return `${date.getHours()}:${date.getMinutes()}`;
         return date;
       } else {
-        let date1 = new Date(this.dataItem.eventTime[0]).toLocaleTimeString(
+        let date1 = new Date(this.event.eventTime[0]).toLocaleTimeString(
           undefined,
           {
             hour: "2-digit",
             minute: "2-digit",
           }
         );
-        let date2 = new Date(this.dataItem.eventTime[1]).toLocaleTimeString(
+        let date2 = new Date(this.event.eventTime[1]).toLocaleTimeString(
           undefined,
           {
             hour: "2-digit",
@@ -94,13 +102,64 @@ export default defineComponent({
           }
         );
 
-        //let dateNow = Date.now();
+        let dayNow = new Date().getDate();
+        let dayDate1 = new Date(this.event.eventTime[0]).getDate();
+        let dayDate2 = new Date(this.event.eventTime[1]).getDate();
 
-        //et diff =  - dateNow;
-        let dayWord = "завтра";
+        let diffDate1 = dayNow - dayDate1;
+        let diffDate2 = dayDate2 - dayNow;
 
-        return `с ${date1} до ${date2} ${dayWord}`;
-        // return `с ${date1.getHours()}:${date1.getMinutes()} до ${date2.getHours()}:${date2.getMinutes()}`;
+        const setDate1 = (diff: number, curr: string): string => {
+          if (diff > 0) {
+            return `${curr} вчера`;
+          } else {
+            return `${curr}`;
+          }
+        };
+
+        const setDate2 = (diff: number, curr: string): string => {
+          // console.log(diff);
+          if (diff > 0 && diff <= 1) {
+            return `${curr} завтра`;
+          } else if (diff > 1) {
+            return `${curr} послезавтра`;
+          } else {
+            return `${curr}`;
+          }
+        };
+
+        return `с ${setDate1(diffDate1, date1)} до ${setDate2(
+          diffDate2,
+          date2
+        )}`;
+      }
+    },
+    setDayInDayInfo(): string[] {
+      const name = ["Сегодня", "Завтра", "Послезавтра", "Вчера"];
+
+      const dateTimestamp =
+        typeof this.event.eventTime === "number"
+          ? this.event.eventTime
+          : this.event.eventTime[0];
+
+      let options: Intl.DateTimeFormatOptions = {
+        month: "long",
+        day: "numeric",
+      };
+
+      const date = new Date(dateTimestamp).toLocaleString("ru", options);
+      const dayName = new Date(dateTimestamp).getDate();
+      switch (dayName) {
+        case new Date().getDate():
+          return [name[0], date];
+        case new Date().getDate() + 1:
+          return [name[1], date];
+        case new Date().getDate() + 2:
+          return [name[2], date];
+        case new Date().getDate() - 1:
+          return [name[3], date];
+        default:
+          return console.log("неверный диапазон"), ["", ""];
       }
     },
   },
@@ -111,16 +170,33 @@ export default defineComponent({
 .container-item {
   border-radius: 10px;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 16px;
-  letter-spacing: 0.2px;
+  // letter-spacing: 0.2px;
 }
-.topInfo,
+.day-info {
+  margin: 16px auto 0 auto;
+  padding: 4px 6px;
+  background: $color-filters-day-dark;
+  color: $color-filters-day-darker;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+}
+.day-info-zero-index {
+  margin: 5px auto 0 auto;
+}
+.top-info,
 .time,
 .title {
   border-radius: 10px;
-  display: inline-block;
-  vertical-align: middle;
+  // display: inline-block;
+  // vertical-align: middle;
+}
+.top-info {
+  display: flex;
+  width: fit-content;
 }
 .time {
   line-height: 16px;
@@ -141,6 +217,7 @@ export default defineComponent({
 .icon {
   display: flex;
   align-items: center;
+  margin: 6px;
 }
 .text {
   text-align: justify;

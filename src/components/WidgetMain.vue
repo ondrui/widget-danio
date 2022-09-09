@@ -1,4 +1,5 @@
 <template>
+  <h2>{{ oneData }}</h2>
   <div class="widget">
     <h1>Главное</h1>
     <WidgetFilters />
@@ -50,6 +51,15 @@ export default defineComponent({
       type: Array as PropType<Array<PropsData>>,
       required: true,
     },
+    one: {
+      type: String,
+      require: true,
+    },
+  },
+  data() {
+    return {
+      oneData: this.one,
+    };
   },
   computed: {
     sortedEvents(): PropsData[] {

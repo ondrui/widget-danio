@@ -146,13 +146,13 @@ export default defineComponent({
       const date = new Date(dateTimestamp).toLocaleString("ru", options);
       const dayName = new Date(dateTimestamp).getDate();
       switch (dayName) {
-        case new Date().getDate():
+        case new Date(1662727200000).getDate():
           return [name[0], date];
-        case new Date().getDate() + 1:
+        case new Date(1662727200000).getDate() + 1:
           return [name[1], date];
-        case new Date().getDate() + 2:
+        case new Date(1662727200000).getDate() + 2:
           return [name[2], date];
-        case new Date().getDate() - 1:
+        case new Date(1662727200000).getDate() - 1:
           return [name[3], date];
         default:
           return console.log("неверный диапазон"), ["", ""];

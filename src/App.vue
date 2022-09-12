@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <WidgetMain :one="'dddddd'" />
+    <WidgetMain />
   </div>
 </template>
 

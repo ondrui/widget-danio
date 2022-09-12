@@ -1,5 +1,4 @@
 <template>
-  <h2>{{ oneData }}</h2>
   <div class="widget">
     <h1>Главное</h1>
     <WidgetFilters />
@@ -22,14 +21,14 @@ import WidgetMainItem from "./WidgetMainItem.vue";
 import WidgetFilters from "./WidgetFilters.vue";
 // import type { PropType } from "vue";
 
-interface PropsData {
-  eventType: number;
-  eventTime: number | number[];
-  timeFormat: string;
-  titleText: string;
-  eventText: string;
-  iconCode?: number;
-}
+// interface PropsData {
+//   eventType: number;
+//   eventTime: number | number[];
+//   timeFormat: string;
+//   titleText: string;
+//   eventText: string;
+//   iconCode?: number;
+// }
 
 interface Data {
   eventType: number;
@@ -46,36 +45,19 @@ export default defineComponent({
     WidgetMainItem,
     WidgetFilters,
   },
-  props: {
-    // events: {
-    //   type: Array as PropType<Array<PropsData>>,
-    //   required: true,
-    // },
-    one: {
-      type: String,
-      require: true,
-    },
-  },
-  data() {
-    return {
-      oneData: this.one,
-    };
-  },
   computed: {
-    sortedEvents(): PropsData[] {
-      return [...this.$store.state.events].sort(
-        (event1: PropsData, event2: PropsData): number => {
-          const a =
-            typeof event1.eventTime === "number"
-              ? event1.eventTime
-              : event1.eventTime[0];
-          const b =
-            typeof event2.eventTime === "number"
-              ? event2.eventTime
-              : event2.eventTime[0];
-          return a - b;
-        }
-      );
+    sortedEvents() {
+      return [...this.$store.state.events].sort((event1, event2): number => {
+        const a =
+          typeof event1.eventTime === "number"
+            ? event1.eventTime
+            : event1.eventTime[0];
+        const b =
+          typeof event2.eventTime === "number"
+            ? event2.eventTime
+            : event2.eventTime[0];
+        return a - b;
+      });
     },
     isDayShow(): Data[] {
       let copyEvents = [...this.sortedEvents] as Data[]; ///!!!!!!

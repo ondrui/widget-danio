@@ -102,8 +102,6 @@ export default defineComponent({
         let diffDate1 = midnightTodayTimestamp - timeStamp1;
         let diffDate2 = (timeStamp2 - midnightTodayTimestamp) / allDayMs;
 
-        console.log(date1, date2);
-
         const setDate1 = (diff: number, curr: string): string => {
           if (diff > 0) {
             return `${curr} вчера`;

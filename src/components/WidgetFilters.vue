@@ -13,8 +13,8 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   computed: {
-    filters(): string {
-      return this.$store.getters.getFilters;
+    filters() {
+      return this.$store.state.filters;
     },
   },
 });

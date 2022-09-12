@@ -20,7 +20,7 @@
 import { defineComponent } from "vue";
 import WidgetMainItem from "./WidgetMainItem.vue";
 import WidgetFilters from "./WidgetFilters.vue";
-import type { PropType } from "vue";
+// import type { PropType } from "vue";
 
 interface PropsData {
   eventType: number;
@@ -47,10 +47,10 @@ export default defineComponent({
     WidgetFilters,
   },
   props: {
-    events: {
-      type: Array as PropType<Array<PropsData>>,
-      required: true,
-    },
+    // events: {
+    //   type: Array as PropType<Array<PropsData>>,
+    //   required: true,
+    // },
     one: {
       type: String,
       require: true,
@@ -63,7 +63,7 @@ export default defineComponent({
   },
   computed: {
     sortedEvents(): PropsData[] {
-      return [...this.events].sort(
+      return [...this.$store.state.events].sort(
         (event1: PropsData, event2: PropsData): number => {
           const a =
             typeof event1.eventTime === "number"

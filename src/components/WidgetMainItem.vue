@@ -93,8 +93,10 @@ export default defineComponent({
           minute: "2-digit",
         });
 
-        let midnightTodayTimestamp = new Date().setHours(0, 0, 0, 0);
-        // let midnightTodayTimestamp = 1664485200000; //30.09.2022 00:00
+        //let midnightTodayTimestamp = new Date().setHours(0, 0, 0, 0);
+
+        //test date
+        let midnightTodayTimestamp = 1662670800000; //09.09.2022 00:00
         const allDayMs = 86400000;
         let timeStamp1 = this.event.eventTime[0];
         let timeStamp2 = this.event.eventTime[1];

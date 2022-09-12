@@ -1,14 +1,8 @@
 import { createStore, Store } from "vuex";
 
 interface RootState {
-  filters: {
-    all: string;
-    gen: string;
-    attention: string;
-    dangerous: string;
-    veryDangerous: string;
-    bad: string;
-  };
+  filters: number[];
+
   events: {
     eventType: number;
     eventTime: number | number[];
@@ -22,14 +16,7 @@ interface RootState {
 const store = createStore<RootState>({
   state() {
     return {
-      filters: {
-        all: "Все",
-        gen: "Общие",
-        attention: "Внимание",
-        dangerous: "Опасно",
-        veryDangerous: "Очень опасно",
-        bad: "Неблагоприятно",
-      },
+      filters: [100, 3, 1, 2],
       events: [
         {
           eventType: 1,

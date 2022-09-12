@@ -33,7 +33,7 @@ interface Data {
   titleText: string;
   eventText: string;
   iconCode?: number;
-  isDayShow: boolean;
+  isDayShow?: boolean;
 }
 
 interface CodeColor {

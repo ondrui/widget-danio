@@ -1,7 +1,7 @@
 <template>
   <div class="widget">
     <h1>Главное</h1>
-    <WidgetFilters />
+    <WidgetFilters @filtered="addFilterCode" @remove="removeFilterCode" />
     <div class="wrapper">
       <div class="container-main">
         <WidgetMainItem
@@ -37,7 +37,7 @@ interface Data {
   titleText: string;
   eventText: string;
   iconCode?: number;
-  isDayShow: boolean;
+  isDayShow?: boolean;
 }
 
 export default defineComponent({
@@ -45,9 +45,34 @@ export default defineComponent({
     WidgetMainItem,
     WidgetFilters,
   },
+  data() {
+    return {
+      events: [] as Data[],
+      selectedFilterCodes: [] as number[],
+    };
+  },
+  created() {
+    this.events = this.it;
+  },
   computed: {
-    sortedEvents() {
-      return [...this.$store.state.events].sort((event1, event2): number => {
+    it() {
+      return this.$store.state.events;
+    },
+    filteredEvents(): Data[] {
+      const resetAllFilters = 100;
+
+      if (
+        this.selectedFilterCodes.length === 0 ||
+        this.selectedFilterCodes.includes(resetAllFilters)
+      )
+        return this.events;
+
+      let filters = this.selectedFilterCodes;
+
+      return this.events.filter((event) => filters.includes(event.eventType));
+    },
+    sortedEvents(): Data[] {
+      return [...this.filteredEvents].sort((event1, event2): number => {
         const a =
           typeof event1.eventTime === "number"
             ? event1.eventTime
@@ -79,7 +104,21 @@ export default defineComponent({
       return copyEvents;
     },
   },
-  methods: {},
+  methods: {
+    addFilterCode(filter: number) {
+      if (this.selectedFilterCodes.indexOf(filter) === -1) {
+        this.selectedFilterCodes.push(filter);
+      }
+    },
+    removeFilterCode(filter: number) {
+      if (this.selectedFilterCodes.indexOf(filter) !== -1) {
+        this.selectedFilterCodes.splice(
+          this.selectedFilterCodes.indexOf(filter),
+          1
+        );
+      }
+    },
+  },
 });
 </script>
 

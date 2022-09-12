@@ -1,9 +1,18 @@
 <template>
   <div class="filters-list">
-    <div class="filter-item" v-for="filter in filters" :key="`fw-${filter}`">
-      <div>{{ filter }}</div>
+    <div
+      @click="$emit('filtered', filter)"
+      class="filter-item"
+      v-for="filter in filters"
+      :key="`fw-${filter}`"
+    >
+      <div>{{ filtersName[filter] }}</div>
       3
-      <img src="../assets/images/filter-close.svg" alt="icon" />
+      <img
+        @click.stop="$emit('remove', filter)"
+        src="../assets/images/filter-close.svg"
+        alt="icon"
+      />
     </div>
   </div>
 </template>
@@ -11,7 +20,24 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
+interface Filters {
+  [index: string]: string;
+}
+
 export default defineComponent({
+  data() {
+    return {
+      filtersName: {
+        100: "Все",
+        3: "Общие",
+        1: "Внимание",
+        2: "Опасно",
+        5: "Очень опасно",
+        6: "Неблагоприятно",
+      } as Filters,
+    };
+  },
+  emits: ["filtered", "remove"],
   computed: {
     filters() {
       return this.$store.state.filters;
@@ -40,6 +66,7 @@ export default defineComponent({
   font-size: 10px;
   line-height: 12px;
   color: $color-filters-day-darker;
+  cursor: pointer;
 }
 .img {
   display: block;

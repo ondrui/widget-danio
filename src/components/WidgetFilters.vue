@@ -36,7 +36,7 @@ export default defineComponent({
         5: "Очень опасно",
         6: "Неблагоприятно",
       } as Filters,
-      activeFilter: [] as number[],
+      activeFilter: [0] as number[],
     };
   },
   emits: ["filtered", "remove"],
@@ -47,36 +47,23 @@ export default defineComponent({
   },
   methods: {
     selectFilter(index: number) {
-      if (this.activeFilter.indexOf(index) === -1) {
-        // if (
-        //   this.activeFilter.indexOf(0) &&
-        //   this.activeFilter.indexOf(0) === -1
-        // ) {
-        //   console.log(this.activeFilter.indexOf(0));
-        //   this.activeFilter.splice(this.activeFilter.indexOf(0), 1);
-        //   this.activeFilter.push(index);
-        // } else {
-        //   this.activeFilter.push(index);
-        // }
-        if (index !== 0) {
-          this.activeFilter.splice(this.activeFilter.indexOf(0), 1);
+      if (this.activeFilter.indexOf(index) === -1 && index !== 0) {
+        if (this.activeFilter.indexOf(0) === -1) {
           this.activeFilter.push(index);
         } else {
-          this.activeFilter = [0];
+          this.activeFilter.splice(this.activeFilter.indexOf(0), 1);
+          this.activeFilter.push(index);
         }
-        console.log(this.activeFilter.indexOf(0));
-        console.log(this.activeFilter);
-        // if (
-        //   this.activeFilter.indexOf(0) &&
-        //   this.activeFilter.indexOf(0) !== -1
-        // ) {
-        //   this.activeFilter.slice(this.activeFilter.indexOf(0), 1);
-        // }
+      } else if (this.activeFilter.indexOf(index) === -1) {
+        this.activeFilter = [0];
       }
     },
     removeSelectFilter(index: number) {
-      if (this.activeFilter.indexOf(index) !== -1) {
+      if (this.activeFilter.indexOf(index) !== -1 && index !== 0) {
         this.activeFilter.splice(this.activeFilter.indexOf(index), 1);
+      }
+      if (this.activeFilter.length === 0) {
+        this.activeFilter = [0];
       }
     },
   },

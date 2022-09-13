@@ -187,12 +187,9 @@ export default defineComponent({
 .time,
 .title {
   border-radius: 10px;
-  // display: inline-block;
-  // vertical-align: middle;
 }
 .top-info {
-  display: flex;
-  width: fit-content;
+  display: inline-flex;
 }
 .time {
   line-height: 16px;

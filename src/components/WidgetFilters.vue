@@ -1,15 +1,16 @@
 <template>
   <div class="filters-list">
     <div
-      @click="$emit('filtered', filter)"
+      @click="$emit('filtered', filter), selectFilter(index)"
       class="filter-item"
-      v-for="filter in filters"
+      :class="{ active: activeFilter.includes(index) }"
+      v-for="(filter, index) in filters"
       :key="`fw-${filter}`"
     >
       <div>{{ filtersName[filter] }}</div>
       3
       <img
-        @click.stop="$emit('remove', filter)"
+        @click.stop="$emit('remove', filter), removeSelectFilter(index)"
         src="../assets/images/filter-close.svg"
         alt="icon"
       />
@@ -35,12 +36,48 @@ export default defineComponent({
         5: "Очень опасно",
         6: "Неблагоприятно",
       } as Filters,
+      activeFilter: [] as number[],
     };
   },
   emits: ["filtered", "remove"],
   computed: {
     filters() {
       return this.$store.state.filters;
+    },
+  },
+  methods: {
+    selectFilter(index: number) {
+      if (this.activeFilter.indexOf(index) === -1) {
+        // if (
+        //   this.activeFilter.indexOf(0) &&
+        //   this.activeFilter.indexOf(0) === -1
+        // ) {
+        //   console.log(this.activeFilter.indexOf(0));
+        //   this.activeFilter.splice(this.activeFilter.indexOf(0), 1);
+        //   this.activeFilter.push(index);
+        // } else {
+        //   this.activeFilter.push(index);
+        // }
+        if (index !== 0) {
+          this.activeFilter.splice(this.activeFilter.indexOf(0), 1);
+          this.activeFilter.push(index);
+        } else {
+          this.activeFilter = [0];
+        }
+        console.log(this.activeFilter.indexOf(0));
+        console.log(this.activeFilter);
+        // if (
+        //   this.activeFilter.indexOf(0) &&
+        //   this.activeFilter.indexOf(0) !== -1
+        // ) {
+        //   this.activeFilter.slice(this.activeFilter.indexOf(0), 1);
+        // }
+      }
+    },
+    removeSelectFilter(index: number) {
+      if (this.activeFilter.indexOf(index) !== -1) {
+        this.activeFilter.splice(this.activeFilter.indexOf(index), 1);
+      }
     },
   },
 });
@@ -70,5 +107,8 @@ export default defineComponent({
 }
 .img {
   display: block;
+}
+.active {
+  background-color: green;
 }
 </style>

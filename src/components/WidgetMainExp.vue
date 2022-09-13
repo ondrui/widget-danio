@@ -5,7 +5,7 @@
     <div class="wrapper">
       <div class="container-main">
         <WidgetMainItem
-          v-for="(event, index) in isDayShow"
+          v-for="(event, index) in filteredEvents"
           :key="`wn-${index}`"
           :event="event"
           :index="+index"
@@ -61,51 +61,21 @@ export default defineComponent({
     filteredEvents(): Data[] {
       const resetAllFilters = 100;
 
-      if (this.selectedFilterCodes.includes(resetAllFilters)) {
-        [...this.selectedFilterCodes] = [];
-      }
-
-      if (this.selectedFilterCodes.length === 0) {
+      if (
+        this.selectedFilterCodes.length === 0 ||
+        this.selectedFilterCodes.includes(resetAllFilters)
+      )
         return this.events;
-      }
 
       let filters = this.selectedFilterCodes;
 
-      return [...this.events].filter((event) =>
+      let filteredEvents = this.events.filter((event) =>
         filters.includes(event.eventType)
       );
-    },
-    sortedEvents(): Data[] {
-      return [...this.filteredEvents].sort((event1, event2): number => {
-        const a =
-          typeof event1.eventTime === "number"
-            ? event1.eventTime
-            : event1.eventTime[0];
-        const b =
-          typeof event2.eventTime === "number"
-            ? event2.eventTime
-            : event2.eventTime[0];
-        return a - b;
-      });
-    },
-    isDayShow(): Data[] {
-      let copyEvents = [...this.sortedEvents] as Data[]; ///!!!!!!
-      copyEvents.map((event: Data, index: number): void => {
-        //!!!!
-        if (index === copyEvents.length - 1) {
-          return;
-        }
-        // event.isDayShow = false;
-        let firstElm = event.eventTime;
-        let secondElm = copyEvents[index + 1].eventTime;
-        firstElm = typeof firstElm === "number" ? firstElm : firstElm[0];
-        secondElm = typeof secondElm === "number" ? secondElm : secondElm[0];
-        if (new Date(firstElm).getDate() !== new Date(secondElm).getDate()) {
-          copyEvents[index + 1].isDayShow = true;
-        }
-      });
-      copyEvents[0].isDayShow = true;
-      return copyEvents;
+
+      let orderedEvents = this.orderedEvents(filteredEvents);
+
+      return this.isDayShow(orderedEvents);
     },
   },
   methods: {
@@ -121,6 +91,37 @@ export default defineComponent({
           1
         );
       }
+    },
+    orderedEvents(filteredEvents: Data[]): Data[] {
+      return filteredEvents.sort((event1, event2): number => {
+        const a =
+          typeof event1.eventTime === "number"
+            ? event1.eventTime
+            : event1.eventTime[0];
+        const b =
+          typeof event2.eventTime === "number"
+            ? event2.eventTime
+            : event2.eventTime[0];
+        return a - b;
+      });
+    },
+    isDayShow(orderedEvents: Data[]): Data[] {
+      let copyEvents = orderedEvents;
+      copyEvents.map((event: Data, index: number): void => {
+        if (index === copyEvents.length - 1) {
+          return;
+        }
+        // event.isDayShow = false
+        let firstElm = event.eventTime;
+        let secondElm = copyEvents[index + 1].eventTime;
+        firstElm = typeof firstElm === "number" ? firstElm : firstElm[0];
+        secondElm = typeof secondElm === "number" ? secondElm : secondElm[0];
+        if (new Date(firstElm).getDate() !== new Date(secondElm).getDate()) {
+          copyEvents[index + 1].isDayShow = true;
+        }
+      });
+      copyEvents[0].isDayShow = true;
+      return copyEvents;
     },
   },
 });

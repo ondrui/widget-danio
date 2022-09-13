@@ -19,6 +19,16 @@
 import { defineComponent } from "vue";
 import WidgetMainItem from "./WidgetMainItem.vue";
 import WidgetFilters from "./WidgetFilters.vue";
+// import type { PropType } from "vue";
+
+// interface PropsData {
+//   eventType: number;
+//   eventTime: number | number[];
+//   timeFormat: string;
+//   titleText: string;
+//   eventText: string;
+//   iconCode?: number;
+// }
 
 interface Data {
   eventType: number;

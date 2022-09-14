@@ -43,6 +43,7 @@ export default defineComponent({
   },
   created() {
     this.events = this.it;
+    // this.events = this.it;
   },
   computed: {
     it() {

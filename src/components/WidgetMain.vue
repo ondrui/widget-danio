@@ -49,20 +49,20 @@ export default defineComponent({
     return {
       events: [] as Data[],
       selectedFilterCodes: [] as number[],
+      filterCounter: {},
     };
   },
   created() {
-    this.events = this.it;
+    console.log("create");
+    this.events = this.it();
+    this.selectedFilterCodes = this.initialfilters();
   },
   computed: {
-    it() {
-      return this.$store.state.events;
-    },
     filteredEvents(): Data[] {
-      const resetAllFilters = 100;
+      const showAllFilters = 100;
 
-      if (this.selectedFilterCodes.includes(resetAllFilters)) {
-        [...this.selectedFilterCodes] = [];
+      if (this.selectedFilterCodes.includes(showAllFilters)) {
+        [...this.selectedFilterCodes] = this.$store.state.filters;
       }
 
       if (this.selectedFilterCodes.length === 0) {
@@ -71,9 +71,11 @@ export default defineComponent({
 
       let filters = this.selectedFilterCodes;
 
-      return [...this.events].filter((event) =>
+      let filteredEvents = [...this.events].filter((event) =>
         filters.includes(event.eventType)
       );
+
+      return filteredEvents.length !== 0 ? filteredEvents : this.events;
     },
     sortedEvents(): Data[] {
       return [...this.filteredEvents].sort((event1, event2): number => {
@@ -109,13 +111,23 @@ export default defineComponent({
     },
   },
   methods: {
+    it() {
+      return this.$store.state.events;
+    },
+    initialfilters() {
+      return [...this.$store.state.filters];
+    },
     addFilterCode(filter: number) {
       if (this.selectedFilterCodes.indexOf(filter) === -1) {
         this.selectedFilterCodes.push(filter);
       }
     },
     removeFilterCode(filter: number) {
-      if (this.selectedFilterCodes.indexOf(filter) !== -1) {
+      if (
+        this.selectedFilterCodes.indexOf(filter) !== -1 &&
+        this.selectedFilterCodes.length > 1
+      ) {
+        console.log("removeFilterCode");
         this.selectedFilterCodes.splice(
           this.selectedFilterCodes.indexOf(filter),
           1

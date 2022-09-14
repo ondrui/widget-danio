@@ -16,7 +16,7 @@ interface RootState {
 const store = createStore<RootState>({
   state() {
     return {
-      filters: [100, 3, 1, 2],
+      filters: [3, 1, 6, 2, 5],
       events: [
         {
           eventType: 1,

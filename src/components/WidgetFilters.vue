@@ -8,12 +8,19 @@
       :key="`fw-${filter}`"
     >
       <div>{{ filtersName[filter] }}</div>
-      3
-      <img
+      <span class="filter-count">3</span>
+      <span
         @click.stop="$emit('remove', filter), removeSelectFilter(index)"
-        src="../assets/images/filter-close.svg"
+        class="icon"
+      ></span>
+      <!-- <img
+
+        src="../assets/images/filter-open.svg"
         alt="icon"
-      />
+      /> -->
+    </div>
+    <div @click="$emit('filtered', 100), showAll()" class="show-all">
+      Показать все
     </div>
   </div>
 </template>
@@ -29,17 +36,20 @@ export default defineComponent({
   data() {
     return {
       filtersName: {
-        100: "Все",
+        100: "Показать все",
         3: "Общие",
         1: "Внимание",
         2: "Опасно",
         5: "Очень опасно",
         6: "Неблагоприятно",
       } as Filters,
-      activeFilter: [0] as number[],
+      activeFilter: [] as number[],
     };
   },
   emits: ["filtered", "remove"],
+  created() {
+    this.activeFilter = this.filters.map((filter, index) => index);
+  },
   computed: {
     filters() {
       return this.$store.state.filters;
@@ -47,24 +57,33 @@ export default defineComponent({
   },
   methods: {
     selectFilter(index: number) {
-      if (this.activeFilter.indexOf(index) === -1 && index !== 0) {
-        if (this.activeFilter.indexOf(0) === -1) {
-          this.activeFilter.push(index);
-        } else {
-          this.activeFilter.splice(this.activeFilter.indexOf(0), 1);
-          this.activeFilter.push(index);
-        }
-      } else if (this.activeFilter.indexOf(index) === -1) {
-        this.activeFilter = [0];
+      if (this.activeFilter.indexOf(index) === -1) {
+        this.activeFilter.push(index);
       }
+      // if (this.activeFilter.indexOf(index) === -1 && index !== 0) {
+      //   if (this.activeFilter.indexOf(0) === -1) {
+      //     this.activeFilter.push(index);
+      //   } else {
+      //     this.activeFilter.splice(this.activeFilter.indexOf(0), 1);
+      //     this.activeFilter.push(index);
+      //   }
+      // } else if (this.activeFilter.indexOf(index) === -1) {
+      //   this.activeFilter = [0];
+      // }
     },
     removeSelectFilter(index: number) {
-      if (this.activeFilter.indexOf(index) !== -1 && index !== 0) {
+      if (this.activeFilter.indexOf(index) !== -1) {
         this.activeFilter.splice(this.activeFilter.indexOf(index), 1);
       }
-      if (this.activeFilter.length === 0) {
-        this.activeFilter = [0];
-      }
+      // if (this.activeFilter.indexOf(index) !== -1 && index !== 0) {
+      //   this.activeFilter.splice(this.activeFilter.indexOf(index), 1);
+      // }
+      // if (this.activeFilter.length === 0) {
+      //   this.activeFilter = [0];
+      // }
+    },
+    showAll() {
+      this.activeFilter = this.filters.map((filter, index) => index);
     },
   },
 });
@@ -76,6 +95,24 @@ export default defineComponent({
   flex-wrap: wrap;
   margin: 18px 12px 0 14px;
   gap: 5px 6px;
+
+  .show-all {
+    color: $color-filter-font-shadow;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    margin: auto 0;
+    padding-left: 7px;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration-line: underline;
+    }
+
+    &:active {
+      color: #1f54b7;
+    }
+  }
 }
 .filter-item {
   display: flex;
@@ -85,17 +122,60 @@ export default defineComponent({
   padding: 4px 6px 4px 12px;
   gap: 3px;
   border-radius: 20px;
-  background-color: $color-filters-day-dark;
+  border: 1px solid $color-filters-day-dark;
   font-weight: 400;
   font-size: 10px;
   line-height: 12px;
-  color: $color-filters-day-darker;
+  color: $color-filter-font-default;
   cursor: pointer;
+
+  .icon {
+    display: inline-block;
+    background-size: cover;
+    background-image: url(../assets/images/filter-open.svg);
+    width: 8px;
+    height: 8px;
+  }
+
+  .filter-count {
+    opacity: 70%;
+  }
+
+  &:hover {
+    color: $color-filter-font-default-hover;
+    border: 1px solid $color-filter-font-shadow;
+
+    .icon {
+      background-image: url(../assets/images/filter-open-hover.svg);
+    }
+  }
+  &:active {
+    box-shadow: 0px 0px 4px $color-filter-font-shadow;
+  }
+}
+.filter-item.active {
+  background-color: $color-filters-day-dark;
+  color: $color-filters-day-darker;
+  // border: none;
+
+  .icon {
+    background-image: url(../assets/images/filter-close.svg);
+  }
+
+  &:hover {
+    background: #eaeef2;
+    border: 1px solid $color-filters-day-dark;
+
+    .icon {
+      background-image: url(../assets/images/filter-close-hover.svg);
+    }
+  }
+
+  &:active {
+    box-shadow: 0px 0px 4px $color-filter-font-shadow;
+  }
 }
 .img {
   display: block;
-}
-.active {
-  background-color: green;
 }
 </style>

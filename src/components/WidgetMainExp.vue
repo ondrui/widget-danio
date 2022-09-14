@@ -101,7 +101,6 @@ export default defineComponent({
         if (index === copyEvents.length - 1) {
           return;
         }
-        // event.isDayShow = false
         let firstElm = event.eventTime;
         let secondElm = copyEvents[index + 1].eventTime;
         firstElm = typeof firstElm === "number" ? firstElm : firstElm[0];

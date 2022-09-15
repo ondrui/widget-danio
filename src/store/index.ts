@@ -1,7 +1,7 @@
 import { createStore, Store } from "vuex";
 
 interface RootState {
-  filters: number[];
+  filters: { code: number; amount: number; name: string; isActive: boolean }[];
 
   events: {
     eventType: number;
@@ -16,7 +16,13 @@ interface RootState {
 const store = createStore<RootState>({
   state() {
     return {
-      filters: [3, 1, 6, 2, 5],
+      filters: [
+        { code: 3, amount: 4, name: "Общие", isActive: true },
+        { code: 1, amount: 2, name: "Внимание", isActive: true },
+        { code: 2, amount: 1, name: "Опасно", isActive: true },
+        { code: 5, amount: 0, name: "Очень опасно", isActive: true },
+        { code: 6, amount: 0, name: "Неблагоприятно", isActive: true },
+      ],
       events: [
         {
           eventType: 1,
@@ -92,7 +98,11 @@ const store = createStore<RootState>({
     };
   },
   mutations: {},
-  getters: {},
+  getters: {
+    getFilters(state) {
+      return state.filters;
+    },
+  },
 });
 
 declare module "@vue/runtime-core" {

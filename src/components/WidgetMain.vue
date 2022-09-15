@@ -1,7 +1,7 @@
 <template>
   <div class="widget">
     <h1>Главное</h1>
-    <WidgetFilters @filtered="addFilterCode" @remove="removeFilterCode" />
+    <WidgetFilters @filtered="changeFilterActive" :filters="filters" />
     <div class="wrapper">
       <div class="container-main">
         <WidgetMainItem
@@ -19,16 +19,6 @@
 import { defineComponent } from "vue";
 import WidgetMainItem from "./WidgetMainItem.vue";
 import WidgetFilters from "./WidgetFilters.vue";
-// import type { PropType } from "vue";
-
-// interface PropsData {
-//   eventType: number;
-//   eventTime: number | number[];
-//   timeFormat: string;
-//   titleText: string;
-//   eventText: string;
-//   iconCode?: number;
-// }
 
 interface Data {
   eventType: number;
@@ -40,6 +30,13 @@ interface Data {
   isDayShow?: boolean;
 }
 
+interface Filters {
+  code: number;
+  amount: number;
+  name: string;
+  isActive: boolean;
+}
+
 export default defineComponent({
   components: {
     WidgetMainItem,
@@ -48,34 +45,36 @@ export default defineComponent({
   data() {
     return {
       events: [] as Data[],
-      selectedFilterCodes: [] as number[],
-      filterCounter: {},
+      // selectedFilterCodes: [] as number[],
+      filters: [] as Filters[],
     };
   },
   created() {
-    console.log("create");
     this.events = this.it();
-    this.selectedFilterCodes = this.initialfilters();
+    this.filters = this.initialfilters();
   },
   computed: {
     filteredEvents(): Data[] {
-      const showAllFilters = 100;
+      // const showAllFilters = 100;
 
-      if (this.selectedFilterCodes.includes(showAllFilters)) {
-        [...this.selectedFilterCodes] = this.$store.state.filters;
-      }
+      // if (this.selectedFilterCodes.includes(showAllFilters)) {
+      //   [...this.selectedFilterCodes] = this.$store.state.filters.map(
+      //     (filter) => filter.code
+      //   );
+      // }
 
-      if (this.selectedFilterCodes.length === 0) {
-        return this.events;
-      }
+      // if (this.selectedFilterCodes.length === 0) {
+      //   return this.events;
+      // }
 
-      let filters = this.selectedFilterCodes;
+      // let filters = this.selectedFilterCodes;
 
-      let filteredEvents = [...this.events].filter((event) =>
-        filters.includes(event.eventType)
-      );
+      // let filteredEvents = [...this.events].filter((event) =>
+      //   filters.includes(event.eventType)
+      // );
 
-      return filteredEvents.length !== 0 ? filteredEvents : this.events;
+      // return filteredEvents.length !== 0 ? filteredEvents : this.events;
+      return this.events;
     },
     sortedEvents(): Data[] {
       return [...this.filteredEvents].sort((event1, event2): number => {
@@ -114,25 +113,21 @@ export default defineComponent({
     it() {
       return this.$store.state.events;
     },
-    initialfilters() {
-      return [...this.$store.state.filters];
+    initialfilters(): Filters[] {
+      return this.$store.getters.getFilters;
     },
-    addFilterCode(filter: number) {
-      if (this.selectedFilterCodes.indexOf(filter) === -1) {
-        this.selectedFilterCodes.push(filter);
-      }
-    },
-    removeFilterCode(filter: number) {
-      if (
-        this.selectedFilterCodes.indexOf(filter) !== -1 &&
-        this.selectedFilterCodes.length > 1
-      ) {
-        console.log("removeFilterCode");
-        this.selectedFilterCodes.splice(
-          this.selectedFilterCodes.indexOf(filter),
-          1
+    changeFilterActive(filter: Filters | 100) {
+      if (filter === 100) {
+        this.filters = this.initialfilters();
+      } else {
+        this.filters = this.filters.map((f) =>
+          f.code === filter.code && f.amount > 0
+            ? { ...f, isActive: !f.isActive }
+            : f
         );
       }
+
+      console.log(this.filters);
     },
   },
 });

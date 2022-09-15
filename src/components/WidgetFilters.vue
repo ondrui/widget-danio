@@ -1,91 +1,44 @@
 <template>
   <div class="filters-list">
     <div
-      @click="$emit('filtered', filter), selectFilter(index)"
+      @click="$emit('filtered', filter)"
       class="filter-item"
-      :class="{ active: activeFilter.includes(index) }"
-      v-for="(filter, index) in filters"
-      :key="`fw-${filter}`"
+      :class="{ active: filter.isActive && filter.amount > 0 }"
+      v-for="filter in filters"
+      :key="`fw-${filter.code}`"
     >
-      <div>{{ filtersName[filter] }}</div>
-      <span class="filter-count">3</span>
-      <span
-        @click.stop="$emit('remove', filter), removeSelectFilter(index)"
-        class="icon"
-      ></span>
+      <div>{{ filter.name }}</div>
+      <span class="filter-count">{{ filter.amount }}</span>
+      <span class="icon"></span>
       <!-- <img
 
         src="../assets/images/filter-open.svg"
         alt="icon"
       /> -->
     </div>
-    <div @click="$emit('filtered', 100), showAll()" class="show-all">
-      Показать все
-    </div>
+    <div @click="$emit('filtered', 100)" class="show-all">Показать все</div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import type { PropType } from "vue";
 
 interface Filters {
-  [index: string]: string;
+  code: number;
+  amount: number;
+  name: string;
+  isActive: boolean;
 }
 
 export default defineComponent({
-  data() {
-    return {
-      filtersName: {
-        100: "Показать все",
-        3: "Общие",
-        1: "Внимание",
-        2: "Опасно",
-        5: "Очень опасно",
-        6: "Неблагоприятно",
-      } as Filters,
-      activeFilter: [] as number[],
-    };
+  props: {
+    filters: {
+      type: Array as PropType<Filters[]>,
+      requare: true,
+    },
   },
   emits: ["filtered", "remove"],
-  created() {
-    this.activeFilter = this.filters.map((filter, index) => index);
-  },
-  computed: {
-    filters() {
-      return this.$store.state.filters;
-    },
-  },
-  methods: {
-    selectFilter(index: number) {
-      if (this.activeFilter.indexOf(index) === -1) {
-        this.activeFilter.push(index);
-      }
-      // if (this.activeFilter.indexOf(index) === -1 && index !== 0) {
-      //   if (this.activeFilter.indexOf(0) === -1) {
-      //     this.activeFilter.push(index);
-      //   } else {
-      //     this.activeFilter.splice(this.activeFilter.indexOf(0), 1);
-      //     this.activeFilter.push(index);
-      //   }
-      // } else if (this.activeFilter.indexOf(index) === -1) {
-      //   this.activeFilter = [0];
-      // }
-    },
-    removeSelectFilter(index: number) {
-      if (this.activeFilter.indexOf(index) !== -1) {
-        this.activeFilter.splice(this.activeFilter.indexOf(index), 1);
-      }
-      // if (this.activeFilter.indexOf(index) !== -1 && index !== 0) {
-      //   this.activeFilter.splice(this.activeFilter.indexOf(index), 1);
-      // }
-      // if (this.activeFilter.length === 0) {
-      //   this.activeFilter = [0];
-      // }
-    },
-    showAll() {
-      this.activeFilter = this.filters.map((filter, index) => index);
-    },
-  },
 });
 </script>
 

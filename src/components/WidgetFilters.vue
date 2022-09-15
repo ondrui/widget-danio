@@ -1,9 +1,16 @@
 <template>
   <div class="filters-list">
     <div
-      @click="$emit('filtered', filter) && filter.amount > 0"
+      @click="
+        (filter.amount > 0 && condition > 1) || filter.isActive !== true
+          ? $emit('filtered', filter)
+          : null
+      "
       class="filter-item"
-      :class="{ active: filter.isActive && filter.amount > 0 }"
+      :class="{
+        active: filter.isActive && filter.amount > 0,
+        disable: filter.amount === 0,
+      }"
       v-for="filter in filters"
       :key="`fw-${filter.code}`"
     >
@@ -16,7 +23,13 @@
         alt="icon"
       /> -->
     </div>
-    <div @click="$emit('filtered', 100)" class="show-all">Показать все</div>
+    <div
+      @click="$emit('filtered', 100)"
+      class="show-all"
+      :class="{ disable: condition === 3 }"
+    >
+      Показать все
+    </div>
   </div>
 </template>
 
@@ -37,8 +50,21 @@ export default defineComponent({
       type: Array as PropType<Filters[]>,
       requare: true,
     },
+    counters: {
+      type: Array as PropType<number[]>,
+      require: true,
+    },
   },
   emits: ["filtered", "remove"],
+  computed: {
+    condition(): number {
+      if (this.counters !== undefined) {
+        return this.counters[0] - this.counters[1];
+      } else {
+        return 1;
+      }
+    },
+  },
 });
 </script>
 
@@ -57,6 +83,12 @@ export default defineComponent({
     margin: auto 0;
     padding-left: 7px;
     cursor: pointer;
+
+    &.disable {
+      pointer-events: none;
+      cursor: none;
+      color: $color-filter-font-disabled;
+    }
 
     &:hover {
       text-decoration-line: underline;
@@ -82,6 +114,10 @@ export default defineComponent({
   color: $color-filter-font-default;
   cursor: pointer;
 
+  &.disable {
+    pointer-events: none;
+    cursor: none;
+  }
   .icon {
     display: inline-block;
     background-size: cover;

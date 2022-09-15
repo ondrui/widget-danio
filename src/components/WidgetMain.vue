@@ -1,8 +1,12 @@
 <template>
   <div class="widget">
     <h1>Главное</h1>
-    <h2>{{ countFiltersWithPlusAmount }}</h2>
-    <WidgetFilters @filtered="changeFilterActive" :filters="filters" />
+    <h2>{{ countFiltersWithPlusAmount[0] - countFiltersWithPlusAmount[1] }}</h2>
+    <WidgetFilters
+      @filtered="changeFilterActive"
+      :filters="filters"
+      :counters="countFiltersWithPlusAmount"
+    />
     <div class="wrapper">
       <div class="container-main">
         <WidgetMainItem
@@ -96,7 +100,7 @@ export default defineComponent({
       copyEvents[0].isDayShow = true;
       return copyEvents;
     },
-    countFiltersWithPlusAmount(): number {
+    countFiltersWithPlusAmount(): number[] {
       let allActiveFilters = this.filters.reduce(
         (previousValue, currentValue) =>
           currentValue.isActive ? ++previousValue : previousValue,
@@ -108,7 +112,7 @@ export default defineComponent({
           currentValue.amount === 0 ? ++previousValue : previousValue,
         0
       );
-      return allActiveFilters - ActiveFiltersWithZeroAmount;
+      return [allActiveFilters, ActiveFiltersWithZeroAmount];
     },
   },
   methods: {
@@ -119,12 +123,11 @@ export default defineComponent({
       return this.$store.getters.getFilters;
     },
     changeFilterActive(filter: Filters | 100) {
-      console.log(filter);
       if (filter === 100) {
         this.filters = this.filters.map((f) => {
           return { ...f, isActive: true };
         });
-      } else if (this.countFiltersWithPlusAmount > 1) {
+      } else {
         this.filters = this.filters.map((f) =>
           f.code === filter.code && f.amount > 0
             ? { ...f, isActive: !f.isActive }

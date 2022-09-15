@@ -1,7 +1,7 @@
 <template>
   <div class="filters-list">
     <div
-      @click="$emit('filtered', filter)"
+      @click="$emit('filtered', filter) && filter.amount > 0"
       class="filter-item"
       :class="{ active: filter.isActive && filter.amount > 0 }"
       v-for="filter in filters"

@@ -1,6 +1,7 @@
 <template>
   <div class="widget">
     <h1>Главное</h1>
+    <h2>{{ countFiltersWithPlusAmount }}</h2>
     <WidgetFilters @filtered="changeFilterActive" :filters="filters" />
     <div class="wrapper">
       <div class="container-main">
@@ -45,36 +46,24 @@ export default defineComponent({
   data() {
     return {
       events: [] as Data[],
-      // selectedFilterCodes: [] as number[],
       filters: [] as Filters[],
     };
   },
   created() {
     this.events = this.it();
     this.filters = this.initialfilters();
+    this.amount();
   },
   computed: {
     filteredEvents(): Data[] {
-      // const showAllFilters = 100;
+      let filters = this.filters;
 
-      // if (this.selectedFilterCodes.includes(showAllFilters)) {
-      //   [...this.selectedFilterCodes] = this.$store.state.filters.map(
-      //     (filter) => filter.code
-      //   );
-      // }
-
-      // if (this.selectedFilterCodes.length === 0) {
-      //   return this.events;
-      // }
-
-      // let filters = this.selectedFilterCodes;
-
-      // let filteredEvents = [...this.events].filter((event) =>
-      //   filters.includes(event.eventType)
-      // );
-
-      // return filteredEvents.length !== 0 ? filteredEvents : this.events;
-      return this.events;
+      let filteredEvents = [...this.events].filter((event) => {
+        return filters.some((f) => {
+          return f.code === event.eventType && f.isActive;
+        });
+      });
+      return filteredEvents.length > 0 ? filteredEvents : this.events;
     },
     sortedEvents(): Data[] {
       return [...this.filteredEvents].sort((event1, event2): number => {
@@ -96,7 +85,6 @@ export default defineComponent({
         if (index === copyEvents.length - 1) {
           return;
         }
-        // event.isDayShow = false;
         let firstElm = event.eventTime;
         let secondElm = copyEvents[index + 1].eventTime;
         firstElm = typeof firstElm === "number" ? firstElm : firstElm[0];
@@ -108,6 +96,20 @@ export default defineComponent({
       copyEvents[0].isDayShow = true;
       return copyEvents;
     },
+    countFiltersWithPlusAmount(): number {
+      let allActiveFilters = this.filters.reduce(
+        (previousValue, currentValue) =>
+          currentValue.isActive ? ++previousValue : previousValue,
+        0
+      );
+
+      let ActiveFiltersWithZeroAmount = this.filters.reduce(
+        (previousValue, currentValue) =>
+          currentValue.amount === 0 ? ++previousValue : previousValue,
+        0
+      );
+      return allActiveFilters - ActiveFiltersWithZeroAmount;
+    },
   },
   methods: {
     it() {
@@ -117,17 +119,32 @@ export default defineComponent({
       return this.$store.getters.getFilters;
     },
     changeFilterActive(filter: Filters | 100) {
+      console.log(filter);
       if (filter === 100) {
-        this.filters = this.initialfilters();
-      } else {
+        this.filters = this.filters.map((f) => {
+          return { ...f, isActive: true };
+        });
+      } else if (this.countFiltersWithPlusAmount > 1) {
         this.filters = this.filters.map((f) =>
           f.code === filter.code && f.amount > 0
             ? { ...f, isActive: !f.isActive }
             : f
         );
       }
-
-      console.log(this.filters);
+    },
+    amount() {
+      this.filters = this.filters.map((f) => {
+        const filterAmount = this.events.reduce(
+          (previousValue, currentValue) => {
+            if (currentValue.eventType === f.code) {
+              return ++previousValue;
+            }
+            return previousValue;
+          },
+          0
+        );
+        return { ...f, amount: filterAmount };
+      });
     },
   },
 });

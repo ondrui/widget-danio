@@ -17,9 +17,9 @@ const store = createStore<RootState>({
   state() {
     return {
       filters: [
-        { code: 3, amount: 4, name: "Общие", isActive: true },
-        { code: 1, amount: 2, name: "Внимание", isActive: true },
-        { code: 2, amount: 1, name: "Опасно", isActive: true },
+        { code: 3, amount: 0, name: "Общие", isActive: true },
+        { code: 1, amount: 0, name: "Внимание", isActive: true },
+        { code: 2, amount: 0, name: "Опасно", isActive: true },
         { code: 5, amount: 0, name: "Очень опасно", isActive: true },
         { code: 6, amount: 0, name: "Неблагоприятно", isActive: true },
       ],

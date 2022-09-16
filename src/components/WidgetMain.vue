@@ -164,7 +164,7 @@ export default defineComponent({
   }
 }
 .wrapper {
-  margin: 14px 14px 4px 10px;
+  margin: 14px 6px 4px 10px;
   height: calc(100% - 101px);
   display: flex;
 }

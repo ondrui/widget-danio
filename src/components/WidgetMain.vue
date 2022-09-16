@@ -175,7 +175,7 @@ export default defineComponent({
   min-height: 0;
   overflow-x: hidden;
   overflow-y: scroll;
-  padding: 10px 0;
+  padding: 10px 10px 10px 0;
   flex-basis: 100%;
 }
 @media screen and (max-width: 595px) {

@@ -1,7 +1,6 @@
 <template>
   <div class="widget">
     <h1>Главное</h1>
-    <h2>{{ countFiltersWithPlusAmount[0] - countFiltersWithPlusAmount[1] }}</h2>
     <WidgetFilters
       @filtered="changeFilterActive"
       :filters="filters"
@@ -10,7 +9,7 @@
     <div class="wrapper">
       <div class="container-main">
         <WidgetMainItem
-          v-for="(event, index) in isDayShow"
+          v-for="(event, index) in filteredEvents"
           :key="`wn-${index}`"
           :event="event"
           :index="+index"
@@ -62,45 +61,40 @@ export default defineComponent({
     filteredEvents(): Data[] {
       let filters = this.filters;
 
-      let filteredEvents = [...this.events].filter((event) => {
-        return filters.some((f) => {
-          return f.code === event.eventType && f.isActive;
+      return this.events
+        .filter((event) => {
+          return filters.some((f) => {
+            return f.code === event.eventType && f.isActive;
+          });
+        })
+        .sort((event1, event2): number => {
+          const a =
+            typeof event1.eventTime === "number"
+              ? event1.eventTime
+              : event1.eventTime[0];
+          const b =
+            typeof event2.eventTime === "number"
+              ? event2.eventTime
+              : event2.eventTime[0];
+          return a - b;
+        })
+        .map((event: Data, index: number, arr: Data[]) => {
+          //!!!!
+          if (index === 0) {
+            return { ...event, isDayShow: true };
+          }
+          let firstElm = arr[index - 1].eventTime;
+          let secondElm = event.eventTime;
+          firstElm = typeof firstElm === "number" ? firstElm : firstElm[0];
+          secondElm = typeof secondElm === "number" ? secondElm : secondElm[0];
+          if (new Date(firstElm).getDate() !== new Date(secondElm).getDate()) {
+            return { ...event, isDayShow: true };
+          } else {
+            return { ...event, isDayShow: false };
+          }
         });
-      });
-      return filteredEvents.length > 0 ? filteredEvents : this.events;
     },
-    sortedEvents(): Data[] {
-      return [...this.filteredEvents].sort((event1, event2): number => {
-        const a =
-          typeof event1.eventTime === "number"
-            ? event1.eventTime
-            : event1.eventTime[0];
-        const b =
-          typeof event2.eventTime === "number"
-            ? event2.eventTime
-            : event2.eventTime[0];
-        return a - b;
-      });
-    },
-    isDayShow(): Data[] {
-      let copyEvents = [...this.sortedEvents] as Data[]; ///!!!!!!
-      copyEvents.map((event: Data, index: number): void => {
-        //!!!!
-        if (index === copyEvents.length - 1) {
-          return;
-        }
-        let firstElm = event.eventTime;
-        let secondElm = copyEvents[index + 1].eventTime;
-        firstElm = typeof firstElm === "number" ? firstElm : firstElm[0];
-        secondElm = typeof secondElm === "number" ? secondElm : secondElm[0];
-        if (new Date(firstElm).getDate() !== new Date(secondElm).getDate()) {
-          copyEvents[index + 1].isDayShow = true;
-        }
-      });
-      copyEvents[0].isDayShow = true;
-      return copyEvents;
-    },
-    countFiltersWithPlusAmount(): number[] {
+    countFiltersWithPlusAmount(): number {
       let allActiveFilters = this.filters.reduce(
         (previousValue, currentValue) =>
           currentValue.isActive ? ++previousValue : previousValue,
@@ -112,7 +106,7 @@ export default defineComponent({
           currentValue.amount === 0 ? ++previousValue : previousValue,
         0
       );
-      return [allActiveFilters, ActiveFiltersWithZeroAmount];
+      return allActiveFilters - ActiveFiltersWithZeroAmount;
     },
   },
   methods: {

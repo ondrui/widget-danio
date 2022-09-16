@@ -212,7 +212,7 @@ export default defineComponent({
   align-items: flex-start;
   margin: 6px;
 }
-.text {
-  text-align: justify;
-}
+// .text {
+//   text-align: justify;
+// }
 </style>

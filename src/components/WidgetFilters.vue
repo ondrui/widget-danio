@@ -51,7 +51,7 @@ export default defineComponent({
       requare: true,
     },
     counters: {
-      type: Array as PropType<number[]>,
+      type: Number,
       require: true,
     },
   },
@@ -59,7 +59,7 @@ export default defineComponent({
   computed: {
     condition(): number {
       if (this.counters !== undefined) {
-        return this.counters[0] - this.counters[1];
+        return this.counters;
       } else {
         return 1;
       }

@@ -16,12 +16,41 @@
     >
       <div>{{ filter.name }}</div>
       <span class="filter-count">{{ filter.amount }}</span>
-      <span class="icon"></span>
-      <!-- <img
-
-        src="../assets/images/filter-open.svg"
-        alt="icon"
-      /> -->
+      <div class="filter-icon-block">
+        <div
+          class="filter-icon-open"
+          v-if="!filter.isActive || filter.amount === 0"
+        >
+          <svg
+            width="8"
+            height="8"
+            viewBox="0 0 8 8"
+            fill="#C4C4C4"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M3.5 4.5L3.5 8H4.5L4.5 4.5H8L8 3.5L4.5 3.5L4.5 0L3.5 0L3.5 3.5L0 3.5L0 4.5L3.5 4.5Z"
+            />
+          </svg>
+        </div>
+        <div class="filter-icon-close" v-else>
+          <svg
+            width="8"
+            height="8"
+            viewBox="0 0 8 8"
+            fill="#C4C4C4"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M4.07115 4.7784L7.25309 7.96033L7.9602 7.25323L4.77826 4.07129L7.9602 0.88935L7.25309 0.182244L4.07115 3.36418L0.889129 0.18216L0.182022 0.889267L3.36404 4.07129L0.182022 7.25331L0.889129 7.96042L4.07115 4.7784Z"
+            />
+          </svg>
+        </div>
+      </div>
     </div>
     <div
       @click="$emit('filtered', 100)"
@@ -81,7 +110,7 @@ export default defineComponent({
     font-size: 10px;
     line-height: 12px;
     margin: auto 0;
-    padding-left: 7px;
+    padding: 4px 6px 4px 12px;
     cursor: pointer;
 
     &.disable {
@@ -118,14 +147,6 @@ export default defineComponent({
     pointer-events: none;
     cursor: none;
   }
-  .icon {
-    display: inline-block;
-    background-size: cover;
-    background-image: url(../assets/images/filter-open.svg);
-    width: 8px;
-    height: 8px;
-  }
-
   .filter-count {
     opacity: 70%;
   }
@@ -134,8 +155,8 @@ export default defineComponent({
     color: $color-filter-font-default-hover;
     border: 1px solid $color-filter-font-shadow;
 
-    .icon {
-      background-image: url(../assets/images/filter-open-hover.svg);
+    .filter-icon-open svg {
+      fill: $color-filter-font-default-hover;
     }
   }
   &:active {
@@ -147,24 +168,17 @@ export default defineComponent({
   color: $color-filters-day-darker;
   // border: none;
 
-  .icon {
-    background-image: url(../assets/images/filter-close.svg);
-  }
-
   &:hover {
     background: #eaeef2;
     border: 1px solid $color-filters-day-dark;
 
-    .icon {
-      background-image: url(../assets/images/filter-close-hover.svg);
+    .filter-icon-close svg {
+      fill: $color-filters-day-darker;
     }
   }
 
   &:active {
     box-shadow: 0px 0px 4px $color-filter-font-shadow;
   }
-}
-.img {
-  display: block;
 }
 </style>

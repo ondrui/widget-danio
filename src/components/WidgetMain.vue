@@ -61,38 +61,44 @@ export default defineComponent({
     filteredEvents(): Data[] {
       let filters = this.filters;
 
-      return this.events
-        .filter((event) => {
-          return filters.some((f) => {
-            return f.code === event.eventType && f.isActive;
-          });
-        })
-        .sort((event1, event2): number => {
-          const a =
-            typeof event1.eventTime === "number"
-              ? event1.eventTime
-              : event1.eventTime[0];
-          const b =
-            typeof event2.eventTime === "number"
-              ? event2.eventTime
-              : event2.eventTime[0];
-          return a - b;
-        })
-        .map((event: Data, index: number, arr: Data[]) => {
-          //!!!!
-          if (index === 0) {
-            return { ...event, isDayShow: true };
-          }
-          let firstElm = arr[index - 1].eventTime;
-          let secondElm = event.eventTime;
-          firstElm = typeof firstElm === "number" ? firstElm : firstElm[0];
-          secondElm = typeof secondElm === "number" ? secondElm : secondElm[0];
-          if (new Date(firstElm).getDate() !== new Date(secondElm).getDate()) {
-            return { ...event, isDayShow: true };
-          } else {
-            return { ...event, isDayShow: false };
-          }
-        });
+      return (
+        this.events
+          .filter((event) => {
+            return filters.some((f) => {
+              return f.code === event.eventType && f.isActive;
+            });
+          })
+          .sort((event1, event2): number => {
+            const a =
+              typeof event1.eventTime === "number"
+                ? event1.eventTime
+                : event1.eventTime[0];
+            const b =
+              typeof event2.eventTime === "number"
+                ? event2.eventTime
+                : event2.eventTime[0];
+            return a - b;
+          })
+          /** Set the isDayShow property mapping the date block. */
+          .map((event: Data, index: number, arr: Data[]) => {
+            //!!!!
+            if (index === 0) {
+              return { ...event, isDayShow: true };
+            }
+            let firstElm = arr[index - 1].eventTime;
+            let secondElm = event.eventTime;
+            firstElm = typeof firstElm === "number" ? firstElm : firstElm[0];
+            secondElm =
+              typeof secondElm === "number" ? secondElm : secondElm[0];
+            if (
+              new Date(firstElm).getDate() !== new Date(secondElm).getDate()
+            ) {
+              return { ...event, isDayShow: true };
+            } else {
+              return { ...event, isDayShow: false };
+            }
+          })
+      );
     },
     countFiltersWithPlusAmount(): number {
       let allActiveFilters = this.filters.reduce(
@@ -164,8 +170,9 @@ export default defineComponent({
   }
 }
 .wrapper {
-  margin: 14px 14px 4px 10px;
-  height: calc(100% - 101px);
+  margin: 14px 4px 4px 10px;
+  // height: calc(100% - 101px);
+  max-height: 448px;
   display: flex;
 }
 .container-main {
@@ -174,18 +181,18 @@ export default defineComponent({
   row-gap: 20px;
   min-height: 0;
   overflow-x: hidden;
-  overflow-y: scroll;
-  padding: 10px 0;
+  overflow-y: auto;
+  padding: 10px 6px 10px 0;
   flex-basis: 100%;
 }
-@media screen and (max-width: 595px) {
-  .wrapper {
-    height: calc(100% - 125px);
-  }
-}
-@media screen and (max-width: 365px) {
-  .wrapper {
-    height: calc(100% - 150px);
-  }
-}
+// @media screen and (max-width: 630px) {
+//   .wrapper {
+//     height: calc(100% - 125px);
+//   }
+// }
+// @media screen and (max-width: 365px) {
+//   .wrapper {
+//     height: calc(100% - 150px);
+//   }
+// }
 </style>

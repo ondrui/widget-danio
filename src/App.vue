@@ -21,11 +21,17 @@ export default defineComponent({
   padding: 0;
   box-sizing: border-box;
 }
+*::-webkit-scrollbar {
+  width: 4px;
+}
+*::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #cfd6e4;
+}
 
 html,
 body,
-body > div,
-.app {
+body > div {
   height: 100%;
 }
 

@@ -4,7 +4,7 @@
     <WidgetFilters
       @filtered="changeFilterActive"
       :filters="filters"
-      :counters="countFiltersWithPlusAmount"
+      :totalActiveFilters="totalActiveFilters"
     />
     <div class="wrapper">
       <div class="container-main">
@@ -23,23 +23,7 @@
 import { defineComponent } from "vue";
 import WidgetMainItem from "./WidgetMainItem.vue";
 import WidgetFilters from "./WidgetFilters.vue";
-
-interface Data {
-  eventType: number;
-  eventTime: number | number[];
-  timeFormat: string;
-  titleText: string;
-  eventText: string;
-  iconCode?: number;
-  isDayShow?: boolean;
-}
-
-interface Filters {
-  code: number;
-  amount: number;
-  name: string;
-  isActive: boolean;
-}
+import { Data, Filters } from "@/types/types";
 
 export default defineComponent({
   components: {
@@ -100,19 +84,12 @@ export default defineComponent({
           })
       );
     },
-    countFiltersWithPlusAmount(): number {
-      let allActiveFilters = this.filters.reduce(
+    totalActiveFilters(): number {
+      return this.filters.reduce(
         (previousValue, currentValue) =>
           currentValue.isActive ? ++previousValue : previousValue,
         0
       );
-
-      let ActiveFiltersWithZeroAmount = this.filters.reduce(
-        (previousValue, currentValue) =>
-          currentValue.amount === 0 ? ++previousValue : previousValue,
-        0
-      );
-      return allActiveFilters - ActiveFiltersWithZeroAmount;
     },
   },
   methods: {
@@ -125,7 +102,7 @@ export default defineComponent({
     changeFilterActive(filter: Filters | 100) {
       if (filter === 100) {
         this.filters = this.filters.map((f) => {
-          return { ...f, isActive: true };
+          return { ...f, isActive: f.amount > 0 };
         });
       } else {
         this.filters = this.filters.map((f) =>
@@ -146,7 +123,7 @@ export default defineComponent({
           },
           0
         );
-        return { ...f, amount: filterAmount };
+        return { ...f, amount: filterAmount, isActive: filterAmount > 0 };
       });
     },
   },
@@ -170,7 +147,7 @@ export default defineComponent({
   }
 }
 .wrapper {
-  margin: 14px 4px 4px 10px;
+  margin: 14px 4px 10px 10px;
   // height: calc(100% - 101px);
   max-height: 448px;
   display: flex;
@@ -182,7 +159,7 @@ export default defineComponent({
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 10px 6px 10px 0;
+  padding: 10px 6px 1px 0;
   flex-basis: 100%;
 }
 // @media screen and (max-width: 630px) {

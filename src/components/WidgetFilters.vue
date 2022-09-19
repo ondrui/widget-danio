@@ -1,15 +1,11 @@
 <template>
   <div class="filters-list">
     <div
-      @click="
-        (filter.amount > 0 && condition > 1) || filter.isActive !== true
-          ? $emit('filtered', filter)
-          : null
-      "
+      @click="$emit('filtered', filter)"
       class="filter-item"
       :class="{
-        active: filter.isActive && filter.amount > 0,
-        disable: filter.amount === 0,
+        active: filter.isActive,
+        disable: filter.amount === 0 || (condition <= 1 && filter.isActive),
       }"
       v-for="filter in filters"
       :key="`fw-${filter.code}`"
@@ -65,13 +61,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-
-interface Filters {
-  code: number;
-  amount: number;
-  name: string;
-  isActive: boolean;
-}
+import { Filters } from "@/types/types";
 
 export default defineComponent({
   props: {
@@ -79,7 +69,7 @@ export default defineComponent({
       type: Array as PropType<Filters[]>,
       requare: true,
     },
-    counters: {
+    totalActiveFilters: {
       type: Number,
       require: true,
     },
@@ -87,8 +77,8 @@ export default defineComponent({
   emits: ["filtered", "remove"],
   computed: {
     condition(): number {
-      if (this.counters !== undefined) {
-        return this.counters;
+      if (this.totalActiveFilters !== undefined) {
+        return this.totalActiveFilters;
       } else {
         return 1;
       }
@@ -102,15 +92,15 @@ export default defineComponent({
   display: flex;
   flex-wrap: wrap;
   margin: 18px 12px 0 14px;
-  gap: 5px 6px;
+  gap: 10px 10px;
 
   .show-all {
     color: $color-filter-font-shadow;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 12px;
     margin: auto 0;
-    padding: 4px 6px 4px 12px;
+    padding: 6px 8px 6px 14px;
     cursor: pointer;
 
     &.disable {
@@ -133,12 +123,12 @@ export default defineComponent({
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 4px 6px 4px 12px;
+  padding: 6px 8px 6px 14px;
   gap: 3px;
   border-radius: 20px;
   border: 1px solid $color-filters-day-dark;
   font-weight: 400;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 12px;
   color: $color-filter-font-default;
   cursor: pointer;

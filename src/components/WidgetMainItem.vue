@@ -11,7 +11,7 @@
   <div class="container-item" :class="setEvent">
     <div class="top-info">
       <div class="time">{{ setTimeEvent }}</div>
-      <div class="title">{{ event.titleText }}</div>
+      <div class="title" :title="event.titleText">{{ event.titleText }}</div>
     </div>
     <div class="block">
       <div v-if="event.iconCode" class="icon">
@@ -25,16 +25,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-
-interface Data {
-  eventType: number;
-  eventTime: number | number[];
-  timeFormat: string;
-  titleText: string;
-  eventText: string;
-  iconCode?: number;
-  isDayShow?: boolean;
-}
+import { Data } from "@/types/types";
 
 interface CodeColor {
   [index: number]: string;
@@ -212,7 +203,9 @@ export default defineComponent({
   align-items: flex-start;
   margin: 6px;
 }
-// .text {
-//   text-align: justify;
-// }
+.text {
+  word-wrap: break-word;
+  hyphens: auto;
+  // text-align: justify;
+}
 </style>

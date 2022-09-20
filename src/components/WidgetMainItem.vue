@@ -1,6 +1,7 @@
 <template>
   <div
-    :class="index !== 0 ? 'day-info' : 'day-info day-info-zero-index'"
+    class="day-info"
+    :class="index !== 0 ? '' : 'day-info-zero-index'"
     v-show="event.isDayShow && setDayInDayInfo[0]"
   >
     <span class="day-info-name">

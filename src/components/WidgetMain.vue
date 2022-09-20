@@ -45,6 +45,14 @@ export default defineComponent({
     filteredEvents(): Data[] {
       let filters = this.filters;
 
+      const computedEventTime = (event: Data): number => {
+        if (typeof event.eventTime === "number") {
+          return event.eventTime;
+        } else {
+          return event.eventTime[0];
+        }
+      };
+
       return (
         this.events
           .filter((event) => {
@@ -53,15 +61,7 @@ export default defineComponent({
             });
           })
           .sort((event1, event2): number => {
-            const a =
-              typeof event1.eventTime === "number"
-                ? event1.eventTime
-                : event1.eventTime[0];
-            const b =
-              typeof event2.eventTime === "number"
-                ? event2.eventTime
-                : event2.eventTime[0];
-            return a - b;
+            return computedEventTime(event1) - computedEventTime(event2);
           })
           /** Set the isDayShow property mapping the date block. */
           .map((event: Data, index: number, arr: Data[]) => {
@@ -69,13 +69,9 @@ export default defineComponent({
             if (index === 0) {
               return { ...event, isDayShow: true };
             }
-            let firstElm = arr[index - 1].eventTime;
-            let secondElm = event.eventTime;
-            firstElm = typeof firstElm === "number" ? firstElm : firstElm[0];
-            secondElm =
-              typeof secondElm === "number" ? secondElm : secondElm[0];
             if (
-              new Date(firstElm).getDate() !== new Date(secondElm).getDate()
+              new Date(computedEventTime(arr[index - 1])).getDate() !==
+              new Date(computedEventTime(event)).getDate()
             ) {
               return { ...event, isDayShow: true };
             } else {

@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import WidgetMain from "./components/WidgetMain.vue";
+import WidgetMain from "@/components/WidgetMain.vue";
 
 export default defineComponent({
   components: {
@@ -20,6 +20,8 @@ export default defineComponent({
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  /** styling scrollbar component*/
 
   &::-webkit-scrollbar {
     width: 6px;

@@ -1,11 +1,22 @@
 <template>
   <div class="filters-list">
+    <!--
+      Кнопки фильтров
+      При нажатии посылает в родительский компонент объект со свойствами выбранного фильтра
+     -->
     <div
       @click="$emit('filtered', filter)"
       class="filter-item"
       :class="{
         active: filter.isActive,
-        disable: filter.amount === 0 || (condition <= 1 && filter.isActive),
+        /**
+         * Нельзя изменить состояние фильтра при следующих условиях:
+         * - общее количество предупреждений для данного фильтра равно нулю
+         * или
+         * - применен только один данный фильтр
+         */
+        disable:
+          filter.amount === 0 || (totalActiveFilters === 1 && filter.isActive),
       }"
       v-for="filter in filters"
       :key="`fw-${filter.code}`"
@@ -48,10 +59,18 @@
         </div>
       </div>
     </div>
+    <!--
+      Кнопка 'Показать все'
+     -->
     <div
       @click="$emit('filtered', 100)"
       class="show-all"
-      :class="{ disable: condition === 3 }"
+      :class="{
+        /**
+         *  Кнопка 'Показать все' активна если количество примененных фильтров меньше трех.
+         */
+        disable: totalActiveFilters === 3,
+      }"
     >
       Показать все
     </div>
@@ -69,21 +88,15 @@ export default defineComponent({
       type: Array as PropType<Filters[]>,
       requare: true,
     },
+    /**
+     * totalActiveFilters - Общее количество примененных фильтров
+     */
     totalActiveFilters: {
       type: Number,
       require: true,
     },
   },
   emits: ["filtered", "remove"],
-  computed: {
-    condition(): number {
-      if (this.totalActiveFilters !== undefined) {
-        return this.totalActiveFilters;
-      } else {
-        return 1;
-      }
-    },
-  },
 });
 </script>
 

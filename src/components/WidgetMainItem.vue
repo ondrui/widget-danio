@@ -52,7 +52,7 @@ export default defineComponent({
   props: {
     /**
      * Объект со свойствами, которые определяют содержание, внешний вид предупреждения
-     * и необходимасть отображения блока даты.
+     * и необходимость отображения блока даты.
      * @example
      * {"eventType":1,
      * "eventTime":[1662613200000,1663075800000],
@@ -71,7 +71,7 @@ export default defineComponent({
      * Порядковый индекс предупреждения. Необходим для установки доп класса CSS
      * 'day-info-zero-index'  предупреждению с индексом 0.
      */
-    index: Number,
+    index: { type: Number, required: true },
   },
   data() {
     return {

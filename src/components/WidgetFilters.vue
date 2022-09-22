@@ -3,7 +3,7 @@
     <!--
       Кнопки фильтров
       При нажатии посылает в родительский компонент объект со свойствами выбранного фильтра
-     -->
+    -->
     <div
       @click="$emit('filtered', filter)"
       class="filter-item"
@@ -84,6 +84,9 @@ import { Filters } from "@/types/types";
 
 export default defineComponent({
   props: {
+    /**
+     * Массив объектов, которые определяют состояние фильтра и его отображение.
+     */
     filters: {
       type: Array as PropType<Filters[]>,
       required: true,

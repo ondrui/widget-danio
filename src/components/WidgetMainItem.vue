@@ -38,7 +38,10 @@ import { Data } from "@/types/types";
  * и класс CSS устанавливающий цветовую схему предупреждения.
  */
 interface CodeColor {
-  [index: number]: string;
+  //[index: number]: string;
+  3: "primary";
+  1: "warning";
+  2: "danger";
 }
 /**
  * Интерфейс для объекта со свойствами, которые связывают код иконки
@@ -94,7 +97,7 @@ export default defineComponent({
      */
     setEvent(): string {
       return this.event.eventType
-        ? this.codeColor[this.event.eventType]
+        ? this.codeColor[this.event.eventType as keyof CodeColor]
         : (console.log("несуществующий код eventType"), "primary");
     },
     /**

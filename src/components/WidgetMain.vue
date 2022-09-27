@@ -3,7 +3,7 @@
     <h1>Главное</h1>
     <WidgetFilters
       @filtered="changeFilterActive"
-      :filters="amount"
+      :filters="filters"
       :totalActiveFilters="totalActiveFilters"
     />
     <div class="wrapper">
@@ -37,23 +37,21 @@ export default defineComponent({
     };
   },
   created() {
-    // this.filters = this.amount;
+    this.filters = this.count();
+  },
+  watch: {
+    events: {
+      handler() {
+        // console.log("events changes", n);
+        this.filters = this.count();
+      },
+      deep: true,
+    },
   },
   computed: {
-    amount(): Filters[] {
-      return this.filters.map((f) => {
-        const filterAmount = this.events.reduce(
-          (previousValue, currentValue) => {
-            if (currentValue.eventType === f.code) {
-              return ++previousValue;
-            }
-            return previousValue;
-          },
-          0
-        );
-        return { ...f, amount: filterAmount, isActive: filterAmount > 0 };
-      });
-    },
+    // amount(): Filters[] {
+    //   return this.count();
+    // },
     /**
      * Метод возвращает массив объектов с предупреждениями отфильтрованные и отсортированные
      * по дате и времени. А также добавляет в объект опциональный параметр, который
@@ -168,7 +166,23 @@ export default defineComponent({
      *
      * Возвращает обновленный массив фильтров.
      */
-    // count(): Filters[] {},
+    count() {
+      // console.log(this.filters);
+      return this.filters.map((f) => {
+        // console.log(f);
+        const filterAmount = this.events.reduce(
+          (previousValue, currentValue) => {
+            if (currentValue.eventType === f.code) {
+              return ++previousValue;
+            }
+            return previousValue;
+          },
+          0
+        );
+        console.log({ ...f, amount: filterAmount, isActive: filterAmount > 0 });
+        return { ...f, amount: filterAmount, isActive: filterAmount > 0 };
+      });
+    },
   },
 });
 </script>

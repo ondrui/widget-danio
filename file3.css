@@ -1,0 +1,16 @@
+.day-info-zero-index {
+  margin: 5px auto 0 auto;
+}
+.top-info,
+.time,
+.title {
+  border-radius: 10px;
+}
+.top-info {
+  display: inline-flex;
+}
+.time {
+  line-height: 16px;
+  text-align: center;
+  padding: 4px 8px 2px 8px;
+}

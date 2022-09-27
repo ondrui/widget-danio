@@ -5,3 +5,5 @@ import store from "./store";
 const app = createApp(App);
 
 app.use(store).mount("#app");
+
+setTimeout(() => store.commit("setChangeToTextWidget"), 3000);

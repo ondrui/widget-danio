@@ -3,7 +3,7 @@
     <h1>Главное</h1>
     <WidgetFilters
       @filtered="changeFilterActive"
-      :filters="filters"
+      :filters="amount"
       :totalActiveFilters="totalActiveFilters"
     />
     <div class="wrapper">
@@ -32,16 +32,28 @@ export default defineComponent({
   },
   data() {
     return {
-      events: [] as Data[],
-      filters: [] as Filters[],
+      events: this.$store.state.events as Data[],
+      filters: this.$store.state.filters as Filters[],
     };
   },
   created() {
-    this.events = this.it();
-    this.filters = this.initialfilters();
-    this.amount();
+    // this.filters = this.amount;
   },
   computed: {
+    amount(): Filters[] {
+      return this.filters.map((f) => {
+        const filterAmount = this.events.reduce(
+          (previousValue, currentValue) => {
+            if (currentValue.eventType === f.code) {
+              return ++previousValue;
+            }
+            return previousValue;
+          },
+          0
+        );
+        return { ...f, amount: filterAmount, isActive: filterAmount > 0 };
+      });
+    },
     /**
      * Метод возвращает массив объектов с предупреждениями отфильтрованные и отсортированные
      * по дате и времени. А также добавляет в объект опциональный параметр, который
@@ -113,19 +125,20 @@ export default defineComponent({
     /**
      * Возвращает массив объектов с предупреждениями, полученными из store
      */
-    it() {
-      return this.$store.state.events;
-    },
+    // getEvents() {
+    //   return this.$store.state.events;
+    // },
     /**
      * Возвращает массив объектов с фильтрами, полученными из store
      */
-    initialfilters(): Filters[] {
-      return this.$store.getters.getFilters;
-    },
+    // getfilters() {
+    //   return this.$store.state.filters;
+    // },
     /**
      * Метод вызывается когда пользователь кликает на кнопку фильтра или
      * кнопку 'Показать все'.
-     * Параметром принимает объект со свойствами выбранного фильтра или число 100
+     * @param {Filters | 100} filter Параметром принимает объект со свойствами
+     * выбранного фильтра или число 100
      *
      * Если параметр равен 100, то применяются ВСЕ фильтры у которых общее
      * количество предупреждений больше 0.
@@ -134,7 +147,6 @@ export default defineComponent({
      * противоположное при условии, что у него общее количество предупреждений
      * больше 0.
      *
-     * @param {Filters} filter
      */
     changeFilterActive(filter: Filters | 100) {
       if (filter === 100) {
@@ -156,20 +168,7 @@ export default defineComponent({
      *
      * Возвращает обновленный массив фильтров.
      */
-    amount() {
-      this.filters = this.filters.map((f) => {
-        const filterAmount = this.events.reduce(
-          (previousValue, currentValue) => {
-            if (currentValue.eventType === f.code) {
-              return ++previousValue;
-            }
-            return previousValue;
-          },
-          0
-        );
-        return { ...f, amount: filterAmount, isActive: filterAmount > 0 };
-      });
-    },
+    // count(): Filters[] {},
   },
 });
 </script>

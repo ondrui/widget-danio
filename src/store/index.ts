@@ -97,12 +97,41 @@ const store = createStore<RootState>({
       ],
     };
   },
-  mutations: {},
-  getters: {
-    getFilters(state) {
-      return state.filters;
+  mutations: {
+    setChangeToTextWidget(state) {
+      console.log("mutation start");
+      state.events.push({
+        eventType: 2,
+        eventTime: 1662702000000,
+        timeFormat: `year, month, day`,
+        titleText: `сильный ветер`,
+        eventText: `FFFFFFFFFFFFFFFFFFFFFFFF`,
+        iconCode: 2,
+      });
+      state.events.push({
+        eventType: 2,
+        eventTime: 1662702000000,
+        timeFormat: `year, month, day`,
+        titleText: `сильный ветер`,
+        eventText: `FFFFFFFFFFFFFFFFFFFFFFFF`,
+        iconCode: 2,
+      });
+      state.events.push({
+        eventType: 2,
+        eventTime: 1662702000000,
+        timeFormat: `year, month, day`,
+        titleText: `сильный ветер`,
+        eventText: `FFFFFFFFFFFFFFFFFFFFFFFF`,
+        iconCode: 2,
+      });
+      // state.events.map(
+      //   (item) => (item.eventText = "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
+      // );
+      state.filters.map((i) => (i.name = "ssss"));
+      console.log(state);
     },
   },
+  getters: {},
 });
 
 declare module "@vue/runtime-core" {

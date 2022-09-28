@@ -1,103 +1,41 @@
 import { createStore, Store } from "vuex";
 
-interface RootState {
-  filters: { code: number; amount: number; name: string; isActive: boolean }[];
+import type { Data, Filters } from "@/types/types";
+import { FilterStatus } from "@/basic";
 
-  events: {
-    eventType: number;
-    eventTime: number | number[];
-    timeFormat: string;
-    titleText: string;
-    eventText: string;
-    iconCode?: number;
-  }[];
+interface RootState {
+  filters: Filters;
+
+  events: Data[];
 }
 
 const store = createStore<RootState>({
   state() {
     return {
-      filters: [
-        { code: 3, amount: 0, name: "Общие", isActive: true },
-        { code: 1, amount: 0, name: "Внимание", isActive: true },
-        { code: 2, amount: 0, name: "Опасно", isActive: true },
-        { code: 5, amount: 0, name: "Очень опасно", isActive: true },
-        { code: 6, amount: 0, name: "Неблагоприятно", isActive: true },
-      ],
-      events: [
-        {
-          eventType: 1,
-          eventTime: [1662624030000, 1662730230000],
-          timeFormat: `year, month, day`,
-          titleText: `внимание`,
-          eventText: `1-Thursday, September 8th 2022, 11:00:30 am Максимальный уровень ультрофиолетового излучения за день`,
-          iconCode: 1,
-        },
-        {
-          eventType: 2,
-          eventTime: 1662790800000,
-          timeFormat: `year, month, day`,
-          titleText: `сильный ветер`,
-          eventText: `2-Saturday, September 10th 2022, 9:20:00 am 10 сентября 2022 года, с 10 часов до 21 часов в Москве и ТиНАО и в Московской области ожидается сильный ветер с порывами 12 - 15 м/с.`,
-          iconCode: 2,
-        },
-        {
-          eventType: 3,
-          eventTime: 1662700980000,
-          timeFormat: `year, month, day`,
-          titleText: `заход солнца`,
-          eventText: `3-Friday, September 9th 2022, 8:23:00 am Заход солнца сегодня в 20:23, на 5 минут позже чем вчера, продолжительность дня составила 12 ч. 43 мин. (+ 15 мин.)`,
-        },
-        {
-          eventType: 2,
-          eventTime: 1662699600000,
-          timeFormat: `year, month, day`,
-          titleText: `сильный ветер`,
-          eventText: `4-Friday, September 9th 2022, 8:00:00 am Сегодня в Москве и области ожидается усиление ветра с порывами до 22 м/с`,
-          iconCode: 2,
-        },
-        {
-          eventType: 1,
-          eventTime: [1662700500000, 1662818400000],
-          timeFormat: `year, month, day`,
-          titleText: `внимание`,
-          eventText: `5-Friday, September 9th 2022, 8:15:00 am Максимальный уровень ультрофиолетового излучения за день.`,
-          iconCode: 1,
-        },
-        {
-          eventType: 3,
-          eventTime: 1662742800000,
-          timeFormat: `year, month, day`,
-          titleText: `заход солнца`,
-          eventText: `6-Friday, September 9th 2022, 8:00:00 pm Заход солнца сегодня в 20:23, на 5 минут позже чем вчера, продолжительность дня составила 12 ч. 43 мин. (+ 15 мин.). Lorem ipsum dolor sit amet consectetur, adipisicing elit.`,
-        },
-        {
-          eventType: 2,
-          eventTime: 1662913800000,
-          timeFormat: `year, month, day`,
-          titleText: `сильный ветер`,
-          eventText: `7-Sunday, September 11th 2022, 7:30:00 pm В Москве и области ожидается усиление ветра с порывами до 22 м/с. Заход солнца сегодня в 20:23, на 5 минут позже чем вчера, продолжительность дня составила 12 ч. 43 мин. (+ 15 мин.)`,
-          iconCode: 2,
-        },
-        {
-          eventType: 1,
-          eventTime: [1662613200000, 1663075800000],
-          timeFormat: `year, month, day`,
-          titleText: `внимание`,
-          eventText: `8-Thursday, September 8th 2022, 8:00:00 am Максимальный уровень ультрофиолетового излучения за день.`,
-          iconCode: 1,
-        },
-        {
-          eventType: 2,
-          eventTime: 1662702000000,
-          timeFormat: `year, month, day`,
-          titleText: `сильный ветер`,
-          eventText: `9-Friday, September 9th 2022, 8:40:00 am 9 сентября 2022 года, с 10 часов до 20 часов в Москве и ТиНАО и в Московской области ожидается сильный ветер с порывами 12 - 17 м/с.`,
-          iconCode: 2,
-        },
-      ],
+      filters: {},
+      events: [],
     };
   },
   mutations: {
+    setData(state, payload) {
+      state.events = payload.events;
+      state.filters = payload.filters;
+    },
+    setFilter(state, payload) {
+      console.log(payload);
+
+      if (payload === 100) {
+        for (const filter in state.filters) {
+          state.filters[filter].status =
+            state.filters[filter].amount > 0
+              ? FilterStatus.Applied
+              : FilterStatus.Disabled;
+        }
+        state.filters;
+      } else {
+        state.filters[payload].status = FilterStatus.Removed;
+      }
+    },
     setChangeToTextWidget(state) {
       console.log("mutation start");
       state.events.push({
@@ -124,14 +62,85 @@ const store = createStore<RootState>({
         eventText: `FFFFFFFFFFFFFFFFFFFFFFFF`,
         iconCode: 2,
       });
-      // state.events.map(
-      //   (item) => (item.eventText = "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
-      // );
-      state.filters.map((i) => (i.name = "ssss"));
-      console.log(state);
+      state.events.map(
+        (item) => (item.eventText = "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
+      );
+      // state.filters.map((i) => (i.name = "ssss"));
+      // console.log(state);
     },
   },
-  getters: {},
+  getters: {
+    addFilters(state) {
+      const filterObj = JSON.parse(JSON.stringify(state.filters));
+      for (const filter in filterObj) {
+        filterObj[filter].amount = state.events.filter(
+          (f) => f.eventType === +filter
+        ).length;
+        if (!filterObj[filter].status) {
+          filterObj[filter].status =
+            filterObj[filter].amount > 0
+              ? FilterStatus.Applied
+              : FilterStatus.Disabled;
+        }
+      }
+      filterObj[1].amount = 10;
+      return filterObj;
+    },
+    filteredEvents(state, getters) {
+      const computedEventTime = (event: Data): number => {
+        if (typeof event.eventTime === "number") {
+          return event.eventTime;
+        } else {
+          return event.eventTime[0];
+        }
+      };
+
+      const filters = getters.addFilters;
+      return (
+        [...state.events]
+          .filter((event) => {
+            return Object.keys(filters).some((key) => {
+              return (
+                event.eventType === +key &&
+                filters[key].status === FilterStatus.Applied
+              );
+            });
+
+            // const filteredOutput = input.filter((obj) => {
+            //   return Object.keys(filter).every((filterKeys) => {
+            //     return obj[filterKeys] === filter[filterKeys];
+            //   });
+            // });
+            // return filters.some((f) => {
+            //   return f.code === event.eventType && f.isActive;
+            // });
+          })
+          .sort((event1, event2): number => {
+            return computedEventTime(event1) - computedEventTime(event2);
+          })
+          /** Set the isDayShow property mapping the date block. */
+          /**
+           * Параметр isDayShow устанавливается в true если:
+           * - индекс предупреждения равен 0
+           * - у соседних предупреждений разная дата, то параметр isDayShow
+           * устанавливается в true второму предупреждению.
+           */
+          .map((event: Data, index: number, arr: Data[]) => {
+            if (index === 0) {
+              return { ...event, isDayShow: true };
+            }
+            if (
+              new Date(computedEventTime(arr[index - 1])).getDate() !==
+              new Date(computedEventTime(event)).getDate()
+            ) {
+              return { ...event, isDayShow: true };
+            } else {
+              return { ...event, isDayShow: false };
+            }
+          })
+      );
+    },
+  },
 });
 
 declare module "@vue/runtime-core" {

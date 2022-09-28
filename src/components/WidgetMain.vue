@@ -1,15 +1,11 @@
 <template>
   <div class="widget">
     <h1>Главное</h1>
-    <WidgetFilters
-      @filtered="changeFilterActive"
-      :filters="filters"
-      :totalActiveFilters="totalActiveFilters"
-    />
+    <WidgetFilters :filters="getfilters" />
     <div class="wrapper">
       <div class="container-main">
         <WidgetMainItem
-          v-for="(event, index) in filteredEvents"
+          v-for="(event, index) in getEvents"
           :key="`wn-${index}`"
           :event="event"
           :index="+index"
@@ -23,114 +19,95 @@
 import { defineComponent } from "vue";
 import WidgetMainItem from "./WidgetMainItem.vue";
 import WidgetFilters from "./WidgetFilters.vue";
-import { Data, Filters } from "@/types/types";
+// import { Data, Filters } from "@/types/types";
 
 export default defineComponent({
   components: {
     WidgetMainItem,
     WidgetFilters,
   },
-  data() {
-    return {
-      events: this.$store.state.events as Data[],
-      filters: this.$store.state.filters as Filters[],
-    };
-  },
-  created() {
-    this.filters = this.count();
-  },
-  watch: {
-    events: {
-      handler() {
-        // console.log("events changes", n);
-        this.filters = this.count();
-      },
-      deep: true,
-    },
-  },
   computed: {
-    // amount(): Filters[] {
-    //   return this.count();
-    // },
     /**
-     * Метод возвращает массив объектов с предупреждениями отфильтрованные и отсортированные
-     * по дате и времени. А также добавляет в объект опциональный параметр, который
-     * отвечает за отображение блока с датой. Если true, то блок отрисовывается.
+     * Возвращает массив объектов с предупреждениями, полученными из store
      */
-    filteredEvents(): Data[] {
-      let filters = this.filters;
-      /**
-       * Проверяет тип значения свойства eventTime и возвращает определенный timestamp
-       * согласно этому.
-       * @param {Data} event - объект со свойствами, которые определяют
-       * содержание, внешний вид предупреждения
-       */
-      const computedEventTime = (event: Data): number => {
-        if (typeof event.eventTime === "number") {
-          return event.eventTime;
-        } else {
-          return event.eventTime[0];
-        }
-      };
-
-      return (
-        this.events
-          .filter((event) => {
-            return filters.some((f) => {
-              return f.code === event.eventType && f.isActive;
-            });
-          })
-          .sort((event1, event2): number => {
-            return computedEventTime(event1) - computedEventTime(event2);
-          })
-          /** Set the isDayShow property mapping the date block. */
-          /**
-           * Параметр isDayShow устанавливается в true если:
-           * - индекс предупреждения равен 0
-           * - у соседних предупреждений разная дата, то параметр isDayShow
-           * устанавливается в true второму предупреждению.
-           */
-          .map((event: Data, index: number, arr: Data[]) => {
-            //!!!!
-            if (index === 0) {
-              return { ...event, isDayShow: true };
-            }
-            if (
-              new Date(computedEventTime(arr[index - 1])).getDate() !==
-              new Date(computedEventTime(event)).getDate()
-            ) {
-              return { ...event, isDayShow: true };
-            } else {
-              return { ...event, isDayShow: false };
-            }
-          })
-      );
+    getEvents() {
+      return this.$store.getters.filteredEvents;
+    },
+    /**
+     * Возвращает массив объектов с фильтрами, полученными из store
+     */
+    getfilters() {
+      return this.$store.getters.addFilters;
     },
     /**
      * Возвращает общее количество примененных фильтров
      * @example
      * // returns 3
      */
-    totalActiveFilters(): number {
-      return this.filters.reduce(
-        (previousValue, currentValue) =>
-          currentValue.isActive ? ++previousValue : previousValue,
-        0
-      );
-    },
+    // totalActiveFilters(): number {
+    //   return this.filters.reduce(
+    //     (previousValue, currentValue) =>
+    //       currentValue.isActive ? ++previousValue : previousValue,
+    //     0
+    //   );
+    // },
   },
   methods: {
     /**
-     * Возвращает массив объектов с предупреждениями, полученными из store
+     * Метод возвращает массив объектов с предупреждениями отфильтрованные и отсортированные
+     * по дате и времени. А также добавляет в объект опциональный параметр, который
+     * отвечает за отображение блока с датой. Если true, то блок отрисовывается.
      */
-    // getEvents() {
-    //   return this.$store.state.events;
-    // },
-    /**
-     * Возвращает массив объектов с фильтрами, полученными из store
-     */
-    // getfilters() {
-    //   return this.$store.state.filters;
+    // filteredEvents(): Data[] {
+    //   let filters = this.filters;
+    //   /**
+    //    * Проверяет тип значения свойства eventTime и возвращает определенный timestamp
+    //    * согласно этому.
+    //    * @param {Data} event - объект со свойствами, которые определяют
+    //    * содержание, внешний вид предупреждения
+    //    */
+    //   const computedEventTime = (event: Data): number => {
+    //     if (typeof event.eventTime === "number") {
+    //       return event.eventTime;
+    //     } else {
+    //       return event.eventTime[0];
+    //     }
+    //   };
+    //   console.log("1", this.events);
+    //   return (this.events = this.getEvents
+    //     .filter((event) => {
+    //       // console.log("filter", event);
+    //       return filters.some((f) => {
+    //         console.log("filters some", f);
+    //         return f.code === event.eventType && f.isActive;
+    //       });
+    //     })
+    //     .sort((event1, event2): number => {
+    //       console.log("sort", event1);
+    //       return computedEventTime(event1) - computedEventTime(event2);
+    //     })
+    //     /** Set the isDayShow property mapping the date block. */
+    //     /**
+    //      * Параметр isDayShow устанавливается в true если:
+    //      * - индекс предупреждения равен 0
+    //      * - у соседних предупреждений разная дата, то параметр isDayShow
+    //      * устанавливается в true второму предупреждению.
+    //      */
+    //     .map((event: Data, index: number, arr: Data[]) => {
+    //       console.log("map", arr);
+    //       //!!!!
+    //       if (index === 0) {
+    //         return { ...event, isDayShow: true };
+    //       }
+    //       if (
+    //         new Date(computedEventTime(arr[index - 1])).getDate() !==
+    //         new Date(computedEventTime(event)).getDate()
+    //       ) {
+    //         return { ...event, isDayShow: true };
+    //       } else {
+    //         return { ...event, isDayShow: false };
+    //       }
+    //     }));
     // },
     /**
      * Метод вызывается когда пользователь кликает на кнопку фильтра или
@@ -146,19 +123,19 @@ export default defineComponent({
      * больше 0.
      *
      */
-    changeFilterActive(filter: Filters | 100) {
-      if (filter === 100) {
-        this.filters = this.filters.map((f) => {
-          return { ...f, isActive: f.amount > 0 };
-        });
-      } else {
-        this.filters = this.filters.map((f) =>
-          f.code === filter.code && f.amount > 0
-            ? { ...f, isActive: !f.isActive }
-            : f
-        );
-      }
-    },
+    // changeFilterActive(filter: Filters | 100) {
+    //   if (filter === 100) {
+    //     this.filters = this.filters.map((f) => {
+    //       return { ...f, isActive: f.amount > 0 };
+    //     });
+    //   } else {
+    //     this.filters = this.filters.map((f) =>
+    //       f.code === filter.code && f.amount > 0
+    //         ? { ...f, isActive: !f.isActive }
+    //         : f
+    //     );
+    //   }
+    // },
     /**
      * Метод вычисляет общее количество предупреждений с определенным типом и записывает
      * его в свойство amount объекта фильтра, а также устанавливает свойство isActive в
@@ -166,23 +143,23 @@ export default defineComponent({
      *
      * Возвращает обновленный массив фильтров.
      */
-    count() {
-      // console.log(this.filters);
-      return this.filters.map((f) => {
-        // console.log(f);
-        const filterAmount = this.events.reduce(
-          (previousValue, currentValue) => {
-            if (currentValue.eventType === f.code) {
-              return ++previousValue;
-            }
-            return previousValue;
-          },
-          0
-        );
-        console.log({ ...f, amount: filterAmount, isActive: filterAmount > 0 });
-        return { ...f, amount: filterAmount, isActive: filterAmount > 0 };
-      });
-    },
+    // count() {
+    //   // console.log(this.filters);
+    //   return this.filters.map((f) => {
+    //     // console.log(f);
+    //     const filterAmount = this.events.reduce(
+    //       (previousValue, currentValue) => {
+    //         if (currentValue.eventType === f.code) {
+    //           return ++previousValue;
+    //         }
+    //         return previousValue;
+    //       },
+    //       0
+    //     );
+    //     // console.log("count", f);
+    //     return { ...f, amount: filterAmount, isActive: filterAmount > 0 };
+    //   });
+    // },
   },
 });
 </script>

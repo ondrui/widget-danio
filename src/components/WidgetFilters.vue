@@ -5,28 +5,27 @@
       При нажатии посылает в родительский компонент объект со свойствами выбранного фильтра
     -->
     <div
-      @click="$emit('filtered', filter)"
+      v-for="(filter, index) in filters"
+      @click="$store.commit('setFilter', index)"
       class="filter-item"
       :class="{
-        active: filter.isActive,
+        active: filter.status,
         /**
          * Нельзя изменить состояние фильтра при следующих условиях:
          * - общее количество предупреждений для данного фильтра равно нулю
          * или
          * - применен только один данный фильтр
          */
-        disable:
-          filter.amount === 0 || (totalActiveFilters <= 1 && filter.isActive),
+        disable: filter.amount === 0 || filter.status,
       }"
-      v-for="filter in filters"
-      :key="`fw-${filter.code}`"
+      :key="`fw-${filter}`"
     >
       <div>{{ filter.name }}</div>
       <span class="filter-count">{{ filter.amount }}</span>
       <div class="filter-icon-block">
         <div
           class="filter-icon-open"
-          v-if="!filter.isActive || filter.amount === 0"
+          v-if="!filter.status || filter.amount === 0"
         >
           <svg
             width="8"
@@ -61,17 +60,8 @@
     </div>
     <!--
       Кнопка 'Показать все'
-     -->
-    <div
-      @click="$emit('filtered', 100)"
-      class="show-all"
-      :class="{
-        /**
-         *  Кнопка 'Показать все' активна если количество примененных фильтров меньше трех.
-         */
-        disable: totalActiveFilters === 3,
-      }"
-    >
+    -->
+    <div @click="$store.commit('setFilter', 100)" class="show-all">
       Показать все
     </div>
   </div>
@@ -88,18 +78,18 @@ export default defineComponent({
      * Массив объектов, которые определяют состояние фильтра и его отображение.
      */
     filters: {
-      type: Array as PropType<Filters[]>,
+      type: Object as PropType<Filters>,
       required: true,
     },
     /**
      * totalActiveFilters - Общее количество примененных фильтров
      */
-    totalActiveFilters: {
-      type: Number,
-      required: true,
-    },
+    // totalActiveFilters: {
+    //   type: Number,
+    //   required: true,
+    // },
   },
-  emits: ["filtered", "remove"],
+  //emits: ["filtered", "remove"],
 });
 </script>
 

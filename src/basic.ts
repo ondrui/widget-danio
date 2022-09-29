@@ -1,9 +1,19 @@
-export enum CodeColor {
-  Warning = 1,
-  Danger = 2,
-  Primary = 3,
+/**
+ * Enum который связывают код типа
+ * предупреждения eventType из объекта event
+ * и класс CSS устанавливающий цветовую схему предупреждения.
+ * @enum
+ */
+export enum CodeEvent {
+  warning = 1,
+  danger = 2,
+  primary = 3,
 }
 
+/**
+ * Enum содержит статусы фильтра.
+ * @enum
+ */
 export enum FilterStatus {
   Applied,
   Removed,

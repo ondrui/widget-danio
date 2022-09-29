@@ -1,7 +1,10 @@
 <template>
   <div class="widget">
     <h1>Главное</h1>
-    <WidgetFilters :filters="getfilters" />
+    <WidgetFilters
+      :filters="getfilters"
+      :totalAppliedFilters="totalAppliedFilters"
+    />
     <div class="wrapper">
       <div class="container-main">
         <WidgetMainItem
@@ -19,7 +22,6 @@
 import { defineComponent } from "vue";
 import WidgetMainItem from "./WidgetMainItem.vue";
 import WidgetFilters from "./WidgetFilters.vue";
-// import { Data, Filters } from "@/types/types";
 
 export default defineComponent({
   components: {
@@ -44,122 +46,9 @@ export default defineComponent({
      * @example
      * // returns 3
      */
-    // totalActiveFilters(): number {
-    //   return this.filters.reduce(
-    //     (previousValue, currentValue) =>
-    //       currentValue.isActive ? ++previousValue : previousValue,
-    //     0
-    //   );
-    // },
-  },
-  methods: {
-    /**
-     * Метод возвращает массив объектов с предупреждениями отфильтрованные и отсортированные
-     * по дате и времени. А также добавляет в объект опциональный параметр, который
-     * отвечает за отображение блока с датой. Если true, то блок отрисовывается.
-     */
-    // filteredEvents(): Data[] {
-    //   let filters = this.filters;
-    //   /**
-    //    * Проверяет тип значения свойства eventTime и возвращает определенный timestamp
-    //    * согласно этому.
-    //    * @param {Data} event - объект со свойствами, которые определяют
-    //    * содержание, внешний вид предупреждения
-    //    */
-    //   const computedEventTime = (event: Data): number => {
-    //     if (typeof event.eventTime === "number") {
-    //       return event.eventTime;
-    //     } else {
-    //       return event.eventTime[0];
-    //     }
-    //   };
-    //   console.log("1", this.events);
-    //   return (this.events = this.getEvents
-    //     .filter((event) => {
-    //       // console.log("filter", event);
-    //       return filters.some((f) => {
-    //         console.log("filters some", f);
-    //         return f.code === event.eventType && f.isActive;
-    //       });
-    //     })
-    //     .sort((event1, event2): number => {
-    //       console.log("sort", event1);
-    //       return computedEventTime(event1) - computedEventTime(event2);
-    //     })
-    //     /** Set the isDayShow property mapping the date block. */
-    //     /**
-    //      * Параметр isDayShow устанавливается в true если:
-    //      * - индекс предупреждения равен 0
-    //      * - у соседних предупреждений разная дата, то параметр isDayShow
-    //      * устанавливается в true второму предупреждению.
-    //      */
-    //     .map((event: Data, index: number, arr: Data[]) => {
-    //       console.log("map", arr);
-    //       //!!!!
-    //       if (index === 0) {
-    //         return { ...event, isDayShow: true };
-    //       }
-    //       if (
-    //         new Date(computedEventTime(arr[index - 1])).getDate() !==
-    //         new Date(computedEventTime(event)).getDate()
-    //       ) {
-    //         return { ...event, isDayShow: true };
-    //       } else {
-    //         return { ...event, isDayShow: false };
-    //       }
-    //     }));
-    // },
-    /**
-     * Метод вызывается когда пользователь кликает на кнопку фильтра или
-     * кнопку 'Показать все'.
-     * @param {Filters | 100} filter Параметром принимает объект со свойствами
-     * выбранного фильтра или число 100
-     *
-     * Если параметр равен 100, то применяются ВСЕ фильтры у которых общее
-     * количество предупреждений больше 0.
-     *
-     * Если принимается объект, то у данного фильтра меняется свойство isActive на
-     * противоположное при условии, что у него общее количество предупреждений
-     * больше 0.
-     *
-     */
-    // changeFilterActive(filter: Filters | 100) {
-    //   if (filter === 100) {
-    //     this.filters = this.filters.map((f) => {
-    //       return { ...f, isActive: f.amount > 0 };
-    //     });
-    //   } else {
-    //     this.filters = this.filters.map((f) =>
-    //       f.code === filter.code && f.amount > 0
-    //         ? { ...f, isActive: !f.isActive }
-    //         : f
-    //     );
-    //   }
-    // },
-    /**
-     * Метод вычисляет общее количество предупреждений с определенным типом и записывает
-     * его в свойство amount объекта фильтра, а также устанавливает свойство isActive в
-     * true если общее количество предупреждений больше 0.
-     *
-     * Возвращает обновленный массив фильтров.
-     */
-    // count() {
-    //   // console.log(this.filters);
-    //   return this.filters.map((f) => {
-    //     // console.log(f);
-    //     const filterAmount = this.events.reduce(
-    //       (previousValue, currentValue) => {
-    //         if (currentValue.eventType === f.code) {
-    //           return ++previousValue;
-    //         }
-    //         return previousValue;
-    //       },
-    //       0
-    //     );
-    //     // console.log("count", f);
-    //     return { ...f, amount: filterAmount, isActive: filterAmount > 0 };
-    //   });
-    // },
+    totalAppliedFilters(): number {
+      return this.$store.getters.totalAppliedFilters;
+    },
   },
 });
 </script>

@@ -6,27 +6,18 @@
     -->
     <div
       v-for="(filter, index) in filters"
-      @click="$store.commit('setFilter', index)"
-      class="filter-item"
+      @click="isClick(index, filter)"
       :class="{
-        active: filter.status,
-        /**
-         * Нельзя изменить состояние фильтра при следующих условиях:
-         * - общее количество предупреждений для данного фильтра равно нулю
-         * или
-         * - применен только один данный фильтр
-         */
-        disable: filter.amount === 0 || filter.status,
+        'filter-item': 'filter-item',
+        active: filter.status === 0,
+        disable: disabled,
       }"
       :key="`fw-${filter}`"
     >
       <div>{{ filter.name }}</div>
       <span class="filter-count">{{ filter.amount }}</span>
       <div class="filter-icon-block">
-        <div
-          class="filter-icon-open"
-          v-if="!filter.status || filter.amount === 0"
-        >
+        <div class="filter-icon-open" v-if="filter.status !== 0">
           <svg
             width="8"
             height="8"
@@ -61,7 +52,16 @@
     <!--
       Кнопка 'Показать все'
     -->
-    <div @click="$store.commit('setFilter', 100)" class="show-all">
+    <div
+      @click="$store.commit('changeFilterStatus', 100)"
+      :class="{
+        'show-all': 'show-all',
+        /**
+         *  Кнопка 'Показать все' активна если количество примененных фильтров меньше трех.
+         */
+        disable: totalAppliedFilters === 3,
+      }"
+    >
       Показать все
     </div>
   </div>
@@ -70,7 +70,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import { Filters } from "@/types/types";
+import { Filters, Filter } from "@/types/types";
+// import { FilterStatus } from "@/basic";
 
 export default defineComponent({
   props: {
@@ -82,14 +83,36 @@ export default defineComponent({
       required: true,
     },
     /**
-     * totalActiveFilters - Общее количество примененных фильтров
+     * totalAppliedFilters - Общее количество примененных фильтров
      */
-    // totalActiveFilters: {
-    //   type: Number,
-    //   required: true,
-    // },
+    totalAppliedFilters: {
+      type: Number,
+      required: true,
+    },
   },
-  //emits: ["filtered", "remove"],
+  data() {
+    return {
+      disabled: false,
+    };
+  },
+  methods: {
+    isClick(index: number, filter: Filter) {
+      /**
+       * Нельзя изменить состояние фильтра при следующих условиях:
+       * - общее количество предупреждений для данного фильтра равно нулю
+       * или
+       * - применен только один данный фильтр
+       */
+      if (
+        filter.status === 2 ||
+        (this.totalAppliedFilters <= 1 && filter.status === 0)
+      ) {
+        this.disabled = true;
+      } else {
+        this.$store.commit("changeFilterStatus", index);
+      }
+    },
+  },
 });
 </script>
 

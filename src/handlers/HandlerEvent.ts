@@ -1,34 +1,44 @@
-import { FilterStatus, CodeEvent } from "@/basic";
+import type { Data, Datakeys } from "../types/types";
+import { CodeEvent } from "@/basic";
 /**
- * Интерфейс для объекта со свойствами, которые определяют содержание и внешний вид предупреждения.
+ * Класс HandlerEvent модифицирует данные из объекта предупреждения в соответствии с
+ * потребностью компоненты.
+ * @class
  */
-export interface Data {
+export class HandlerEvent implements Data {
+  [index: string]:
+    | number
+    | number[]
+    | string
+    | boolean
+    | undefined
+    | (() => number);
   /**
    * eventType - Код типа предупреждения (важность). Будет предопределено
    * несколько типов предупреждений. Определяет цветовую схему и параметры
    * используемых шрифтов. Цветовые схемы будут подключаться в корневой
    * компоненте из отдельного файла.
    */
-  eventType: CodeEvent;
+  eventType!: CodeEvent;
   /**
    * eventTime - Время действия предупреждения. Может быть точным (одно
    * значение) или интервальным (два значения). Значение времени передается в
    * формате timestamp.
    */
-  eventTime: number | number[];
+  eventTime!: number | number[];
   /**
    * timeFormat -  Формат отображения времени. Возможные варианты:
    * часы:минуты; часы:минуты день:месяц; другие.
    */
-  timeFormat: string;
+  timeFormat!: string;
   /**
    * titleText -  Текст заголовка.
    */
-  titleText: string;
+  titleText!: string;
   /**
    * eventText - Текст предупреждения.
    */
-  eventText: string;
+  eventText!: string;
   /**
    * iconCode - Опциональный параметр. Код иконки предупреждения. Компонента
    * такой иконки будет создана позднее. Компонента будет представлять собой
@@ -42,35 +52,23 @@ export interface Data {
    * Если true, то блок отрисовывается.
    */
   isDayShow?: boolean;
-}
 
-/**
- * Интерфейс фильтра.
- */
-export interface Filter {
-  /**
-   * name - Наименование фильтра.
-   */
-  name: string;
-  /**
-   * amount - Общее количество предупреждений с одинаковым кодом.
-   */
-  amount: number;
-  /**
-   * status - Отвечает за состояние кнопки фильтра. Возможно 3 состояния:
-   * disabled - кнопка заблокирована и неактивна
-   * applied - фильтр применен
-   * removed - фильтр не применен
-   */
-  status: FilterStatus;
-}
+  constructor(_event: Data) {
+    for (const prop in _event) {
+      const key = prop as Datakeys;
 
-/**
- * Интерфейс для объекта, который управляет отображением блока с фильтрами
- * и их состояниями.
- */
-export interface Filters {
-  [index: number]: Filter;
+      this[prop] = _event[key];
+    }
+  }
+  /**
+   * Метод проверяет тип значения свойства eventTime и возвращает определенный timestamp
+   */
+  //timestamp: number;
+  getTimestamp(): number {
+    if (typeof this.eventTime === "number") {
+      return this.eventTime;
+    } else {
+      return this.eventTime[0];
+    }
+  }
 }
-
-export type Datakeys = keyof Data;

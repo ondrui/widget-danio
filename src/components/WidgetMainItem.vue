@@ -1,11 +1,11 @@
 <template>
   <!--
     Условия отображения блока с датой:
-    - свойство isDayShow объекта event, который приходит через пропсы, установлено в true и указано слово порядка даты setDayInDayInfo[0].
+    - свойство isDayShow объекта event, который приходит через пропсы,
+      установлено в true и указано слово порядка даты setDayInDayInfo[0].
   -->
   <div
-    class="day-info"
-    :class="index !== 0 ? '' : 'day-info-zero-index'"
+    :class="'day-info ' + (index !== 0 ? '' : 'day-info-zero-index')"
     v-show="event.isDayShow && setDayInDayInfo[0]"
   >
     <span class="day-info-name">
@@ -13,14 +13,14 @@
     </span>
     <span class="day-info-number-month">{{ setDayInDayInfo[1] }}</span>
   </div>
-  <div class="container-item" :class="setEvent">
+  <div :class="'container-item ' + EventColorScheme">
     <div class="top-info">
       <div class="time">{{ setTimeEvent }}</div>
       <div class="title" :title="event.titleText">{{ event.titleText }}</div>
     </div>
     <div class="block">
       <div v-if="event.iconCode" class="icon">
-        <img :src="setUrlIcon" alt="icon" />
+        <img :src="UrlIcon" alt="icon" />
       </div>
       <div class="text">{{ event.eventText }}</div>
     </div>
@@ -31,18 +31,9 @@
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
 import { Data } from "@/types/types";
+import { HandlerEvent } from "@/handlers/HandlerEvent";
+import { CodeEvent } from "@/basic";
 
-/**
- * Интерфейс для объекта со свойствами, которые связывают код типа
- * предупреждения eventType из объекта event
- * и класс CSS устанавливающий цветовую схему предупреждения.
- */
-interface CodeColor {
-  //[index: number]: string;
-  3: "primary";
-  1: "warning";
-  2: "danger";
-}
 /**
  * Интерфейс для объекта со свойствами, которые связывают код иконки
  * предупреждения iconCode из объекта event и названием файла иконки.
@@ -78,11 +69,6 @@ export default defineComponent({
   },
   data() {
     return {
-      codeColor: {
-        3: "primary",
-        1: "warning",
-        2: "danger",
-      } as CodeColor,
       iconItem: {
         2: "wind",
         1: "uv-index",
@@ -95,9 +81,9 @@ export default defineComponent({
      * @example
      * // returns 'warning'
      */
-    setEvent(): string {
+    EventColorScheme(): string {
       return this.event.eventType
-        ? this.codeColor[this.event.eventType as keyof CodeColor]
+        ? CodeEvent[this.event.eventType]
         : (console.log("несуществующий код eventType"), "primary");
     },
     /**
@@ -105,7 +91,7 @@ export default defineComponent({
      * @example
      * // returns '@/assets/images/uv-index.svg'
      */
-    setUrlIcon(): string {
+    UrlIcon(): string {
       return this.event.iconCode
         ? require(`@/assets/images/${this.iconItem[this.event.iconCode]}.svg`)
         : (console.log("нет иконки"), "#");
@@ -185,10 +171,7 @@ export default defineComponent({
     setDayInDayInfo(): string[] {
       const name = ["Сегодня", "Завтра", "Послезавтра", "Вчера"];
 
-      const dateTimestamp =
-        typeof this.event.eventTime === "number"
-          ? this.event.eventTime
-          : this.event.eventTime[0];
+      const dateTimestamp = new HandlerEvent(this.event).getTimestamp();
 
       let options: Intl.DateTimeFormatOptions = {
         month: "long",

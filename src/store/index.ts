@@ -80,10 +80,12 @@ const store = createStore<RootState>({
        */
       const totalAppliedFilters = (): number => {
         return Object.keys(state.filters).reduce(
-          (previousValue, currentValue) =>
-            state.filters[+currentValue].status === FilterStatus.Applied
-              ? previousValue + 1
-              : previousValue,
+          (previousValue, currentValue) => {
+            if (state.filters[+currentValue].status === FilterStatus.Applied) {
+              previousValue++;
+            }
+            return previousValue;
+          },
           0
         );
       };
@@ -118,10 +120,12 @@ const store = createStore<RootState>({
      */
     totalAppliedFilters(state): number {
       return Object.keys(state.filters).reduce(
-        (previousValue, currentValue) =>
-          state.filters[+currentValue].status === FilterStatus.Applied
-            ? previousValue + 1
-            : previousValue,
+        (previousValue, currentValue) => {
+          if (state.filters[+currentValue].status === FilterStatus.Applied) {
+            previousValue++;
+          }
+          return previousValue;
+        },
         0
       );
     },

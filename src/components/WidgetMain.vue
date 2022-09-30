@@ -84,7 +84,7 @@ export default defineComponent({
 }
 .default-event {
   width: 100%;
-  margin: 21px 9px 10px 9px;
+  margin: 21px 5px 10px 0px;
   padding: 14px 15px;
   background: $color-filters-day-dark;
   color: $color-filters-day-darker;

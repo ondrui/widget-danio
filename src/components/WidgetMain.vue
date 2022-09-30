@@ -6,13 +6,19 @@
       :totalAppliedFilters="totalAppliedFilters"
     />
     <div class="wrapper">
-      <div class="container-main">
+      <div v-if="getEvents.length" class="container-main">
         <WidgetMainItem
           v-for="(event, index) in getEvents"
           :key="`wn-${index}`"
           :event="event"
           :index="+index"
         />
+      </div>
+      <div class="default-event" v-else>
+        <div>
+          В ближайшее время никаких значимых событий в погоде не ожидается :)
+        </div>
+        <div>Мы сразу сообщим, как появится что-то интересное.</div>
       </div>
     </div>
   </div>
@@ -22,6 +28,7 @@
 import { defineComponent } from "vue";
 import WidgetMainItem from "./WidgetMainItem.vue";
 import WidgetFilters from "./WidgetFilters.vue";
+import { Data } from "@/types/types";
 
 export default defineComponent({
   components: {
@@ -32,7 +39,7 @@ export default defineComponent({
     /**
      * Возвращает массив объектов с предупреждениями, полученными из store
      */
-    getEvents() {
+    getEvents(): Data[] {
       return this.$store.getters.filteredEvents;
     },
     /**
@@ -74,6 +81,20 @@ export default defineComponent({
   // height: calc(100% - 101px);
   max-height: 448px;
   display: flex;
+}
+.default-event {
+  width: 100%;
+  margin: 21px 9px 10px 9px;
+  padding: 14px 15px;
+  background: $color-filters-day-dark;
+  color: $color-filters-day-darker;
+  border-radius: 10px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  & > div {
+    margin-bottom: 15px;
+  }
 }
 .container-main {
   display: flex;

@@ -13,7 +13,13 @@ interface RootState {
 const store = createStore<RootState>({
   state() {
     return {
-      filters: {},
+      filters: {
+        3: { name: "Общие", amount: 0, status: 2 },
+        1: { name: "Внимание", amount: 0, status: 2 },
+        2: { name: "Опасно", amount: 0, status: 2 },
+        5: { name: "Очень опасно", amount: 0, status: 2 },
+        6: { name: "Неблагоприятно", amount: 0, status: 2 },
+      },
       events: [],
     };
   },
@@ -81,7 +87,6 @@ const store = createStore<RootState>({
           0
         );
       };
-      console.log(payload);
       if (payload === 100) {
         for (const key in state.filters) {
           if (state.filters[key].amount > 0) {

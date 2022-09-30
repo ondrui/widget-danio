@@ -7,12 +7,16 @@
     <div
       v-for="(filter, index) in filters"
       @click="isClick(index, filter)"
+      @keyup.enter="isClick(index, filter)"
+      @keyup.space="isClick(index, filter)"
       :class="{
         'filter-item': 'filter-item',
-        active: filter.status === 0,
-        disable: disabled,
+        active: isAppliedFilter(filter),
+        disable: isDisabledFilter(filter),
       }"
       :key="`fw-${filter}`"
+      :tabindex="isDisabledFilter(filter) ? '' : 0"
+      :title="titleForLastFilter(filter) ? 'Нельзя отключить все фильтры!' : ''"
     >
       <div>{{ filter.name }}</div>
       <span class="filter-count">{{ filter.amount }}</span>
@@ -54,13 +58,16 @@
     -->
     <div
       @click="$store.commit('changeFilterStatus', 100)"
+      @keyup.enter="$store.commit('changeFilterStatus', 100)"
+      @keyup.space="$store.commit('changeFilterStatus', 100)"
       :class="{
         'show-all': 'show-all',
         /**
          *  Кнопка 'Показать все' активна если количество примененных фильтров меньше трех.
          */
-        disable: totalAppliedFilters === 3,
+        disable: isDisabledShowAll,
       }"
+      :tabindex="isDisabledShowAll ? '' : 0"
     >
       Показать все
     </div>
@@ -71,7 +78,7 @@
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
 import { Filters, Filter } from "@/types/types";
-// import { FilterStatus } from "@/basic";
+import { FilterStatus } from "@/basic";
 
 export default defineComponent({
   props: {
@@ -90,12 +97,33 @@ export default defineComponent({
       required: true,
     },
   },
-  data() {
-    return {
-      disabled: false,
-    };
+  computed: {
+    isDisabledShowAll() {
+      const totalDisabledFilters = Object.keys(this.filters).reduce(
+        (previousValue, currentValue) =>
+          this.filters[+currentValue].status === FilterStatus.Disabled
+            ? previousValue + 1
+            : previousValue,
+        0
+      );
+      return (
+        this.totalAppliedFilters ===
+        Object.keys(this.filters).length - totalDisabledFilters
+      );
+    },
   },
   methods: {
+    isAppliedFilter(filter: Filter) {
+      return filter.status === FilterStatus.Applied;
+    },
+    isDisabledFilter(filter: Filter) {
+      return filter.status === FilterStatus.Disabled;
+    },
+    titleForLastFilter(filter: Filter) {
+      return (
+        this.totalAppliedFilters === 1 && filter.status === FilterStatus.Applied
+      );
+    },
     isClick(index: number, filter: Filter) {
       /**
        * Нельзя изменить состояние фильтра при следующих условиях:
@@ -103,12 +131,7 @@ export default defineComponent({
        * или
        * - применен только один данный фильтр
        */
-      if (
-        filter.status === 2 ||
-        (this.totalAppliedFilters <= 1 && filter.status === 0)
-      ) {
-        this.disabled = true;
-      } else {
+      if (filter.status !== FilterStatus.Disabled) {
         this.$store.commit("changeFilterStatus", index);
       }
     },
@@ -128,6 +151,7 @@ export default defineComponent({
     font-weight: 400;
     font-size: 12px;
     line-height: 12px;
+    border-radius: 20px;
     margin: auto 0;
     padding: 6px 8px 6px 14px;
     cursor: pointer;

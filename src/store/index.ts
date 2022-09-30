@@ -67,6 +67,20 @@ const store = createStore<RootState>({
      *
      */
     changeFilterStatus(state, payload: number) {
+      /**
+       * Возвращает общее количество примененных фильтров
+       * @example
+       * // returns 3
+       */
+      const totalAppliedFilters = (): number => {
+        return Object.keys(state.filters).reduce(
+          (previousValue, currentValue) =>
+            state.filters[+currentValue].status === FilterStatus.Applied
+              ? previousValue + 1
+              : previousValue,
+          0
+        );
+      };
       console.log(payload);
       if (payload === 100) {
         for (const key in state.filters) {
@@ -74,46 +88,15 @@ const store = createStore<RootState>({
             state.filters[key].status = FilterStatus.Applied;
           }
         }
-      } else {
-        if (state.filters[payload].status === FilterStatus.Removed) {
-          state.filters[payload].status = FilterStatus.Applied;
-        } else {
+      } else if (state.filters[payload].status === FilterStatus.Applied) {
+        const total = totalAppliedFilters();
+        if (total > 1) {
           state.filters[payload].status = FilterStatus.Removed;
         }
+      } else {
+        state.filters[payload].status = FilterStatus.Applied;
       }
     },
-    // setChangeToTextWidget(state) {
-    //   // console.log("mutation start");
-    //   // state.events.push({
-    //   //   eventType: 2,
-    //   //   eventTime: 1662702000000,
-    //   //   timeFormat: `year, month, day`,
-    //   //   titleText: `сильный ветер`,
-    //   //   eventText: `FFFFFFFFFFFFFFFFFFFFFFFF`,
-    //   //   iconCode: 2,
-    //   // });
-    //   // state.events.push({
-    //   //   eventType: 2,
-    //   //   eventTime: 1662702000000,
-    //   //   timeFormat: `year, month, day`,
-    //   //   titleText: `сильный ветер`,
-    //   //   eventText: `FFFFFFFFFFFFFFFFFFFFFFFF`,
-    //   //   iconCode: 2,
-    //   // });
-    //   // state.events.push({
-    //   //   eventType: 2,
-    //   //   eventTime: 1662702000000,
-    //   //   timeFormat: `year, month, day`,
-    //   //   titleText: `сильный ветер`,
-    //   //   eventText: `FFFFFFFFFFFFFFFFFFFFFFFF`,
-    //   //   iconCode: 2,
-    //   // });
-    //   // state.events.map(
-    //   //   (item) => (item.eventText = "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
-    //   // );
-    //   // state.filters.map((i) => (i.name = "ssss"));
-    //   // console.log(state);
-    // },
   },
   getters: {
     /**
@@ -132,7 +115,7 @@ const store = createStore<RootState>({
       return Object.keys(state.filters).reduce(
         (previousValue, currentValue) =>
           state.filters[+currentValue].status === FilterStatus.Applied
-            ? ++previousValue
+            ? previousValue + 1
             : previousValue,
         0
       );

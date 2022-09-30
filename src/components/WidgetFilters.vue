@@ -1,8 +1,7 @@
 <template>
   <div class="filters-list">
     <!--
-      Кнопки фильтров
-      При нажатии посылает в родительский компонент объект со свойствами выбранного фильтра
+      Кнопки фильтров поддерживают управление с клавиатуры.
     -->
     <div
       v-for="(filter, index) in filters"
@@ -124,6 +123,7 @@ export default defineComponent({
         this.totalAppliedFilters === 1 && filter.status === FilterStatus.Applied
       );
     },
+
     isClick(index: number, filter: Filter) {
       /**
        * Нельзя изменить состояние фильтра при следующих условиях:

@@ -73,4 +73,7 @@ export interface Filters {
   [index: number]: Filter;
 }
 
+/**
+ * Вспомогательный интерфейс.
+ */
 export type Datakeys = keyof Data;

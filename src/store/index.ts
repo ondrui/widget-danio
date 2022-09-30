@@ -13,6 +13,9 @@ interface RootState {
 const store = createStore<RootState>({
   state() {
     return {
+      /**
+       * Начальные настройки фильтров.
+       */
       filters: {
         3: { name: "Общие", amount: 0, status: 2 },
         1: { name: "Внимание", amount: 0, status: 2 },
@@ -63,14 +66,6 @@ const store = createStore<RootState>({
      * кнопку 'Показать все'.
      * @param {number} payload Параметром принимает код
      * выбранного фильтра или число 100
-     *
-     * Если параметр равен 100, то применяются ВСЕ фильтры у которых общее
-     * количество предупреждений больше 0.
-     *
-     * Если принимается код фильтра, то у данного фильтра меняется свойство status на
-     * противоположное при условии, что у него общее количество предупреждений
-     * больше 0.
-     *
      */
     changeFilterStatus(state, payload: number) {
       /**
@@ -89,18 +84,32 @@ const store = createStore<RootState>({
           0
         );
       };
+      /**
+       * Если параметр payload равен 100, то применяются ВСЕ фильтры у которых общее
+       * количество предупреждений больше 0.
+       */
       if (payload === 100) {
         for (const key in state.filters) {
           if (state.filters[key].amount > 0) {
             state.filters[key].status = FilterStatus.Applied;
           }
         }
+        /**
+         * Если принимается код фильтра, то у данного фильтра проверяется значение
+         * свойства status. Если оно равно FilterStatus.Applied, то вычисляется общее
+         * количество фильтров с таким статусом. Если оно больше 1, то статус фильтра
+         * меняется на FilterStatus.Removed.
+         */
       } else if (state.filters[payload].status === FilterStatus.Applied) {
         const total = totalAppliedFilters();
         if (total > 1) {
           state.filters[payload].status = FilterStatus.Removed;
         }
       } else {
+        /**
+         * Если значение свойства status равно FilterStatus.Removed, то статус фильтра
+         * меняется на FilterStatus.Applied.
+         */
         state.filters[payload].status = FilterStatus.Applied;
       }
     },

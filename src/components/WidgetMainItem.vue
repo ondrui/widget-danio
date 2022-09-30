@@ -77,7 +77,7 @@ export default defineComponent({
   },
   computed: {
     /**
-     * Геттер для получения класса CSS цветовой схемы предупреждения
+     * Геттер для получения класса CSS цветовой схемы предупреждения из enum CodeEvent.
      * @example
      * // returns 'warning'
      */

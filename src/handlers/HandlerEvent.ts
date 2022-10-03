@@ -12,7 +12,8 @@ export class HandlerEvent implements Data {
     | string
     | boolean
     | undefined
-    | (() => number);
+    | (() => number)
+    | ((timestamp: number) => string);
   /**
    * eventType - Код типа предупреждения (важность). Будет предопределено
    * несколько типов предупреждений. Определяет цветовую схему и параметры
@@ -70,5 +71,12 @@ export class HandlerEvent implements Data {
     } else {
       return this.eventTime[0];
     }
+  }
+
+  setTimeFormat(timestamp: number): string {
+    return new Date(timestamp).toLocaleTimeString("ru", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   }
 }

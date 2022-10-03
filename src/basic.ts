@@ -19,3 +19,7 @@ export enum FilterStatus {
   Removed,
   Disabled,
 }
+
+export const allDayMs = 86400000;
+
+export const dayName = ["Вчера", "Сегодня", "Завтра", "Послезавтра"];

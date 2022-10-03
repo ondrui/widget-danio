@@ -32,7 +32,7 @@ import { defineComponent } from "vue";
 import type { PropType } from "vue";
 import { Data } from "@/types/types";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
-import { CodeEvent } from "@/basic";
+import { CodeEvent, allDayMs, dayName } from "@/basic";
 
 /**
  * Интерфейс для объекта со свойствами, которые связывают код иконки
@@ -104,63 +104,28 @@ export default defineComponent({
      * // returns '08:00'
      */
     setTimeEvent(): string {
+      const handlerEvent = new HandlerEvent(this.event);
       /**
        * Проверка значения свойства eventTime и преобразование этого значения в нужный
        * формат отображения времени.
        */
       if (typeof this.event.eventTime === "number") {
-        let date = new Date(this.event.eventTime).toLocaleTimeString("ru", {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        return date;
+        return handlerEvent.setTimeFormat(this.event.eventTime);
       } else {
-        let date1 = new Date(this.event.eventTime[0]).toLocaleTimeString("ru", {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        let date2 = new Date(this.event.eventTime[1]).toLocaleTimeString("ru", {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
+        let [timeStamp1, timeStamp2] = this.event.eventTime;
 
         /**
          * Логика добавления доп слов после времени.
          */
-        //let midnightTodayTimestamp = new Date().setHours(0, 0, 0, 0);
-        //test date
-        let midnightTodayTimestamp = 1662670800000; //09.09.2022 00:00
-        const allDayMs = 86400000;
-        let timeStamp1 = this.event.eventTime[0];
-        let timeStamp2 = this.event.eventTime[1];
-
-        let diffDate1 = midnightTodayTimestamp - timeStamp1;
-        let diffDate2 = (timeStamp2 - midnightTodayTimestamp) / allDayMs;
-
-        const setDate1 = (diff: number, curr: string): string => {
-          if (diff > 0) {
-            return `${curr} вчера`;
-          } else {
-            return `${curr}`;
-          }
-        };
-
-        const setDate2 = (diff: number, curr: string): string => {
-          if (diff > 0 && diff <= 1) {
-            return `${curr}`;
-          } else if (diff > 1 && diff <= 2) {
-            return `${curr} завтра`;
-          } else if (diff > 2) {
-            return `${curr} послезавтра`;
-          } else {
-            return `${curr}`;
-          }
-        };
-
-        return `с ${setDate1(diffDate1, date1)} до ${setDate2(
-          diffDate2,
-          date2
-        )}`;
+        return `с ${handlerEvent.setTimeFormat(timeStamp1)} ${
+          this.addDayName(timeStamp1, dayName).toLocaleLowerCase() === "вчера"
+            ? this.addDayName(timeStamp1, dayName).toLocaleLowerCase()
+            : ""
+        } до ${handlerEvent.setTimeFormat(timeStamp2)} ${
+          this.addDayName(timeStamp2, dayName).toLocaleLowerCase() === "сегодня"
+            ? ""
+            : this.addDayName(timeStamp2, dayName).toLocaleLowerCase()
+        }`;
       }
     },
     /**
@@ -169,29 +134,28 @@ export default defineComponent({
      * // returns ["Послезавтра","11 сентября"]
      */
     setDayInDayInfo(): string[] {
-      const name = ["Сегодня", "Завтра", "Послезавтра", "Вчера"];
-
       const dateTimestamp = new HandlerEvent(this.event).getTimestamp();
-
       let options: Intl.DateTimeFormatOptions = {
         month: "long",
         day: "numeric",
       };
-
       const date = new Date(dateTimestamp).toLocaleString("ru", options);
-      const dayName = new Date(dateTimestamp).getDate();
-      switch (dayName) {
-        case new Date(1662727200000).getDate():
-          return [name[0], date];
-        case new Date(1662727200000).getDate() + 1:
-          return [name[1], date];
-        case new Date(1662727200000).getDate() + 2:
-          return [name[2], date];
-        case new Date(1662727200000).getDate() - 1:
-          return [name[3], date];
-        default:
-          return console.log("неверный диапазон"), ["", ""];
-      }
+      return [this.addDayName(dateTimestamp, dayName), date];
+    },
+  },
+  methods: {
+    /**
+     * Возвращает название дня ввиде строки.
+     * @param timestamp Числовое значение даты предупреждения.
+     * @param arr Массив строк, содержит названия дней.
+     * @example
+     * // returns ["Послезавтра"]
+     */
+    addDayName(timestamp: number, arr: string[]): string {
+      let diff = Math.floor(
+        (timestamp - (new Date().setHours(0, 0, 0, 0) - allDayMs)) / allDayMs
+      );
+      return arr[diff] ?? (console.log("неверный диапазон"), "");
     },
   },
 });

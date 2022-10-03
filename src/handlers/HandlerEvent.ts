@@ -73,6 +73,12 @@ export class HandlerEvent implements Data {
     }
   }
 
+  /**
+   * Возвращает строку с заданном формате.
+   * @param timestamp Числовое значение даты.
+   * @example
+   * // returns "20:30"
+   */
   setTimeFormat(timestamp: number): string {
     return new Date(timestamp).toLocaleTimeString("ru", {
       hour: "2-digit",

@@ -28,7 +28,7 @@
 import { defineComponent } from "vue";
 import WidgetMainItem from "./WidgetMainItem.vue";
 import WidgetFilters from "./WidgetFilters.vue";
-import { Data } from "@/types/types";
+import { Data, Filters } from "@/types/types";
 
 export default defineComponent({
   components: {
@@ -43,9 +43,9 @@ export default defineComponent({
       return this.$store.getters.filteredEvents;
     },
     /**
-     * Возвращает массив объектов с фильтрами, полученными из store
+     * Возвращает объект с фильтрами, полученными из store
      */
-    getfilters() {
+    getfilters(): Filters {
       return this.$store.getters.addFilters;
     },
     /**

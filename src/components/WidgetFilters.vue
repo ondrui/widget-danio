@@ -4,10 +4,10 @@
       Кнопки фильтров поддерживают управление с клавиатуры.
     -->
     <div
-      v-for="(filter, index) in filters"
-      @click="useMutation(index, filter)"
-      @keyup.enter="useMutation(index, filter)"
-      @keyup.space="useMutation(index, filter)"
+      v-for="(filter, key) in filters"
+      @click="useMutationToChangeFilterStatus(key, filter)"
+      @keyup.enter="useMutationToChangeFilterStatus(key, filter)"
+      @keyup.space="useMutationToChangeFilterStatus(key, filter)"
       :class="{
         'filter-item': 'filter-item',
         active: isAppliedFilter(filter),
@@ -61,9 +61,6 @@
       @keyup.space="$store.commit('resetFilters')"
       :class="{
         'show-all': 'show-all',
-        /**
-         *  Кнопка 'Показать все' активна если количество примененных фильтров меньше трех.
-         */
         disable: isDisabledShowAll,
       }"
       :tabindex="isDisabledShowAll ? '' : 0"
@@ -82,7 +79,7 @@ import { FilterStatus } from "@/basic";
 export default defineComponent({
   props: {
     /**
-     * Массив объектов, которые определяют состояние фильтра и его отображение.
+     * Объект, который определяют состояние фильтра и его отображение.
      */
     filters: {
       type: Object as PropType<Filters>,
@@ -97,6 +94,9 @@ export default defineComponent({
     },
   },
   computed: {
+    /**
+     * Определяет состояние кнопки 'Показать все'. Если все фильтры применены, то кнопка неактивна.
+     */
     isDisabledShowAll(): boolean {
       const totalDisabledFilters = Object.keys(this.filters).reduce(
         (previousValue: number, currentValue: string) =>
@@ -123,8 +123,12 @@ export default defineComponent({
         this.totalAppliedFilters === 1 && filter.status === FilterStatus.Applied
       );
     },
-
-    useMutation(index: number, filter: Filter): void {
+    /**
+     * Определяет вызывать ли мутацию стора при нажатии на кнопку фильтра.
+     * @param key
+     * @param filter
+     */
+    useMutationToChangeFilterStatus(key: number, filter: Filter): void {
       /**
        * Нельзя изменить состояние фильтра при следующих условиях:
        * - общее количество предупреждений для данного фильтра равно нулю
@@ -132,7 +136,7 @@ export default defineComponent({
        * - применен только один данный фильтр
        */
       if (filter.status !== FilterStatus.Disabled) {
-        this.$store.commit("changeFilterStatus", index);
+        this.$store.commit("changeFilterStatus", key);
       }
     },
   },

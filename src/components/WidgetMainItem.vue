@@ -111,22 +111,22 @@ export default defineComponent({
        */
       if (typeof this.event.eventTime === "number") {
         return handlerEvent.setTimeFormat(this.event.eventTime);
-      } else {
-        let [timeStamp1, timeStamp2] = this.event.eventTime;
-
-        /**
-         * Логика добавления доп слов после времени.
-         */
-        return `с ${handlerEvent.setTimeFormat(timeStamp1)} ${
-          this.addDayName(timeStamp1, dayName).toLocaleLowerCase() === "вчера"
-            ? this.addDayName(timeStamp1, dayName).toLocaleLowerCase()
-            : ""
-        } до ${handlerEvent.setTimeFormat(timeStamp2)} ${
-          this.addDayName(timeStamp2, dayName).toLocaleLowerCase() === "сегодня"
-            ? ""
-            : this.addDayName(timeStamp2, dayName).toLocaleLowerCase()
-        }`;
       }
+
+      const [timeStamp1, timeStamp2] = this.event.eventTime;
+
+      /**
+       * Логика добавления доп слов после времени.
+       */
+      return `с ${handlerEvent.setTimeFormat(timeStamp1)} ${
+        this.addDayName(timeStamp1).toLocaleLowerCase() === "вчера"
+          ? this.addDayName(timeStamp1).toLocaleLowerCase()
+          : ""
+      } до ${handlerEvent.setTimeFormat(timeStamp2)} ${
+        this.addDayName(timeStamp2).toLocaleLowerCase() === "сегодня"
+          ? ""
+          : this.addDayName(timeStamp2).toLocaleLowerCase()
+      }`;
     },
     /**
      * Геттер для получения массива значений блока даты.
@@ -140,22 +140,21 @@ export default defineComponent({
         day: "numeric",
       };
       const date = new Date(dateTimestamp).toLocaleString("ru", options);
-      return [this.addDayName(dateTimestamp, dayName), date];
+      return [this.addDayName(dateTimestamp), date];
     },
   },
   methods: {
     /**
-     * Возвращает название дня ввиде строки.
+     * Возвращает название дня в виде строки.
      * @param timestamp Числовое значение даты предупреждения.
-     * @param arr Массив строк, содержит названия дней.
      * @example
      * // returns ["Послезавтра"]
      */
-    addDayName(timestamp: number, arr: string[]): string {
+    addDayName(timestamp: number): string {
       let diff = Math.floor(
         (timestamp - (new Date().setHours(0, 0, 0, 0) - allDayMs)) / allDayMs
       );
-      return arr[diff] ?? (console.log("неверный диапазон"), "");
+      return dayName[diff] ?? (console.log("неверный диапазон"), "");
     },
   },
 });

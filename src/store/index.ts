@@ -51,12 +51,11 @@ const store = createStore<RootState>({
         filterObj[key].amount = state.events.filter(
           (f) => f.eventType === +key
         ).length;
-        if (!filterObj[key].status) {
-          if (filterObj[key].amount > 0) {
-            filterObj[key].status = FilterStatus.Applied;
-          } else {
-            filterObj[key].status = FilterStatus.Disabled;
-          }
+
+        if (filterObj[key].amount > 0) {
+          filterObj[key].status = FilterStatus.Applied;
+        } else {
+          filterObj[key].status = FilterStatus.Disabled;
         }
       }
       state.filters = filterObj;
@@ -78,7 +77,7 @@ const store = createStore<RootState>({
     /**
      * Вызывается когда пользователь кликает на кнопку фильтра.
      * @param {number} payload Параметром принимает код
-     * выбранного фильтра или число 100
+     * выбранного фильтра
      */
     changeFilterStatus(state: RootState, payload: number): void {
       /**

@@ -32,7 +32,7 @@ const store = createStore<RootState>({
      * @param state
      * @param payload Объект с фильтрами и массивом предупреждений
      */
-    setData(state, payload) {
+    setData(state: RootState, payload: RootState): void {
       /**
        * Класс HandlerEvent добавляет в объект предупреждения методы,
        * которые будут применяться в дальнейшем.
@@ -62,34 +62,33 @@ const store = createStore<RootState>({
       state.filters = filterObj;
     },
 
-    resetFilters(state, payload: number) {
-      /**
-       * Если параметр payload равен 100, то применяются ВСЕ фильтры у которых общее
-       * количество предупреждений больше 0.
-       */
-      if (payload === 100) {
-        for (const key in state.filters) {
-          if (state.filters[key].amount > 0) {
-            state.filters[key].status = FilterStatus.Applied;
-          }
+    /**
+     * Вызывается когда пользователь кликает на
+     * кнопку 'Показать все'.
+     * Применяются ВСЕ фильтры у которых общее
+     * количество предупреждений больше 0.
+     */
+    resetFilters(state: RootState): void {
+      for (const key in state.filters) {
+        if (state.filters[key].amount > 0) {
+          state.filters[key].status = FilterStatus.Applied;
         }
       }
     },
     /**
-     * Вызывается когда пользователь кликает на кнопку фильтра или
-     * кнопку 'Показать все'.
+     * Вызывается когда пользователь кликает на кнопку фильтра.
      * @param {number} payload Параметром принимает код
      * выбранного фильтра или число 100
      */
-    changeFilterStatus(state, payload: number) {
+    changeFilterStatus(state: RootState, payload: number): void {
       /**
-       * Возвращает общее количество примененных фильтров
+       * totalAppliedFilters возвращает общее количество примененных фильтров
        * @example
        * // returns 3
        */
       const totalAppliedFilters = (): number => {
         return Object.keys(state.filters).reduce(
-          (previousValue, currentValue) => {
+          (previousValue: number, currentValue: string) => {
             if (state.filters[+currentValue].status === FilterStatus.Applied) {
               previousValue++;
             }
@@ -99,8 +98,8 @@ const store = createStore<RootState>({
         );
       };
       /**
-       * Если принимается код фильтра, то у данного фильтра проверяется значение
-       * свойства status. Если оно равно FilterStatus.Applied, то вычисляется общее
+       * У данного фильтра проверяется значение свойства status.
+       * Если оно равно FilterStatus.Applied, то вычисляется общее
        * количество фильтров с таким статусом. Если оно больше 1, то статус фильтра
        * меняется на FilterStatus.Removed.
        */
@@ -121,7 +120,7 @@ const store = createStore<RootState>({
     /**
      * Возвращает копию объекта с настройками фильтров, полученными из store
      */
-    addFilters(state): Filters {
+    addFilters(state: RootState): Filters {
       const copyFilter: Filters = JSON.parse(JSON.stringify(state.filters));
       return copyFilter;
     },
@@ -130,9 +129,9 @@ const store = createStore<RootState>({
      * @example
      * // returns 3
      */
-    totalAppliedFilters(state): number {
+    totalAppliedFilters(state: RootState): number {
       return Object.keys(state.filters).reduce(
-        (previousValue, currentValue) => {
+        (previousValue: number, currentValue: string) => {
           if (state.filters[+currentValue].status === FilterStatus.Applied) {
             previousValue++;
           }
@@ -146,13 +145,13 @@ const store = createStore<RootState>({
      * по дате и времени. А также добавляет в объект опциональный параметр, который
      * отвечает за отображение блока с датой. Если true, то блок отрисовывается.
      */
-    filteredEvents(state, getters) {
+    filteredEvents(state: RootState, getters): Data[] {
       const copyEvents = [...state.events];
       const filters = getters.addFilters;
       return (
         copyEvents
-          .filter((event) => {
-            return Object.keys(filters).some((key) => {
+          .filter((event: HandlerEvent) => {
+            return Object.keys(filters).some((key: string) => {
               return (
                 event.eventType === +key &&
                 filters[key].status === FilterStatus.Applied

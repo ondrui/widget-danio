@@ -5,9 +5,9 @@
     -->
     <div
       v-for="(filter, index) in filters"
-      @click="isClick(index, filter)"
-      @keyup.enter="isClick(index, filter)"
-      @keyup.space="isClick(index, filter)"
+      @click="useMutation(index, filter)"
+      @keyup.enter="useMutation(index, filter)"
+      @keyup.space="useMutation(index, filter)"
       :class="{
         'filter-item': 'filter-item',
         active: isAppliedFilter(filter),
@@ -15,7 +15,7 @@
       }"
       :key="`fw-${filter}`"
       :tabindex="isDisabledFilter(filter) ? '' : 0"
-      :title="titleForLastFilter(filter) ? 'Нельзя отключить все фильтры!' : ''"
+      :title="isLastFilter(filter) ? 'Нельзя отключить все фильтры!' : ''"
     >
       <div>{{ filter.name }}</div>
       <span class="filter-count">{{ filter.amount }}</span>
@@ -56,9 +56,9 @@
       Кнопка 'Показать все'
     -->
     <div
-      @click="$store.commit('resetFilters', 100)"
-      @keyup.enter="$store.commit('resetFilters', 100)"
-      @keyup.space="$store.commit('resetFilters', 100)"
+      @click="$store.commit('resetFilters')"
+      @keyup.enter="$store.commit('resetFilters')"
+      @keyup.space="$store.commit('resetFilters')"
       :class="{
         'show-all': 'show-all',
         /**
@@ -97,9 +97,9 @@ export default defineComponent({
     },
   },
   computed: {
-    isDisabledShowAll() {
+    isDisabledShowAll(): boolean {
       const totalDisabledFilters = Object.keys(this.filters).reduce(
-        (previousValue, currentValue) =>
+        (previousValue: number, currentValue: string) =>
           this.filters[+currentValue].status === FilterStatus.Disabled
             ? previousValue + 1
             : previousValue,
@@ -112,19 +112,19 @@ export default defineComponent({
     },
   },
   methods: {
-    isAppliedFilter(filter: Filter) {
+    isAppliedFilter(filter: Filter): boolean {
       return filter.status === FilterStatus.Applied;
     },
-    isDisabledFilter(filter: Filter) {
+    isDisabledFilter(filter: Filter): boolean {
       return filter.status === FilterStatus.Disabled;
     },
-    titleForLastFilter(filter: Filter) {
+    isLastFilter(filter: Filter): boolean {
       return (
         this.totalAppliedFilters === 1 && filter.status === FilterStatus.Applied
       );
     },
 
-    isClick(index: number, filter: Filter) {
+    useMutation(index: number, filter: Filter): void {
       /**
        * Нельзя изменить состояние фильтра при следующих условиях:
        * - общее количество предупреждений для данного фильтра равно нулю

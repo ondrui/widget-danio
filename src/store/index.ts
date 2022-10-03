@@ -61,6 +61,20 @@ const store = createStore<RootState>({
       }
       state.filters = filterObj;
     },
+
+    resetFilters(state, payload: number) {
+      /**
+       * Если параметр payload равен 100, то применяются ВСЕ фильтры у которых общее
+       * количество предупреждений больше 0.
+       */
+      if (payload === 100) {
+        for (const key in state.filters) {
+          if (state.filters[key].amount > 0) {
+            state.filters[key].status = FilterStatus.Applied;
+          }
+        }
+      }
+    },
     /**
      * Вызывается когда пользователь кликает на кнопку фильтра или
      * кнопку 'Показать все'.
@@ -85,26 +99,15 @@ const store = createStore<RootState>({
         );
       };
       /**
-       * Если параметр payload равен 100, то применяются ВСЕ фильтры у которых общее
-       * количество предупреждений больше 0.
+       * Если принимается код фильтра, то у данного фильтра проверяется значение
+       * свойства status. Если оно равно FilterStatus.Applied, то вычисляется общее
+       * количество фильтров с таким статусом. Если оно больше 1, то статус фильтра
+       * меняется на FilterStatus.Removed.
        */
-      if (payload === 100) {
-        for (const key in state.filters) {
-          if (state.filters[key].amount > 0) {
-            state.filters[key].status = FilterStatus.Applied;
-          }
-        }
-        /**
-         * Если принимается код фильтра, то у данного фильтра проверяется значение
-         * свойства status. Если оно равно FilterStatus.Applied, то вычисляется общее
-         * количество фильтров с таким статусом. Если оно больше 1, то статус фильтра
-         * меняется на FilterStatus.Removed.
-         */
-      } else if (state.filters[payload].status === FilterStatus.Applied) {
-        const total = totalAppliedFilters();
-        if (total > 1) {
-          state.filters[payload].status = FilterStatus.Removed;
-        }
+
+      const total = totalAppliedFilters();
+      if (state.filters[payload].status === FilterStatus.Applied && total > 1) {
+        state.filters[payload].status = FilterStatus.Removed;
       } else {
         /**
          * Если значение свойства status равно FilterStatus.Removed, то статус фильтра

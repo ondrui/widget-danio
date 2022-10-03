@@ -95,7 +95,7 @@ export default defineComponent({
           },
         ],
       });
-    }, 5000);
+    }, 1000);
   },
 });
 </script>

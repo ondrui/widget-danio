@@ -56,9 +56,9 @@
       Кнопка 'Показать все'
     -->
     <div
-      @click="$store.commit('changeFilterStatus', 100)"
-      @keyup.enter="$store.commit('changeFilterStatus', 100)"
-      @keyup.space="$store.commit('changeFilterStatus', 100)"
+      @click="$store.commit('resetFilters', 100)"
+      @keyup.enter="$store.commit('resetFilters', 100)"
+      @keyup.space="$store.commit('resetFilters', 100)"
       :class="{
         'show-all': 'show-all',
         /**

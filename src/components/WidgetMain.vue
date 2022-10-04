@@ -40,13 +40,13 @@ export default defineComponent({
      * Возвращает массив объектов с предупреждениями, полученными из store
      */
     getEvents(): Data[] {
-      return this.$store.getters.filteredEvents;
+      return this.$store.getters.getFilteredAndSortedEvents;
     },
     /**
      * Возвращает объект с фильтрами, полученными из store
      */
     getfilters(): Filters {
-      return this.$store.getters.addFilters;
+      return this.$store.getters.getFilters;
     },
     /**
      * Возвращает общее количество примененных фильтров
@@ -54,7 +54,7 @@ export default defineComponent({
      * // returns 3
      */
     totalAppliedFilters(): number {
-      return this.$store.getters.totalAppliedFilters;
+      return this.$store.getters.calcTotalAppliedFilters;
     },
   },
 });

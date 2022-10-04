@@ -81,11 +81,11 @@ const store = createStore<RootState>({
      */
     changeFilterStatus(state: RootState, payload: number): void {
       /**
-       * totalAppliedFilters возвращает общее количество примененных фильтров
+       * calcTotalAppliedFilters вычисляет и возвращает общее количество фильтров со статусом FilterStatus.Applied.
        * @example
        * // returns 3
        */
-      const totalAppliedFilters = (): number => {
+      const calcTotalAppliedFilters = (): number => {
         return Object.keys(state.filters).reduce(
           (previousValue: number, currentValue: string) => {
             if (state.filters[+currentValue].status === FilterStatus.Applied) {
@@ -103,7 +103,7 @@ const store = createStore<RootState>({
        * меняется на FilterStatus.Removed.
        */
 
-      const total = totalAppliedFilters();
+      const total = calcTotalAppliedFilters();
       if (state.filters[payload].status === FilterStatus.Applied && total > 1) {
         state.filters[payload].status = FilterStatus.Removed;
       } else {
@@ -119,16 +119,16 @@ const store = createStore<RootState>({
     /**
      * Возвращает копию объекта с настройками фильтров, полученными из store
      */
-    addFilters(state: RootState): Filters {
+    getFilters(state: RootState): Filters {
       const copyFilter: Filters = JSON.parse(JSON.stringify(state.filters));
       return copyFilter;
     },
     /**
-     * Возвращает общее количество примененных фильтров
+     * Вычисляет и возвращает общее количество фильтров со статусом FilterStatus.Applied.
      * @example
      * // returns 3
      */
-    totalAppliedFilters(state: RootState): number {
+    calcTotalAppliedFilters(state: RootState): number {
       return Object.keys(state.filters).reduce(
         (previousValue: number, currentValue: string) => {
           if (state.filters[+currentValue].status === FilterStatus.Applied) {
@@ -144,16 +144,16 @@ const store = createStore<RootState>({
      * по дате и времени. А также добавляет в объект опциональный параметр, который
      * отвечает за отображение блока с датой. Если true, то блок отрисовывается.
      */
-    filteredEvents(state: RootState, getters): Data[] {
+    getFilteredAndSortedEvents(state: RootState, getters): Data[] {
       const copyEvents = [...state.events];
-      const filters = getters.addFilters;
+      const filters: Filters = getters.getFilters;
       return (
         copyEvents
           .filter((event: HandlerEvent) => {
             return Object.keys(filters).some((key: string) => {
               return (
                 event.eventType === +key &&
-                filters[key].status === FilterStatus.Applied
+                filters[+key].status === FilterStatus.Applied
               );
             });
           })

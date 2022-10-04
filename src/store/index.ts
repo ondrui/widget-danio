@@ -32,7 +32,10 @@ const store = createStore<RootState>({
      * @param state
      * @param payload Объект с фильтрами и массивом предупреждений
      */
-    setData(state: RootState, payload: RootState): void {
+    setData(
+      state: RootState,
+      payload: { events: Data[]; filters: Filters }
+    ): void {
       /**
        * Класс HandlerEvent добавляет в объект предупреждения методы,
        * которые будут применяться в дальнейшем.

@@ -32,7 +32,7 @@ import { defineComponent } from "vue";
 import type { PropType } from "vue";
 import { Data } from "@/types/types";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
-import { CodeEvent, allDayMs, timeMarker } from "@/basic";
+import { CodeEvent, ALLDAYMS, timeMarker } from "@/basic";
 
 /**
  * Интерфейс для объекта со свойствами, которые связывают код иконки
@@ -152,7 +152,7 @@ export default defineComponent({
      */
     getTimeMarker(timestamp: number): string {
       let diff = Math.floor(
-        (timestamp - (new Date().setHours(0, 0, 0, 0) - allDayMs)) / allDayMs
+        (timestamp - (new Date().setHours(0, 0, 0, 0) - ALLDAYMS)) / ALLDAYMS
       );
       return timeMarker[diff] ?? (console.log("неверный диапазон"), "");
     },

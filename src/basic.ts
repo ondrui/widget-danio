@@ -24,7 +24,7 @@ export enum FilterStatus {
  * В переменной сохранено количество миллисекунд в сутках.
  * @constant
  */
-export const allDayMs = 86400000;
+export const ALLDAYMS = 86400000;
 
 /**
  * Массив содержит слова-указатели времен

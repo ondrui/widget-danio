@@ -20,7 +20,7 @@
       <div>{{ filter.name }}</div>
       <span class="filter-count">{{ filter.amount }}</span>
       <div class="filter-icon-block">
-        <div class="filter-icon-open" v-if="filter.status !== 0">
+        <div class="filter-icon-open" v-if="!isAppliedFilter(filter)">
           <svg
             width="8"
             height="8"

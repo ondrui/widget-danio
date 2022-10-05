@@ -32,7 +32,7 @@ import { defineComponent } from "vue";
 import type { PropType } from "vue";
 import { Data } from "@/types/types";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
-import { CodeEvent, ALLDAYMS, timeMarker } from "@/basic";
+import { CodeEvent, ALLDAYMS, timeMarker, LOCALES } from "@/basic";
 
 /**
  * Интерфейс для объекта со свойствами, которые связывают код иконки
@@ -104,13 +104,16 @@ export default defineComponent({
      * // returns '08:00'
      */
     calcTimeEvent(): string {
-      const handlerEvent = new HandlerEvent(this.event);
+      // const handlerEvent = new HandlerEvent(this.event);
       /**
        * Проверка значения свойства eventTime и преобразование этого значения в нужный
        * формат отображения времени.
        */
       if (typeof this.event.eventTime === "number") {
-        return handlerEvent.setTimeFormat(this.event.eventTime);
+        return HandlerEvent.setTimeFormat(
+          this.event.eventTime,
+          this.event.timeFormat
+        );
       }
 
       const [timeStamp1, timeStamp2] = this.event.eventTime;
@@ -118,11 +121,14 @@ export default defineComponent({
       /**
        * Логика добавления доп слов после времени.
        */
-      return `с ${handlerEvent.setTimeFormat(timeStamp1)} ${
+      return `с ${HandlerEvent.setTimeFormat(
+        timeStamp1,
+        this.event.timeFormat
+      )} ${
         this.getTimeMarker(timeStamp1).toLocaleLowerCase() === "вчера"
           ? this.getTimeMarker(timeStamp1).toLocaleLowerCase()
           : ""
-      } до ${handlerEvent.setTimeFormat(timeStamp2)} ${
+      } до ${HandlerEvent.setTimeFormat(timeStamp2, this.event.timeFormat)} ${
         this.getTimeMarker(timeStamp2).toLocaleLowerCase() === "сегодня"
           ? ""
           : this.getTimeMarker(timeStamp2).toLocaleLowerCase()
@@ -139,7 +145,7 @@ export default defineComponent({
         month: "long",
         day: "numeric",
       };
-      const date = new Date(dateTimestamp).toLocaleString("ru", options);
+      const date = new Date(dateTimestamp).toLocaleString(LOCALES, options);
       return [this.getTimeMarker(dateTimestamp), date];
     },
   },

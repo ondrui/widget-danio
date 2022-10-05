@@ -1,5 +1,5 @@
 import type { Data, Datakeys } from "../types/types";
-import { CodeEvent } from "@/basic";
+import { CodeEvent, weekDaysRu, monthNamesRu, shortWeekDaysRu } from "@/basic";
 /**
  * Класс HandlerEvent модифицирует данные из объекта предупреждения в соответствии с
  * потребностью компоненты.
@@ -13,7 +13,7 @@ export class HandlerEvent implements Data {
     | boolean
     | undefined
     | (() => number)
-    | ((timestamp: number) => string);
+    | ((timestamp: number, format: string) => string);
   /**
    * eventType - Код типа предупреждения (важность). Будет предопределено
    * несколько типов предупреждений. Определяет цветовую схему и параметры
@@ -74,15 +74,60 @@ export class HandlerEvent implements Data {
   }
 
   /**
-   * Возвращает строку с заданном формате.
+   * Возвращает строку с датой и временем в заданном формате.
    * @param timestamp Числовое значение даты.
+   * @param format Строковое представление формата.
    * @example
    * // returns "20:30"
    */
-  setTimeFormat(timestamp: number): string {
-    return new Date(timestamp).toLocaleTimeString("ru", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  static setTimeFormat(timestamp: number, format: string): string {
+    const date = new Date(timestamp);
+
+    function pad(n: number): string {
+      return n < 10 ? "0" + n : `${n}`;
+    }
+
+    const formatDayTimeByUser = {
+      d: (date: Date): string => {
+        return pad(date.getDate());
+      },
+      D: (date: Date): string => {
+        return shortWeekDaysRu[date.getDay()];
+      },
+      l: (date: Date): string => {
+        return weekDaysRu[date.getDay()];
+      },
+      m: (date: Date): string => {
+        return `${parseInt(pad(date.getMonth())) + 1}`;
+      },
+      F: (date: Date): string => {
+        return monthNamesRu[date.getMonth()];
+      },
+      M: (date: Date): string => {
+        return monthNamesRu[date.getMonth()].slice(0, 3);
+      },
+      Y: (date: Date): string => {
+        return pad(date.getFullYear());
+      },
+      H: (date: Date): string => {
+        return pad(date.getHours());
+      },
+      i: (date: Date): string => {
+        return pad(date.getMinutes());
+      },
+      S: (date: Date): string => {
+        return pad(date.getSeconds());
+      },
+    };
+
+    let dateFormated = format;
+    for (const key in formatDayTimeByUser) {
+      dateFormated = dateFormated.replaceAll(
+        key,
+        formatDayTimeByUser[key as keyof typeof formatDayTimeByUser](date)
+      );
+    }
+
+    return dateFormated;
   }
 }

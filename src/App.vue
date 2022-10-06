@@ -102,6 +102,14 @@ export default defineComponent({
             eventText: `сегодня, 8:40:00 am 9 сентября 2022 года, с 10 часов до 20 часов в Москве и ТиНАО и в Московской области ожидается сильный ветер с порывами 12 - 17 м/с.`,
             iconCode: 2,
           },
+          {
+            eventType: 2,
+            eventTime: new Date().setDate(new Date().getDate() - 1),
+            timeFormat: `H:i`,
+            titleText: `сильный ветер`,
+            eventText: `вчера, 8:00:00 am в Москве и области ожидается усиление ветра с порывами до 22 м/с`,
+            iconCode: 2,
+          },
         ],
       });
     }, 1000);

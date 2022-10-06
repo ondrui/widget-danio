@@ -98,7 +98,7 @@ export class HandlerEvent implements Data {
         return weekDaysRu[date.getDay()];
       },
       m: (date: Date): string => {
-        return `${parseInt(pad(date.getMonth())) + 1}`;
+        return pad(date.getMonth() + 1);
       },
       F: (date: Date): string => {
         return monthNamesRu[date.getMonth()];

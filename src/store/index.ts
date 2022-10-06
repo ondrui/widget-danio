@@ -166,22 +166,18 @@ const store = createStore<RootState>({
           /** Set the isDayShow property mapping the date block. */
           /**
            * Параметр isDayShow устанавливается в true если:
-           * - индекс предупреждения равен 0
+           * - индекс предупреждения равен 0 или
            * - у соседних предупреждений разная дата, то параметр isDayShow
            * устанавливается в true второму предупреждению.
            */
           .map((event: HandlerEvent, index: number, arr: HandlerEvent[]) => {
-            if (index === 0) {
-              return { ...event, isDayShow: true };
-            }
-            if (
-              new Date(arr[index - 1].getTimestamp()).getDate() !==
-              new Date(event.getTimestamp()).getDate()
-            ) {
-              return { ...event, isDayShow: true };
-            } else {
-              return { ...event, isDayShow: false };
-            }
+            return {
+              ...event,
+              isDayShow:
+                index === 0 ||
+                new Date(arr[index - 1].getTimestamp()).getDate() !==
+                  new Date(event.getTimestamp()).getDate(),
+            };
           })
       );
     },

@@ -1,6 +1,6 @@
 import { createStore, Store } from "vuex";
 
-import type { Data, Filters } from "@/types/types";
+import type { Data, Filters, Filter } from "@/types/types";
 import { FilterStatus } from "@/basic";
 import { HandlerEvent } from "./../handlers/HandlerEvent";
 
@@ -51,15 +51,14 @@ const store = createStore<RootState>({
        */
       const filterObj = payload.filters;
       for (const key in filterObj) {
-        filterObj[key].amount = state.events.filter(
+        filterObj[key].amount = state.events?.filter(
           (f) => f.eventType === +key
         ).length;
 
-        if (filterObj[key].amount > 0) {
-          filterObj[key].status = FilterStatus.Applied;
-        } else {
-          filterObj[key].status = FilterStatus.Disabled;
-        }
+        filterObj[key].status =
+          filterObj[key].amount > 0
+            ? FilterStatus.Applied
+            : FilterStatus.Disabled;
       }
       state.filters = filterObj;
     },
@@ -89,33 +88,30 @@ const store = createStore<RootState>({
        * // returns 3
        */
       const calcTotalAppliedFilters = (): number => {
-        return Object.keys(state.filters).reduce(
-          (previousValue: number, currentValue: string) => {
-            if (state.filters[+currentValue].status === FilterStatus.Applied) {
-              previousValue++;
-            }
-            return previousValue;
-          },
+        return Object.values(state.filters).reduce(
+          (previousValue: number, currentValue: Filter) =>
+            currentValue.status === FilterStatus.Applied
+              ? previousValue + 1
+              : previousValue,
           0
         );
       };
       /**
-       * У данного фильтра проверяется значение свойства status.
+       * У фильтра проверяется значение свойства status.
+       *
        * Если оно равно FilterStatus.Applied, то вычисляется общее
        * количество фильтров с таким статусом. Если оно больше 1, то статус фильтра
        * меняется на FilterStatus.Removed.
+       *
+       * Если значение свойства status равно FilterStatus.Removed, то статус фильтра
+       * меняется на FilterStatus.Applied.
        */
 
       const total = calcTotalAppliedFilters();
-      if (state.filters[payload].status === FilterStatus.Applied && total > 1) {
-        state.filters[payload].status = FilterStatus.Removed;
-      } else {
-        /**
-         * Если значение свойства status равно FilterStatus.Removed, то статус фильтра
-         * меняется на FilterStatus.Applied.
-         */
-        state.filters[payload].status = FilterStatus.Applied;
-      }
+      state.filters[payload].status =
+        state.filters[payload].status === FilterStatus.Applied && total > 1
+          ? FilterStatus.Removed
+          : FilterStatus.Applied;
     },
   },
   getters: {
@@ -132,13 +128,11 @@ const store = createStore<RootState>({
      * // returns 3
      */
     calcTotalAppliedFilters(state: RootState): number {
-      return Object.keys(state.filters).reduce(
-        (previousValue: number, currentValue: string) => {
-          if (state.filters[+currentValue].status === FilterStatus.Applied) {
-            previousValue++;
-          }
-          return previousValue;
-        },
+      return Object.values(state.filters).reduce(
+        (previousValue: number, currentValue: Filter) =>
+          currentValue.status === FilterStatus.Applied
+            ? previousValue + 1
+            : previousValue,
         0
       );
     },
@@ -153,12 +147,14 @@ const store = createStore<RootState>({
       return (
         copyEvents
           .filter((event: HandlerEvent) => {
-            return Object.keys(filters).some((key: string) => {
-              return (
-                event.eventType === +key &&
-                filters[+key].status === FilterStatus.Applied
-              );
-            });
+            return Object.entries(filters).some(
+              ([key, value]: [string, Filter]) => {
+                return (
+                  event.eventType === +key &&
+                  value.status === FilterStatus.Applied
+                );
+              }
+            );
           })
           .sort((event1: HandlerEvent, event2: HandlerEvent): number => {
             return event1.getTimestamp() - event2.getTimestamp();

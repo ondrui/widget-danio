@@ -1,5 +1,10 @@
 import type { Data, Datakeys } from "../types/types";
-import { CodeEvent, weekDaysRu, monthNamesRu, shortWeekDaysRu } from "@/basic";
+import {
+  CodeEvent,
+  defaultOptionsDateTimeFormat,
+  LOCALES,
+  formatListDateTime,
+} from "@/basic";
 /**
  * Класс HandlerEvent модифицирует данные из объекта предупреждения в соответствии с
  * потребностью компоненты.
@@ -81,50 +86,26 @@ export class HandlerEvent implements Data {
    * // returns "20:30"
    */
   static setTimeFormat(timestamp: number, format: string): string {
-    const date = new Date(timestamp);
+    const options = { ...defaultOptionsDateTimeFormat };
 
-    function pad(n: number): string {
-      return n < 10 ? "0" + n : `${n}`;
+    for (const key in formatListDateTime) {
+      const p = formatListDateTime[key];
+      if (format.includes(key)) {
+        options[p[0]] = p[1];
+      }
     }
 
-    const formatDayTimeByUser = {
-      d: (date: Date): string => {
-        return pad(date.getDate());
-      },
-      D: (date: Date): string => {
-        return shortWeekDaysRu[date.getDay()];
-      },
-      l: (date: Date): string => {
-        return weekDaysRu[date.getDay()];
-      },
-      m: (date: Date): string => {
-        return pad(date.getMonth() + 1);
-      },
-      F: (date: Date): string => {
-        return monthNamesRu[date.getMonth()];
-      },
-      M: (date: Date): string => {
-        return monthNamesRu[date.getMonth()].slice(0, 3);
-      },
-      Y: (date: Date): string => {
-        return pad(date.getFullYear());
-      },
-      H: (date: Date): string => {
-        return pad(date.getHours());
-      },
-      i: (date: Date): string => {
-        return pad(date.getMinutes());
-      },
-      S: (date: Date): string => {
-        return pad(date.getSeconds());
-      },
-    };
+    const datePartsArr = new Intl.DateTimeFormat(
+      LOCALES,
+      options
+    ).formatToParts(timestamp);
 
     let dateFormated = format;
-    for (const key in formatDayTimeByUser) {
-      dateFormated = dateFormated.replaceAll(
+    for (const key in formatListDateTime) {
+      const p = formatListDateTime[key];
+      dateFormated = dateFormated.replace(
         key,
-        formatDayTimeByUser[key as keyof typeof formatDayTimeByUser](date)
+        datePartsArr.filter((item) => item.type === p[0])[0].value
       );
     }
 

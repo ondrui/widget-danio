@@ -165,7 +165,7 @@ const store = createStore<RootState>({
           })
           /** Set the isDayShow property mapping the date block. */
           /**
-           * Параметр isDayShow устанавливается в true если:
+           * Значение свойства isDayShow устанавливается в true если:
            * - индекс предупреждения равен 0 или
            * - у соседних предупреждений разная дата, то параметр isDayShow
            * устанавливается в true второму предупреждению.

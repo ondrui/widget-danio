@@ -77,3 +77,7 @@ export interface Filters {
  * Вспомогательный интерфейс.
  */
 export type Datakeys = keyof Data;
+
+export interface DateTimeFormat {
+  [index: string]: string[];
+}

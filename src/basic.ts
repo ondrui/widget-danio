@@ -1,3 +1,4 @@
+import { DateTimeFormat } from "@/types/types";
 /**
  * Enum который связывают код типа
  * предупреждения eventType из объекта event
@@ -36,6 +37,29 @@ export const timeMarker = ["Вчера", "Сегодня", "Завтра", "По
  * @constant
  */
 export const LOCALES = "ru";
+
+export const formatListDateTime: DateTimeFormat = {
+  d: ["day", "2-digit"],
+  D: ["weekday", "short"],
+  l: ["weekday", "long"],
+  m: ["month", "2-digit"],
+  F: ["month", "long"],
+  M: ["month", "short"],
+  Y: ["year", "numeric"],
+  H: ["hour", "2-digit"],
+  i: ["minute", "2-digit"],
+  S: ["second", "2-digit"],
+};
+
+export const defaultOptionsDateTimeFormat: { [index: string]: string } = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+};
 
 export const monthNamesRu = [
   "января",

@@ -84,9 +84,9 @@ export class HandlerEvent implements Data {
     const options = { ...defaultOptionsDateTimeFormat };
 
     for (const key in formatListDateTime) {
-      const p = formatListDateTime[key as KeyNameListFormat];
+      const value = formatListDateTime[key as KeyNameListFormat];
       if (format.includes(key)) {
-        options[p[0]] = p[1];
+        options[value[0]] = value[1];
       }
     }
 
@@ -97,13 +97,10 @@ export class HandlerEvent implements Data {
 
     let dateFormated = format;
     for (const key in formatListDateTime) {
-      const p = formatListDateTime[key as KeyNameListFormat];
-      dateFormated = dateFormated.replace(
-        key,
-        datePartsArr.find((item) => item.type === p[0]) !== null
-          ? datePartsArr.find((item) => item.type === p[0]).value
-          : ""
-      );
+      const value = formatListDateTime[key as KeyNameListFormat];
+      const item = datePartsArr.find((i) => i.type === value[0]);
+      console.log(item);
+      dateFormated = dateFormated.replace(key, item == null ? "" : item.value);
     }
 
     return dateFormated;

@@ -71,7 +71,7 @@ export default defineComponent({
           {
             eventType: 3,
             eventTime: new Date().setHours(10, 3, 8, 0) + 86400000,
-            timeFormat: `l-F-d-D-m-M-Y H:i:S`,
+            timeFormat: `D-d-F-Y H:i:S`,
             titleText: `заход солнца`,
             eventText: `завтра, 10:00:00 pm Заход солнца сегодня в 20:23, на 5 минут позже чем вчера, продолжительность дня составила 12 ч. 43 мин. (+ 15 мин.). Lorem ipsum dolor sit amet consectetur, adipisicing elit.`,
           },

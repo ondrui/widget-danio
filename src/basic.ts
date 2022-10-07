@@ -1,6 +1,6 @@
 import { KeyNameListFormat } from "@/types/types";
 /**
- * Enum который связывают код типа
+ * Enum связывает код типа
  * предупреждения eventType из объекта event
  * и класс CSS устанавливающий цветовую схему предупреждения.
  * @property {number} warning

@@ -58,9 +58,9 @@ export interface Filter {
   amount: number;
   /**
    * status - Отвечает за состояние кнопки фильтра. Возможно 3 состояния:
-   * disabled - кнопка заблокирована и неактивна
-   * applied - фильтр применен
-   * removed - фильтр не применен
+   * @property {number} Applied - кнопка заблокирована и неактивна
+   * @property {number} Removed - фильтр применен
+   * @property {number} Disabled - фильтр не применен
    */
   status: FilterStatus;
 }
@@ -81,3 +81,15 @@ export type Datakeys = keyof Data;
 export interface DateTimeFormat {
   [index: string]: string[];
 }
+
+export type KeyNameListFormat =
+  | "d"
+  | "D"
+  | "l"
+  | "m"
+  | "F"
+  | "M"
+  | "Y"
+  | "H"
+  | "i"
+  | "S";

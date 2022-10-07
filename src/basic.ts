@@ -1,9 +1,13 @@
-import { DateTimeFormat } from "@/types/types";
+import { KeyNameListFormat } from "@/types/types";
 /**
  * Enum который связывают код типа
  * предупреждения eventType из объекта event
  * и класс CSS устанавливающий цветовую схему предупреждения.
- * @enum
+ * @property {number} warning
+ * @property {number} danger
+ * @property {number} primary
+ * @readonly
+ * @enum {number}
  */
 export enum CodeEvent {
   warning = 1,
@@ -13,7 +17,12 @@ export enum CodeEvent {
 
 /**
  * Enum содержит статусы фильтра.
- * @enum
+ * Отвечает за состояние кнопки фильтра. Возможно 3 состояния:
+ * @property {number} Applied - кнопка заблокирована и неактивна
+ * @property {number} Removed - фильтр применен
+ * @property {number} Disabled - фильтр не применен
+ * @readonly
+ * @enum {number}
  */
 export enum FilterStatus {
   Applied,
@@ -38,7 +47,7 @@ export const timeMarker = ["Вчера", "Сегодня", "Завтра", "По
  */
 export const LOCALES = "ru";
 
-export const formatListDateTime: DateTimeFormat = {
+export const formatListDateTime: Record<KeyNameListFormat, string[]> = {
   d: ["day", "2-digit"],
   D: ["weekday", "short"],
   l: ["weekday", "long"],

@@ -28,7 +28,7 @@ const store = createStore<RootState>({
   },
   actions: {
     changeFilterStatus({ commit, getters }, payload: number) {
-      const total = getters.calcTotalAppliedFilters;
+      const total: number = getters.calcTotalAppliedFilters;
       commit("changeFilterStatus", [total, payload]);
     },
   },
@@ -139,16 +139,10 @@ const store = createStore<RootState>({
       const filters: Filters = getters.getFilters;
       return (
         copyEvents
-          .filter((event: HandlerEvent) => {
-            return Object.entries(filters).some(
-              ([key, value]: [string, Filter]) => {
-                return (
-                  event.eventType === +key &&
-                  value.status === FilterStatus.Applied
-                );
-              }
-            );
-          })
+          .filter(
+            (event: HandlerEvent) =>
+              filters[event.eventType].status === FilterStatus.Applied
+          )
           .sort((event1: HandlerEvent, event2: HandlerEvent): number => {
             return event1.getTimestamp() - event2.getTimestamp();
           })

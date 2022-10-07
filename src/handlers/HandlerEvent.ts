@@ -1,4 +1,4 @@
-import type { Data, Datakeys } from "../types/types";
+import type { Data, Datakeys, KeyNameListFormat } from "../types/types";
 import {
   CodeEvent,
   defaultOptionsDateTimeFormat,
@@ -70,13 +70,8 @@ export class HandlerEvent implements Data {
    * Метод проверяет тип значения свойства eventTime и возвращает определенный timestamp
    */
   //timestamp: number;
-  getTimestamp(): number {
-    if (typeof this.eventTime === "number") {
-      return this.eventTime;
-    } else {
-      return this.eventTime[0];
-    }
-  }
+  getTimestamp = (): number =>
+    typeof this.eventTime === "number" ? this.eventTime : this.eventTime[0];
 
   /**
    * Возвращает строку с датой и временем в заданном формате.
@@ -89,7 +84,7 @@ export class HandlerEvent implements Data {
     const options = { ...defaultOptionsDateTimeFormat };
 
     for (const key in formatListDateTime) {
-      const p = formatListDateTime[key];
+      const p = formatListDateTime[key as KeyNameListFormat];
       if (format.includes(key)) {
         options[p[0]] = p[1];
       }
@@ -102,10 +97,12 @@ export class HandlerEvent implements Data {
 
     let dateFormated = format;
     for (const key in formatListDateTime) {
-      const p = formatListDateTime[key];
+      const p = formatListDateTime[key as KeyNameListFormat];
       dateFormated = dateFormated.replace(
         key,
-        datePartsArr.filter((item) => item.type === p[0])[0].value
+        datePartsArr.find((item) => item.type === p[0]) !== null
+          ? datePartsArr.find((item) => item.type === p[0]).value
+          : ""
       );
     }
 

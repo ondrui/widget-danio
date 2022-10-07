@@ -81,3 +81,15 @@ export type Datakeys = keyof Data;
 export interface DateTimeFormat {
   [index: string]: string[];
 }
+
+export type KeyNameListFormat =
+  | "d"
+  | "D"
+  | "l"
+  | "m"
+  | "F"
+  | "M"
+  | "Y"
+  | "H"
+  | "i"
+  | "S";

@@ -1,4 +1,4 @@
-import type { Data, Datakeys } from "../types/types";
+import type { Data, Datakeys, KeyNameListFormat } from "../types/types";
 import {
   CodeEvent,
   defaultOptionsDateTimeFormat,
@@ -92,7 +92,7 @@ export class HandlerEvent implements Data {
     const options = { ...defaultOptionsDateTimeFormat };
 
     for (const key in formatListDateTime) {
-      const p = formatListDateTime[key];
+      const p = formatListDateTime[key as KeyNameListFormat];
       if (format.includes(key)) {
         options[p[0]] = p[1];
       }
@@ -105,7 +105,7 @@ export class HandlerEvent implements Data {
 
     let dateFormated = format;
     for (const key in formatListDateTime) {
-      const p = formatListDateTime[key];
+      const p = formatListDateTime[key as KeyNameListFormat];
       dateFormated = dateFormated.replace(
         key,
         datePartsArr.filter((item) => item.type === p[0])[0].value

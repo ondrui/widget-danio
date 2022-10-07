@@ -1,4 +1,4 @@
-// import { DateTimeFormat } from "@/types/types";
+import { KeyNameListFormat } from "@/types/types";
 /**
  * Enum который связывают код типа
  * предупреждения eventType из объекта event
@@ -38,7 +38,7 @@ export const timeMarker = ["Вчера", "Сегодня", "Завтра", "По
  */
 export const LOCALES = "ru";
 
-export const formatListDateTime: Record<string, string[]> = {
+export const formatListDateTime: Record<KeyNameListFormat, string[]> = {
   d: ["day", "2-digit"],
   D: ["weekday", "short"],
   l: ["weekday", "long"],

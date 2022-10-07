@@ -26,6 +26,12 @@ const store = createStore<RootState>({
       events: [],
     };
   },
+  actions: {
+    changeFilterStatus({ commit, getters }, payload: number) {
+      const total = getters.calcTotalAppliedFilters;
+      commit("changeFilterStatus", [total, payload]);
+    },
+  },
   mutations: {
     /**
      * Заполняет store данными, полученными с бэкэнда, предварительно их модифицировав.
@@ -76,26 +82,13 @@ const store = createStore<RootState>({
         }
       }
     },
+
     /**
      * Вызывается когда пользователь кликает на кнопку фильтра.
      * @param {number} payload Параметром принимает код
      * выбранного фильтра
      */
-    changeFilterStatus(state: RootState, payload: number): void {
-      /**
-       * calcTotalAppliedFilters вычисляет и возвращает общее количество фильтров со статусом FilterStatus.Applied.
-       * @example
-       * // returns 3
-       */
-      const calcTotalAppliedFilters = (): number => {
-        return Object.values(state.filters).reduce(
-          (previousValue: number, currentValue: Filter) =>
-            currentValue.status === FilterStatus.Applied
-              ? previousValue + 1
-              : previousValue,
-          0
-        );
-      };
+    changeFilterStatus(state: RootState, payload: number[]): void {
       /**
        * У фильтра проверяется значение свойства status.
        *
@@ -107,9 +100,9 @@ const store = createStore<RootState>({
        * меняется на FilterStatus.Applied.
        */
 
-      const total = calcTotalAppliedFilters();
-      state.filters[payload].status =
-        state.filters[payload].status === FilterStatus.Applied && total > 1
+      state.filters[payload[1]].status =
+        state.filters[payload[1]].status === FilterStatus.Applied &&
+        payload[0] > 1
           ? FilterStatus.Removed
           : FilterStatus.Applied;
     },

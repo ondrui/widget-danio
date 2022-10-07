@@ -5,7 +5,7 @@ import { FilterStatus } from "@/basic";
 import { HandlerEvent } from "./../handlers/HandlerEvent";
 
 interface RootState {
-  filters: Filters;
+  filters: Record<number, Filter>;
 
   events: HandlerEvent[];
 }
@@ -34,7 +34,7 @@ const store = createStore<RootState>({
      */
     setData(
       state: RootState,
-      payload: { events: Data[]; filters: Filters }
+      payload: { events: Data[]; filters: Record<number, Filter> }
     ): void {
       /**
        * Класс HandlerEvent добавляет в объект предупреждения методы,

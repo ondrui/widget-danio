@@ -1,4 +1,4 @@
-import { DateTimeFormat } from "@/types/types";
+// import { DateTimeFormat } from "@/types/types";
 /**
  * Enum который связывают код типа
  * предупреждения eventType из объекта event
@@ -38,7 +38,7 @@ export const timeMarker = ["Вчера", "Сегодня", "Завтра", "По
  */
 export const LOCALES = "ru";
 
-export const formatListDateTime: DateTimeFormat = {
+export const formatListDateTime: Record<string, string[]> = {
   d: ["day", "2-digit"],
   D: ["weekday", "short"],
   l: ["weekday", "long"],
@@ -51,7 +51,7 @@ export const formatListDateTime: DateTimeFormat = {
   S: ["second", "2-digit"],
 };
 
-export const defaultOptionsDateTimeFormat: { [index: string]: string } = {
+export const defaultOptionsDateTimeFormat: Record<string, string> = {
   weekday: "long",
   year: "numeric",
   month: "long",

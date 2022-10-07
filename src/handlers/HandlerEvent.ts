@@ -85,7 +85,10 @@ export class HandlerEvent implements Data {
    * @example
    * // returns "20:30"
    */
-  static setTimeFormat(timestamp: number, format: string): string {
+  static setTimeFormat<T extends number, K extends string>(
+    timestamp: T,
+    format: K
+  ): K {
     const options = { ...defaultOptionsDateTimeFormat };
 
     for (const key in formatListDateTime) {
@@ -106,7 +109,7 @@ export class HandlerEvent implements Data {
       dateFormated = dateFormated.replace(
         key,
         datePartsArr.filter((item) => item.type === p[0])[0].value
-      );
+      ) as K;
     }
 
     return dateFormated;

@@ -110,7 +110,7 @@ export default defineComponent({
        * формат отображения времени.
        */
       if (typeof this.event.eventTime === "number") {
-        return HandlerEvent.setTimeFormat(
+        return HandlerEvent.setTimeFormat<number, string>(
           this.event.eventTime,
           this.event.timeFormat
         );
@@ -121,14 +121,17 @@ export default defineComponent({
       /**
        * Логика добавления доп слов после времени.
        */
-      return `с ${HandlerEvent.setTimeFormat(
+      return `с ${HandlerEvent.setTimeFormat<number, string>(
         timeStamp1,
         this.event.timeFormat
       )} ${
         this.getTimeMarker(timeStamp1).toLocaleLowerCase() === "вчера"
           ? this.getTimeMarker(timeStamp1).toLocaleLowerCase()
           : ""
-      } до ${HandlerEvent.setTimeFormat(timeStamp2, this.event.timeFormat)} ${
+      } до ${HandlerEvent.setTimeFormat<number, string>(
+        timeStamp2,
+        this.event.timeFormat
+      )} ${
         this.getTimeMarker(timeStamp2).toLocaleLowerCase() === "сегодня"
           ? ""
           : this.getTimeMarker(timeStamp2).toLocaleLowerCase()

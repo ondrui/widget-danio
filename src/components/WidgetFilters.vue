@@ -20,7 +20,7 @@
       <div>{{ filter.name }}</div>
       <span class="filter-count">{{ filter.amount }}</span>
       <div class="filter-icon-block">
-        <div class="filter-icon-open" v-if="!isAppliedFilter(filter)">
+        <div :class="filterIconSwitch(filter)[0]">
           <svg
             width="8"
             height="8"
@@ -31,22 +31,7 @@
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
-              d="M3.5 4.5L3.5 8H4.5L4.5 4.5H8L8 3.5L4.5 3.5L4.5 0L3.5 0L3.5 3.5L0 3.5L0 4.5L3.5 4.5Z"
-            />
-          </svg>
-        </div>
-        <div class="filter-icon-close" v-else>
-          <svg
-            width="8"
-            height="8"
-            viewBox="0 0 8 8"
-            fill="#C4C4C4"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M4.07115 4.7784L7.25309 7.96033L7.9602 7.25323L4.77826 4.07129L7.9602 0.88935L7.25309 0.182244L4.07115 3.36418L0.889129 0.18216L0.182022 0.889267L3.36404 4.07129L0.182022 7.25331L0.889129 7.96042L4.07115 4.7784Z"
+              :d="filterIconSwitch(filter)[1]"
             />
           </svg>
         </div>
@@ -132,6 +117,17 @@ export default defineComponent({
       if (filter.status !== FilterStatus.Disabled) {
         this.$store.dispatch("changeFilterStatus", key);
       }
+    },
+    filterIconSwitch(filter: Filter): string[] {
+      return !this.isAppliedFilter(filter)
+        ? [
+            "filter-icon-open",
+            "M3.5 4.5L3.5 8H4.5L4.5 4.5H8L8 3.5L4.5 3.5L4.5 0L3.5 0L3.5 3.5L0 3.5L0 4.5L3.5 4.5Z",
+          ]
+        : [
+            "filter-icon-close",
+            "M4.07115 4.7784L7.25309 7.96033L7.9602 7.25323L4.77826 4.07129L7.9602 0.88935L7.25309 0.182244L4.07115 3.36418L0.889129 0.18216L0.182022 0.889267L3.36404 4.07129L0.182022 7.25331L0.889129 7.96042L4.07115 4.7784Z",
+          ];
     },
   },
 });

@@ -99,7 +99,6 @@ export class HandlerEvent implements Data {
     for (const key in formatListDateTime) {
       const value = formatListDateTime[key as KeyNameListFormat];
       const item = datePartsArr.find((i) => i.type === value[0]);
-      console.log(item);
       dateFormated = dateFormated.replace(key, item == null ? "" : item.value);
     }
 

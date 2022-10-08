@@ -29,6 +29,7 @@ import { defineComponent } from "vue";
 import WidgetMainItem from "./WidgetMainItem.vue";
 import WidgetFilters from "./WidgetFilters.vue";
 import { Data, Filters } from "@/types/types";
+import { FilterStatus } from "@/basic";
 
 export default defineComponent({
   components: {
@@ -54,7 +55,7 @@ export default defineComponent({
      * // returns 3
      */
     totalAppliedFilters(): number {
-      return this.$store.getters.calcTotalAppliedFilters;
+      return this.$store.getters.calcTotalFilters(FilterStatus.Applied);
     },
   },
 });

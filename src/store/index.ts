@@ -27,8 +27,13 @@ const store = createStore<RootState>({
     };
   },
   actions: {
+    /**
+     *
+     * @param param
+     * @param payload
+     */
     changeFilterStatus({ commit, getters }, payload: number) {
-      const total: number = getters.calcTotalAppliedFilters;
+      const total: number = getters.calcTotalFilters(FilterStatus.Applied);
       commit("changeFilterStatus", [total, payload]);
     },
   },
@@ -118,17 +123,19 @@ const store = createStore<RootState>({
     /**
      * Вычисляет и возвращает общее количество фильтров со статусом FilterStatus.Applied.
      * @example
+     * @param state
+     * @returns
      * // returns 3
      */
-    calcTotalAppliedFilters(state: RootState): number {
-      return Object.values(state.filters).reduce(
-        (previousValue: number, currentValue: Filter) =>
-          currentValue.status === FilterStatus.Applied
-            ? previousValue + 1
-            : previousValue,
-        0
-      );
-    },
+    calcTotalFilters:
+      (state: RootState): ((status: FilterStatus) => number) =>
+      (status: FilterStatus): number => {
+        return Object.values(state.filters).reduce<number>(
+          (previousValue: number, currentValue: Filter) =>
+            currentValue.status === status ? previousValue + 1 : previousValue,
+          0
+        );
+      },
     /**
      * Возвращает копию массива объектов с предупреждениями отфильтрованные и отсортированные
      * по дате и времени. А также добавляет в объект опциональный параметр, который

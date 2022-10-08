@@ -98,16 +98,10 @@ export default defineComponent({
      * Определяет состояние кнопки 'Показать все'. Если все фильтры применены, то кнопка неактивна.
      */
     isDisabledShowAll(): boolean {
-      const totalDisabledFilters = Object.keys(this.filters).reduce(
-        (previousValue: number, currentValue: string) =>
-          this.filters[+currentValue].status === FilterStatus.Disabled
-            ? previousValue + 1
-            : previousValue,
-        0
-      );
       return (
         this.totalAppliedFilters ===
-        Object.keys(this.filters).length - totalDisabledFilters
+        Object.keys(this.filters).length -
+          this.$store.getters.calcTotalFilters(FilterStatus.Disabled)
       );
     },
   },

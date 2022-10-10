@@ -1,7 +1,7 @@
 import { createStore, Store } from "vuex";
 
 import type { Data, Filters, Filter } from "@/types/types";
-import { FilterStatus } from "@/basic";
+import { FilterStatus, defaultFilters } from "@/basic";
 import { HandlerEvent } from "./../handlers/HandlerEvent";
 
 interface RootState {
@@ -16,13 +16,7 @@ const store = createStore<RootState>({
       /**
        * Начальные настройки фильтров.
        */
-      filters: {
-        3: { name: "Общие", amount: 0, status: 2 },
-        1: { name: "Внимание", amount: 0, status: 2 },
-        2: { name: "Опасно", amount: 0, status: 2 },
-        5: { name: "Очень опасно", amount: 0, status: 2 },
-        6: { name: "Неблагоприятно", amount: 0, status: 2 },
-      },
+      filters: defaultFilters,
       events: [],
     };
   },
@@ -45,22 +39,28 @@ const store = createStore<RootState>({
      */
     setData(
       state: RootState,
-      payload: { events: Data[]; filters: Filters }
+      payload: { events?: Data[]; filters?: Filters }
     ): void {
+      let { events, filters } = payload;
+      if (events == null) {
+        events = [];
+      }
+
+      if (filters == null) {
+        filters = [];
+      }
       /**
        * Класс HandlerEvent добавляет в объект предупреждения методы,
        * которые будут применяться в дальнейшем.
        */
-      state.events = payload.events.map(
-        (event: Data) => new HandlerEvent(event)
-      );
+      state.events = events.map((event: Data) => new HandlerEvent(event));
       /**
        * Вычисляется общее количество предупреждений с определенным типом и записывает
        * его в свойство amount объекта фильтра, а также присваивает свойству status значение
        *  FilterStatus.Applied если общее количество предупреждений больше 0 или
        * FilterStatus.Disabled, если общее количество предупреждений равно 0.
        */
-      const filterObj = payload.filters;
+      const filterObj = filters;
       for (const key in filterObj) {
         filterObj[key].amount = state.events?.filter(
           (f) => f.eventType === +key

@@ -13,6 +13,9 @@ export default defineComponent({
     WidgetMain,
   },
   created() {
+    /**
+     * Fake data for testing app.
+     */
     setTimeout(() => {
       this.$store.commit("setData", {
         filters: {

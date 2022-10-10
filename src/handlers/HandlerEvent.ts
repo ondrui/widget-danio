@@ -62,7 +62,6 @@ export class HandlerEvent implements Data {
   constructor(_event: Data) {
     for (const prop in _event) {
       const key = prop as Datakeys;
-
       this[prop] = _event[key];
     }
   }
@@ -83,6 +82,9 @@ export class HandlerEvent implements Data {
   static setTimeFormat(timestamp: number, format: string): string {
     const options = { ...defaultOptionsDateTimeFormat };
 
+    /**
+     * Формируем объект с заданными свойствами форматирования даты и времени.
+     */
     for (const key in formatListDateTime) {
       const value = formatListDateTime[key as KeyNameListFormat];
       if (format.includes(key)) {
@@ -90,11 +92,17 @@ export class HandlerEvent implements Data {
       }
     }
 
+    /**
+     * Массив объектов, содержащий отформатированную дату по частям.
+     */
     const datePartsArr = new Intl.DateTimeFormat(
       LOCALES,
       options
     ).formatToParts(timestamp);
 
+    /**
+     * Формируем строку дата-время с заданным форматированием.
+     */
     let dateFormated = format;
     for (const key in formatListDateTime) {
       const value = formatListDateTime[key as KeyNameListFormat];

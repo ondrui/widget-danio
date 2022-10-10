@@ -69,6 +69,10 @@ export default defineComponent({
   },
   data() {
     return {
+      /**
+       * Объект со свойствами, которые связывают код иконки
+       * предупреждения iconCode из объекта event и названием файла иконки.
+       */
       iconItem: {
         2: "wind",
         1: "uv-index",
@@ -104,7 +108,6 @@ export default defineComponent({
      * // returns '08:00'
      */
     calcTimeEvent(): string {
-      // const handlerEvent = new HandlerEvent(this.event);
       /**
        * Проверка значения свойства eventTime и преобразование этого значения в нужный
        * формат отображения времени.
@@ -125,11 +128,11 @@ export default defineComponent({
         timeStamp1,
         this.event.timeFormat
       )} ${
-        this.getTimeMarker(timeStamp1).toLocaleLowerCase() === "вчера"
+        this.getTimeMarker(timeStamp1) === timeMarker[0]
           ? this.getTimeMarker(timeStamp1).toLocaleLowerCase()
           : ""
       } до ${HandlerEvent.setTimeFormat(timeStamp2, this.event.timeFormat)} ${
-        this.getTimeMarker(timeStamp2).toLocaleLowerCase() === "сегодня"
+        this.getTimeMarker(timeStamp2) === timeMarker[1]
           ? ""
           : this.getTimeMarker(timeStamp2).toLocaleLowerCase()
       }`;

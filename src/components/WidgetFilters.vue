@@ -59,12 +59,20 @@
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
 import { Filters, Filter } from "@/types/types";
-import { FilterStatus } from "@/basic";
+import { FilterStatus, filterIconOpen, filterIconClose } from "@/basic";
 
 export default defineComponent({
   props: {
     /**
-     * Объект, который определяют состояние фильтра и его отображение.
+     * Объект, который определяет состояние фильтра и его отображение.
+     * @example
+     * {
+     * 3: { name: "Общие", amount: 2, status: 2 },
+     * 1: { name: "Внимание", amount: 1, status: 2 },
+     * 2: { name: "Опасно", amount: 4, status: 2 },
+     * 5: { name: "Очень опасно", amount: 0, status: 2 },
+     * 6: { name: "Неблагоприятно", amount: 0, status: 2 },
+     * }
      */
     filters: {
       type: Object as PropType<Filters>,
@@ -104,8 +112,8 @@ export default defineComponent({
     },
     /**
      * Определяет вызывать ли мутацию стора при нажатии на кнопку фильтра.
-     * @param key
-     * @param filter
+     * @param key Код фильтра.
+     * @param filter Объект содержит настройки фильтров.
      */
     useMutationToChangeFilterStatus(key: number, filter: Filter): void {
       /**
@@ -118,16 +126,12 @@ export default defineComponent({
         this.$store.dispatch("changeFilterStatus", key);
       }
     },
+    /**
+     * Возвращает массив с параметрами отображения иконки фильтра.
+     * @param filter Объект содержит настройки фильтров.
+     */
     filterIconSwitch(filter: Filter): string[] {
-      return !this.isAppliedFilter(filter)
-        ? [
-            "filter-icon-open",
-            "M3.5 4.5L3.5 8H4.5L4.5 4.5H8L8 3.5L4.5 3.5L4.5 0L3.5 0L3.5 3.5L0 3.5L0 4.5L3.5 4.5Z",
-          ]
-        : [
-            "filter-icon-close",
-            "M4.07115 4.7784L7.25309 7.96033L7.9602 7.25323L4.77826 4.07129L7.9602 0.88935L7.25309 0.182244L4.07115 3.36418L0.889129 0.18216L0.182022 0.889267L3.36404 4.07129L0.182022 7.25331L0.889129 7.96042L4.07115 4.7784Z",
-          ];
+      return !this.isAppliedFilter(filter) ? filterIconOpen : filterIconClose;
     },
   },
 });

@@ -17,7 +17,7 @@ export interface Data {
    */
   eventTime: number | number[];
   /**
-   * timeFormat -  Формат отображения времени. Возможные варианты:
+   * timeFormat -  Формат отображения времени и даты. Возможные варианты:
    * часы:минуты; часы:минуты день:месяц; другие.
    */
   timeFormat: string;
@@ -74,14 +74,13 @@ export interface Filters {
 }
 
 /**
- * Вспомогательный интерфейс.
+ * Вспомогательный тип.
  */
 export type Datakeys = keyof Data;
 
-export interface DateTimeFormat {
-  [index: string]: string[];
-}
-
+/**
+ * Тип для ключей объекта формата отображения времени и даты.
+ */
 export type KeyNameListFormat =
   | "d"
   | "D"

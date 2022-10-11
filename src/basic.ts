@@ -1,8 +1,4 @@
-import {
-  KeyNameListFormat,
-  Filters,
-  KeyOptionsDateTimeFormat,
-} from "@/types/types";
+import { KeyNameListFormat, Filters } from "@/types/types";
 /**
  * Enum связывает код типа
  * предупреждения eventType из объекта event
@@ -70,10 +66,7 @@ export const formatListDateTime: Record<KeyNameListFormat, string[]> = {
 /**
  * Объект с дефолтными значениями свойств форматирования даты и времени.
  */
-export const defaultOptionsDateTimeFormat: Record<
-  KeyOptionsDateTimeFormat,
-  string
-> = {
+export const defaultOptionsDateTimeFormat: Intl.DateTimeFormatOptions = {
   weekday: "long",
   year: "numeric",
   month: "long",

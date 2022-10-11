@@ -114,7 +114,10 @@ export class HandlerEvent implements Data {
     for (const key in formatListDateTime) {
       const value = formatListDateTime[key as KeyNameListFormat];
       const item = datePartsArr.find((i) => i.type === value[0]);
-      dateFormated = dateFormated.replace(key, item == null ? "" : item.value);
+      dateFormated = dateFormated.replace(
+        key,
+        item === undefined ? "" : item.value
+      );
     }
 
     return dateFormated;

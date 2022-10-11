@@ -123,7 +123,7 @@ export default defineComponent({
        * - применен только один данный фильтр
        */
       if (filter.status !== FilterStatus.Disabled) {
-        this.$store.dispatch("changeFilterStatus", key);
+        this.$store.dispatch("FilterStatus", key);
       }
     },
     /**

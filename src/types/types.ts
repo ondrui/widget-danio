@@ -113,11 +113,4 @@ export type KeyNameListFormat =
  *  @param minute Минуты. Возможные значения: 2-digit.
  *  @param second Секунды. Возможные значения: 2-digit.
  */
-export type KeyOptionsDateTimeFormat =
-  | "weekday"
-  | "year"
-  | "month"
-  | "day"
-  | "hour"
-  | "minute"
-  | "second";
+export type KeyOptionsDateTimeFormat = keyof Intl.DateTimeFormatOptions;

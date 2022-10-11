@@ -22,26 +22,30 @@ const store = createStore<RootState>({
   },
   actions: {
     /**
-     *
-     * @param param
-     * @param payload
+     * Получает параметром код фильтра.
+     * Вычисляет общее количество фильтров со статусом FilterStatus.Applied.
+     * Вызывает мутацию changeFilterStatus, в которую передает массив с этими
+     * данными.
+     * @param key Код фильтра.
+     * @param total Общее количество фильтров со статусом FilterStatus.Applied.
      */
-    changeFilterStatus({ commit, getters }, payload: number) {
+    FilterStatus({ commit, getters }, key: number) {
       const total: number = getters.calcTotalFilters(FilterStatus.Applied);
-      commit("changeFilterStatus", [total, payload]);
+      commit("changeFilterStatus", [total, key]);
     },
   },
   mutations: {
     /**
      * Заполняет store данными, полученными с бэкэнда, предварительно их модифицировав.
-     * @param state
-     * @param payload Объект с фильтрами и массивом предупреждений
+     * @param state Текущее состояние store.
+     * @param events Массив предупреждений.
+     * @param filters Объект, который управляет отображением
+     * блока с фильтрами и их состояниями.
      */
     setData(
       state: RootState,
-      payload: { events?: Data[]; filters?: Filters }
+      { events, filters }: { events?: Data[]; filters?: Filters }
     ): void {
-      let { events, filters } = payload;
       if (events == null) {
         events = [];
       }
@@ -79,6 +83,7 @@ const store = createStore<RootState>({
      * кнопку 'Показать все'.
      * Применяются ВСЕ фильтры у которых общее
      * количество предупреждений больше 0.
+     * @param state Текущее состояние store.
      */
     resetFilters(state: RootState): void {
       for (const key in state.filters) {
@@ -90,10 +95,12 @@ const store = createStore<RootState>({
 
     /**
      * Вызывается когда пользователь кликает на кнопку фильтра.
-     * @param {number} payload Параметром принимает код
      * выбранного фильтра
+     * @param state Текущее состояние store.
+     * @param key Код фильтра.
+     * @param total Общее количество фильтров со статусом FilterStatus.Applied.
      */
-    changeFilterStatus(state: RootState, payload: number[]): void {
+    changeFilterStatus(state: RootState, [total, key]: number[]): void {
       /**
        * У фильтра проверяется значение свойства status.
        *
@@ -105,9 +112,8 @@ const store = createStore<RootState>({
        * меняется на FilterStatus.Applied.
        */
 
-      state.filters[payload[1]].status =
-        state.filters[payload[1]].status === FilterStatus.Applied &&
-        payload[0] > 1
+      state.filters[key].status =
+        state.filters[key].status === FilterStatus.Applied && total > 1
           ? FilterStatus.Removed
           : FilterStatus.Applied;
     },
@@ -115,15 +121,18 @@ const store = createStore<RootState>({
   getters: {
     /**
      * Возвращает копию объекта с настройками фильтров, полученными из store
+     * @param state Текущее состояние store.
      */
     getFilters(state: RootState): Filters {
       const copyFilter: Filters = JSON.parse(JSON.stringify(state.filters));
       return copyFilter;
     },
     /**
-     * Вычисляет и возвращает общее количество фильтров со статусом FilterStatus.Applied.
+     * Возвращает общее количество фильтров со определенным статусом, который получает
+     * как параметр.
+     * @param state Текущее состояние store.
+     * @param status Статус фильтра.
      * @example
-     * @param state
      * @returns
      * // returns 3
      */
@@ -140,6 +149,7 @@ const store = createStore<RootState>({
      * Возвращает копию массива объектов с предупреждениями отфильтрованные и отсортированные
      * по дате и времени. А также добавляет в объект опциональный параметр, который
      * отвечает за отображение блока с датой. Если true, то блок отрисовывается.
+     * @param state Текущее состояние store.
      */
     getFilteredAndSortedEvents(state: RootState, getters): Data[] {
       const copyEvents = [...state.events];

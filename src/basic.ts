@@ -1,4 +1,4 @@
-import { KeyNameListFormat, Filters } from "@/types/types";
+import { KeyNameListFormat } from "@/types/types";
 /**
  * Enum связывает код типа
  * предупреждения eventType из объекта event
@@ -37,15 +37,39 @@ export enum FilterStatus {
 export const ALLDAYMS = 86400000;
 
 /**
- * Массив содержит слова-указатели времен
- */
-export const timeMarker = ["Вчера", "Сегодня", "Завтра", "Послезавтра"];
-
-/**
  * Переменная хранит языковую метку для определения локали.
  * @constant
  */
 export const LOCALES = "ru";
+
+/**
+ * Строковые константы с учетом локали.
+ */
+export const expression = {
+  ru: {
+    /**
+     * Массив содержит слова-указатели времен
+     */
+    timeMarker: ["Вчера", "Сегодня", "Завтра", "Послезавтра", "с", "до"],
+    /**
+     * Сообщения, которые отображаются при отсутствии предупреждений.
+     */
+    defaultEventMessage: [
+      "В ближайшее время никаких значимых событий в погоде не ожидается :)",
+      "Мы сразу сообщим, как появится что-то интересное.",
+    ],
+    /**
+     * Начальные настройки фильтров.
+     */
+    defaultFilters: {
+      3: { name: "Общие", amount: 0, status: 2 },
+      1: { name: "Внимание", amount: 0, status: 2 },
+      2: { name: "Опасно", amount: 0, status: 2 },
+      5: { name: "Очень опасно", amount: 0, status: 2 },
+      6: { name: "Неблагоприятно", amount: 0, status: 2 },
+    },
+  },
+};
 
 /**
  * Возможные значения формата отображения времени и даты.
@@ -66,7 +90,7 @@ export const formatListDateTime: Record<KeyNameListFormat, string[]> = {
 /**
  * Объект с дефолтными значениями свойств форматирования даты и времени.
  */
-export const defaultOptionsDateTimeFormat: Intl.DateTimeFormatOptions = {
+export const defaultOptionsDateTimeFormat = {
   weekday: "long",
   year: "numeric",
   month: "long",
@@ -91,25 +115,6 @@ export const filterIconClose: string[] = [
   "filter-icon-close",
   "M4.07115 4.7784L7.25309 7.96033L7.9602 7.25323L4.77826 4.07129L7.9602 0.88935L7.25309 0.182244L4.07115 3.36418L0.889129 0.18216L0.182022 0.889267L3.36404 4.07129L0.182022 7.25331L0.889129 7.96042L4.07115 4.7784Z",
 ];
-
-/**
- * Сообщения, которые отображаются при отсутствии предупреждений.
- */
-export const defaultEventMessage: string[] = [
-  "В ближайшее время никаких значимых событий в погоде не ожидается :)",
-  "Мы сразу сообщим, как появится что-то интересное.",
-];
-
-/**
- * Начальные настройки фильтров.
- */
-export const defaultFilters: Filters = {
-  3: { name: "Общие", amount: 0, status: 2 },
-  1: { name: "Внимание", amount: 0, status: 2 },
-  2: { name: "Опасно", amount: 0, status: 2 },
-  5: { name: "Очень опасно", amount: 0, status: 2 },
-  6: { name: "Неблагоприятно", amount: 0, status: 2 },
-};
 
 // export const monthNamesRu = [
 //   "января",

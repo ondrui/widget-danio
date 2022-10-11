@@ -29,7 +29,7 @@ import { defineComponent } from "vue";
 import WidgetMainItem from "./WidgetMainItem.vue";
 import WidgetFilters from "./WidgetFilters.vue";
 import { Data, Filters } from "@/types/types";
-import { FilterStatus, defaultEventMessage } from "@/basic";
+import { FilterStatus, expression } from "@/basic";
 
 export default defineComponent({
   components: {
@@ -38,7 +38,9 @@ export default defineComponent({
   },
   data() {
     return {
-      defaultEventMessage,
+      defaultEventMessage:
+        expression[this.$store.getters.getLocales as keyof typeof expression]
+          .defaultEventMessage,
     };
   },
   computed: {

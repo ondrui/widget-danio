@@ -1,13 +1,13 @@
 import { createStore, Store } from "vuex";
 
 import type { Data, Filters, Filter } from "@/types/types";
-import { FilterStatus, defaultFilters } from "@/basic";
+import { FilterStatus } from "@/basic";
 import { HandlerEvent } from "./../handlers/HandlerEvent";
 
 interface RootState {
   filters: Filters;
-
   events: HandlerEvent[];
+  locales: string;
 }
 
 const store = createStore<RootState>({
@@ -16,8 +16,12 @@ const store = createStore<RootState>({
       /**
        * Начальные настройки фильтров.
        */
-      filters: defaultFilters,
+      filters: {},
       events: [],
+      /**
+       * Языковая метка для определения локали.
+       */
+      locales: "ru",
     };
   },
   actions: {
@@ -51,7 +55,7 @@ const store = createStore<RootState>({
       }
 
       if (filters == null) {
-        filters = [];
+        filters = {};
       }
       /**
        * Класс HandlerEvent добавляет в объект предупреждения методы,
@@ -120,6 +124,15 @@ const store = createStore<RootState>({
   },
   getters: {
     /**
+     * Возвращает языковую метку для определения локали.
+     * @param state Текущее состояние store.
+     * @example
+     * //returns "ru"
+     */
+    getLocales(state: RootState): string {
+      return state.locales;
+    },
+    /**
      * Возвращает копию объекта с настройками фильтров, полученными из store
      * @param state Текущее состояние store.
      */
@@ -133,7 +146,6 @@ const store = createStore<RootState>({
      * @param state Текущее состояние store.
      * @param status Статус фильтра.
      * @example
-     * @returns
      * // returns 3
      */
     calcTotalFilters:

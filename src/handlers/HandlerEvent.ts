@@ -1,13 +1,7 @@
-import type {
-  Data,
-  Datakeys,
-  KeyNameListFormat,
-  KeyOptionsDateTimeFormat,
-} from "../types/types";
+import type { Data, Datakeys, KeyNameListFormat } from "../types/types";
 import {
   CodeEvent,
   defaultOptionsDateTimeFormat,
-  LOCALES,
   formatListDateTime,
 } from "@/basic";
 /**
@@ -23,7 +17,7 @@ export class HandlerEvent implements Data {
     | boolean
     | undefined
     | (() => number)
-    | ((timestamp: number, format: string) => string);
+    | ((timestamp: number, format: string, locales: string) => string);
   /**
    * eventType - Код типа предупреждения (важность). Будет предопределено
    * несколько типов предупреждений. Определяет цветовую схему и параметры
@@ -81,21 +75,26 @@ export class HandlerEvent implements Data {
    * Возвращает строку с датой и временем в заданном формате.
    * @param timestamp Числовое значение даты.
    * @param format Строковое представление формата.
+   * @param locales Языковая метка для определения локали.
    * @example
    * // returns "20:30"
    */
-  static setTimeFormat(timestamp: number, format: string): string {
+  static setTimeFormat(
+    timestamp: number,
+    format: string,
+    locales: string
+  ): string {
     const options = {
       ...defaultOptionsDateTimeFormat,
     };
-
     /**
      * Формируем объект с заданными свойствами форматирования даты и времени.
      */
     for (const key in formatListDateTime) {
       const value = formatListDateTime[key as KeyNameListFormat];
       if (format.includes(key)) {
-        options[value[0] as KeyOptionsDateTimeFormat] = value[1];
+        options[value[0] as keyof typeof defaultOptionsDateTimeFormat] =
+          value[1];
       }
     }
 
@@ -103,8 +102,8 @@ export class HandlerEvent implements Data {
      * Массив объектов, содержащий отформатированную дату по частям.
      */
     const datePartsArr = new Intl.DateTimeFormat(
-      LOCALES,
-      options
+      locales,
+      options as Intl.DateTimeFormatOptions
     ).formatToParts(timestamp);
 
     /**

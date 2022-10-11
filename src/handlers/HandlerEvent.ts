@@ -1,4 +1,9 @@
-import type { Data, Datakeys, KeyNameListFormat } from "../types/types";
+import type {
+  Data,
+  Datakeys,
+  KeyNameListFormat,
+  KeyOptionsDateTimeFormat,
+} from "../types/types";
 import {
   CodeEvent,
   defaultOptionsDateTimeFormat,
@@ -93,8 +98,7 @@ export class HandlerEvent implements Data {
     for (const key in formatListDateTime) {
       const value = formatListDateTime[key as KeyNameListFormat];
       if (format.includes(key)) {
-        options[value[0] as keyof typeof defaultOptionsDateTimeFormat] =
-          value[1];
+        options[value[0] as KeyOptionsDateTimeFormat] = value[1];
       }
     }
 
@@ -103,7 +107,7 @@ export class HandlerEvent implements Data {
      */
     const datePartsArr = new Intl.DateTimeFormat(
       locales,
-      options as Intl.DateTimeFormatOptions
+      options
     ).formatToParts(timestamp);
 
     /**

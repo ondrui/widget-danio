@@ -90,7 +90,9 @@ export const formatListDateTime: Record<KeyNameListFormat, string[]> = {
 /**
  * Объект с дефолтными значениями свойств форматирования даты и времени.
  */
-export const defaultOptionsDateTimeFormat = {
+export const defaultOptionsDateTimeFormat:
+  | Intl.DateTimeFormatOptions
+  | { [index: string]: string } = {
   weekday: "long",
   year: "numeric",
   month: "long",

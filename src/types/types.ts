@@ -114,5 +114,3 @@ export type KeyNameListFormat =
  *  @param second Секунды. Возможные значения: 2-digit.
  */
 export type KeyOptionsDateTimeFormat = keyof Intl.DateTimeFormatOptions;
-
-export type a = "long" | "short" | "narrow" | "numeric" | "2-digit" | undefined;

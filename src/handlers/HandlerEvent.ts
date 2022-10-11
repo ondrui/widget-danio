@@ -1,4 +1,9 @@
-import type { Data, Datakeys, KeyNameListFormat } from "../types/types";
+import type {
+  Data,
+  Datakeys,
+  KeyNameListFormat,
+  KeyOptionsDateTimeFormat,
+} from "../types/types";
 import {
   CodeEvent,
   defaultOptionsDateTimeFormat,
@@ -80,7 +85,9 @@ export class HandlerEvent implements Data {
    * // returns "20:30"
    */
   static setTimeFormat(timestamp: number, format: string): string {
-    const options = { ...defaultOptionsDateTimeFormat };
+    const options = {
+      ...defaultOptionsDateTimeFormat,
+    };
 
     /**
      * Формируем объект с заданными свойствами форматирования даты и времени.
@@ -88,7 +95,7 @@ export class HandlerEvent implements Data {
     for (const key in formatListDateTime) {
       const value = formatListDateTime[key as KeyNameListFormat];
       if (format.includes(key)) {
-        options[value[0]] = value[1];
+        options[value[0] as KeyOptionsDateTimeFormat] = value[1];
       }
     }
 

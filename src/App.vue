@@ -1,16 +1,16 @@
 <template>
   <div class="app">
-    <WidgetMain />
+    <AlertsWidget />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import WidgetMain from "@/components/WidgetMain.vue";
+import AlertsWidget from "@/components/AlertsWidget.vue";
 
 export default defineComponent({
   components: {
-    WidgetMain,
+    AlertsWidget,
   },
   created() {
     /**

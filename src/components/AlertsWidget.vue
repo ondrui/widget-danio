@@ -1,13 +1,13 @@
 <template>
   <div class="widget">
     <h1>Главное</h1>
-    <WidgetFilters
+    <AlertsWidgetFilters
       :filters="getfilters"
       :totalAppliedFilters="totalAppliedFilters"
     />
     <div class="wrapper">
       <div v-if="getEvents.length" class="container-main">
-        <WidgetMainItem
+        <AlertsWidgetItem
           v-for="(event, index) in getEvents"
           :key="`wn-${index}`"
           :event="event"
@@ -26,15 +26,15 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import WidgetMainItem from "./WidgetMainItem.vue";
-import WidgetFilters from "./WidgetFilters.vue";
+import AlertsWidgetItem from "./AlertsWidgetItem.vue";
+import AlertsWidgetFilters from "./AlertsWidgetFilters.vue";
 import { Data, Filters } from "@/types/types";
 import { FilterStatus, expression } from "@/basic";
 
 export default defineComponent({
   components: {
-    WidgetMainItem,
-    WidgetFilters,
+    AlertsWidgetItem,
+    AlertsWidgetFilters,
   },
   data() {
     return {

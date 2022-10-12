@@ -15,7 +15,7 @@
       }"
       :key="`fw-${filter}`"
       :tabindex="isDisabledFilter(filter) ? '' : 0"
-      :title="isLastFilter(filter) ? 'Нельзя отключить все фильтры!' : ''"
+      :title="isLastFilter(filter) ? messageForOneFilter : ''"
     >
       <div>{{ filter.name }}</div>
       <span class="filter-count">{{ filter.amount }}</span>
@@ -50,7 +50,7 @@
       }"
       :tabindex="isDisabledShowAll ? '' : 0"
     >
-      Показать все
+      {{ valueButtonShowAll }}
     </div>
   </div>
 </template>
@@ -59,7 +59,7 @@
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
 import { Filters, Filter } from "@/types/types";
-import { FilterStatus, filterIconOpen, filterIconClose } from "@/basic";
+import { FilterStatus, filterIcon, expression } from "@/basic";
 
 export default defineComponent({
   props: {
@@ -86,6 +86,12 @@ export default defineComponent({
       required: true,
     },
   },
+  data() {
+    return {
+      messageForOneFilter: expression.ru.messageForOneFilter,
+      valueButtonShowAll: expression.ru.valueButtonShowAll,
+    };
+  },
   computed: {
     /**
      * Определяет состояние кнопки 'Показать все'. Если все фильтры применены, то кнопка неактивна.
@@ -99,12 +105,24 @@ export default defineComponent({
     },
   },
   methods: {
+    /**
+     * Определяет применен ли фильтр.
+     * @param filter Объект содержит настройки фильтров.
+     */
     isAppliedFilter(filter: Filter): boolean {
       return filter.status === FilterStatus.Applied;
     },
+    /**
+     * Определяет отключен ли фильтр.
+     * @param filter Объект содержит настройки фильтров.
+     */
     isDisabledFilter(filter: Filter): boolean {
       return filter.status === FilterStatus.Disabled;
     },
+    /**
+     * Определяет последний применненый фильтр.
+     * @param filter Объект содержит настройки фильтров.
+     */
     isLastFilter(filter: Filter): boolean {
       return (
         this.totalAppliedFilters === 1 && filter.status === FilterStatus.Applied
@@ -131,7 +149,7 @@ export default defineComponent({
      * @param filter Объект содержит настройки фильтров.
      */
     filterIconSwitch(filter: Filter): string[] {
-      return !this.isAppliedFilter(filter) ? filterIconOpen : filterIconClose;
+      return !this.isAppliedFilter(filter) ? filterIcon.open : filterIcon.close;
     },
   },
 });

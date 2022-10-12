@@ -13,14 +13,14 @@
     </span>
     <span class="day-info-number-month">{{ calcDayInDayInfo[1] }}</span>
   </div>
-  <div :class="'container-item ' + EventColorScheme">
+  <div :class="'container-item ' + eventColorScheme">
     <div class="top-info">
       <div class="time">{{ calcTimeEvent }}</div>
       <div class="title" :title="event.titleText">{{ event.titleText }}</div>
     </div>
     <div class="block">
       <div v-if="event.iconCode" class="icon">
-        <img :src="UrlIcon" alt="icon" />
+        <img :src="urlIcon" alt="icon" />
       </div>
       <div class="text">{{ event.eventText }}</div>
     </div>
@@ -30,17 +30,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import { Data } from "@/types/types";
+import { Data, ExpressionLocales } from "@/types/types";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
-import { CodeEvent, ALLDAYMS, expression } from "@/basic";
-
-/**
- * Интерфейс для объекта со свойствами, которые связывают код иконки
- * предупреждения iconCode из объекта event и названием файла иконки.
- */
-interface IconItem {
-  [index: number]: string;
-}
+import { CodeEvent, ALLDAYMS, expression, iconItem } from "@/basic";
 
 export default defineComponent({
   props: {
@@ -73,19 +65,16 @@ export default defineComponent({
        * Объект со свойствами, которые связывают код иконки
        * предупреждения iconCode из объекта event и названием файла иконки.
        */
-      iconItem: {
-        2: "wind",
-        1: "uv-index",
-      } as IconItem,
+      iconItem: iconItem,
     };
   },
   computed: {
     /**
      * Геттер для получения класса CSS цветовой схемы предупреждения из enum CodeEvent.
      * @example
-     * // returns 'warning'
+     *'warning'
      */
-    EventColorScheme(): string {
+    eventColorScheme(): string {
       return this.event.eventType
         ? CodeEvent[this.event.eventType]
         : (console.log("несуществующий код eventType"), "primary");
@@ -93,9 +82,9 @@ export default defineComponent({
     /**
      * Геттер для получения пути к файлу с иконкой
      * @example
-     * // returns '@/assets/images/uv-index.svg'
+     * '@/assets/images/uv-index.svg'
      */
-    UrlIcon(): string {
+    urlIcon(): string {
       return this.event.iconCode
         ? require(`@/assets/images/${this.iconItem[this.event.iconCode]}.svg`)
         : (console.log("нет иконки"), "#");
@@ -104,8 +93,9 @@ export default defineComponent({
      * Геттер для вычисления время действия предупреждения и его срока.
      * Может быть точным (одно значение) или интервальным (два значения).
      * @example
-     * // returns 'с 08:00 вчера до 16:30 послезавтра'
-     * // returns '08:00'
+     * 'с 08:00 вчера до 16:30 послезавтра'
+     * или
+     * '08:00'
      */
     calcTimeEvent(): string {
       /**
@@ -126,7 +116,7 @@ export default defineComponent({
        * Логика добавления доп слов после времени.
        */
       return `${
-        expression[this.$store.getters.getLocales as keyof typeof expression]
+        expression[this.$store.getters.getLocales as keyof ExpressionLocales]
           .timeMarker[4]
       } ${HandlerEvent.setTimeFormat(
         timeStamp1,
@@ -134,12 +124,12 @@ export default defineComponent({
         this.$store.getters.getLocales
       )} ${
         this.getTimeMarker(timeStamp1) ===
-        expression[this.$store.getters.getLocales as keyof typeof expression]
+        expression[this.$store.getters.getLocales as keyof ExpressionLocales]
           .timeMarker[0]
           ? this.getTimeMarker(timeStamp1).toLocaleLowerCase()
           : ""
       } ${
-        expression[this.$store.getters.getLocales as keyof typeof expression]
+        expression[this.$store.getters.getLocales as keyof ExpressionLocales]
           .timeMarker[5]
       } ${HandlerEvent.setTimeFormat(
         timeStamp2,
@@ -147,7 +137,7 @@ export default defineComponent({
         this.$store.getters.getLocales
       )} ${
         this.getTimeMarker(timeStamp2) ===
-        expression[this.$store.getters.getLocales as keyof typeof expression]
+        expression[this.$store.getters.getLocales as keyof ExpressionLocales]
           .timeMarker[1]
           ? ""
           : this.getTimeMarker(timeStamp2).toLocaleLowerCase()
@@ -156,7 +146,7 @@ export default defineComponent({
     /**
      * Геттер для получения массива значений блока даты.
      * @example
-     * // returns ["Послезавтра","11 сентября"]
+     * ["Послезавтра","11 сентября"]
      */
     calcDayInDayInfo(): string[] {
       const dateTimestamp = new HandlerEvent(this.event).getTimestamp();
@@ -176,14 +166,14 @@ export default defineComponent({
      * Возвращает название дня в виде строки.
      * @param timestamp Числовое значение даты предупреждения.
      * @example
-     * // returns ["Послезавтра"]
+     * "Послезавтра"
      */
     getTimeMarker(timestamp: number): string {
       let diff = Math.floor(
         (timestamp - (new Date().setHours(0, 0, 0, 0) - ALLDAYMS)) / ALLDAYMS
       );
       return diff >= 0 && diff <= 3
-        ? expression[this.$store.getters.getLocales as keyof typeof expression]
+        ? expression[this.$store.getters.getLocales as keyof ExpressionLocales]
             .timeMarker[diff]
         : (console.log("неверный диапазон"), "");
     },

@@ -74,6 +74,38 @@ export interface Filters {
 }
 
 /**
+ * Интерфейс для объекта, который определяет строковые константы с учетом локали.
+ */
+export interface ExpressionLocales {
+  /**
+   * Объект содержит строковые константы с учетом локали.
+   */
+  ru: {
+    /**
+     * Массив содержит слова-указатели времен.
+     */
+    timeMarker: string[];
+    /**
+     * Сообщения, которые отображаются при отсутствии предупреждений.
+     */
+    defaultEventMessage: string[];
+    /**
+     * Сообщение появляется если остается всего один фильтр.
+     */
+    messageForOneFilter: string;
+    /**
+     * Текст кнопки ShowAll.
+     */
+    valueButtonShowAll: string;
+
+    /**
+     * Начальные настройки фильтров.
+     */
+    defaultFilters: Filters;
+  };
+}
+
+/**
  * Вспомогательный тип.
  */
 export type Datakeys = keyof Data;
@@ -114,3 +146,11 @@ export type KeyNameListFormat =
  *  @param second Секунды. Возможные значения: 2-digit.
  */
 export type KeyOptionsDateTimeFormat = keyof Intl.DateTimeFormatOptions;
+
+/**
+ * Интерфейс для объекта со свойствами, которые связывают код иконки
+ * предупреждения iconCode из объекта event и названием файла иконки.
+ */
+export interface IconItem {
+  [index: number]: string;
+}

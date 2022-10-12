@@ -59,7 +59,7 @@ export default defineComponent({
     /**
      * Возвращает общее количество примененных фильтров
      * @example
-     * // returns 3
+     * 3
      */
     totalAppliedFilters(): number {
       return this.$store.getters.calcTotalFilters(FilterStatus.Applied);

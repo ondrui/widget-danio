@@ -127,7 +127,7 @@ const store = createStore<RootState>({
      * Возвращает языковую метку для определения локали.
      * @param state Текущее состояние store.
      * @example
-     * //returns "ru"
+     * "ru"
      */
     getLocales(state: RootState): string {
       return state.locales;
@@ -135,6 +135,14 @@ const store = createStore<RootState>({
     /**
      * Возвращает копию объекта с настройками фильтров, полученными из store
      * @param state Текущее состояние store.
+     * @example
+     * [
+     * 1: {name: 'Внимание', amount: 3, status: 0}
+     * 2: {name: 'Опасно', amount: 5, status: 0}
+     * 3: {name: 'Общие', amount: 2, status: 0}
+     * 5: {name: 'Очень опасно', amount: 0, status: 2}
+     * 6: {name: 'Неблагоприятно', amount: 0, status: 2}
+     * ];
      */
     getFilters(state: RootState): Filters {
       const copyFilter: Filters = JSON.parse(JSON.stringify(state.filters));
@@ -146,7 +154,7 @@ const store = createStore<RootState>({
      * @param state Текущее состояние store.
      * @param status Статус фильтра.
      * @example
-     * // returns 3
+     * 3
      */
     calcTotalFilters:
       (state: RootState): ((status: FilterStatus) => number) =>

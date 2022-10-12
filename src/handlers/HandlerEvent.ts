@@ -71,6 +71,9 @@ export class HandlerEvent implements Data {
   }
   /**
    * Метод проверяет тип значения свойства eventTime и возвращает определенный timestamp
+   * @returns {number}
+   * @example
+   * 1665553200000
    */
   //timestamp: number;
   getTimestamp = (): number =>
@@ -81,14 +84,29 @@ export class HandlerEvent implements Data {
    * @param timestamp Числовое значение даты.
    * @param format Строковое представление формата.
    * @param locales Языковая метка для определения локали.
+   * @returns {string}
    * @example
-   * // returns "20:30"
+   * "20:30"
    */
   static setTimeFormat(
     timestamp: number,
     format: string,
     locales: string
   ): string {
+    /**
+     * Объект options настраивает формат даты и времени и передается
+     *  аргументом в конструктор new Intl.DateTimeFormat.
+     * @example
+     * {
+     * weekday: "long",
+     * year: "numeric",
+     * month: "long",
+     * day: "numeric",
+     * hour: "2-digit",
+     * minute: "2-digit",
+     * second: "2-digit",
+     * };
+     */
     const options = {
       ...defaultOptionsDateTimeFormat,
     };
@@ -101,9 +119,24 @@ export class HandlerEvent implements Data {
         options[value[0] as KeyOptionsDateTimeFormat] = value[1];
       }
     }
-
     /**
      * Массив объектов, содержащий отформатированную дату по частям.
+     * @example
+     * [
+     * { type: "weekday", value: "вторник" },
+     * { type: "literal", value: ", " },
+     * { type: "day", value: "11" },
+     * { type: "literal", value: " " },
+     * { type: "month", value: "октября" },
+     * { type: "literal", value: " " },
+     * { type: "year", value: "2022" },
+     * { type: "literal", value: " г., " },
+     * { type: "hour", value: "08" },
+     * { type: "literal", value: ":" },
+     * { type: "minute", value: "00" },
+     * { type: "literal", value: ":" },
+     * { type: "second", value: "00" },
+     * ];
      */
     const datePartsArr = new Intl.DateTimeFormat(
       locales,

@@ -3,6 +3,7 @@ import { createStore, Store } from "vuex";
 import type { Data, Filters, Filter } from "@/types/types";
 import { FilterStatus } from "@/basic";
 import { HandlerEvent } from "./../handlers/HandlerEvent";
+import { climateModule } from "./climateModule";
 
 interface RootState {
   filters: Filters;
@@ -23,6 +24,9 @@ const store = createStore<RootState>({
        */
       locales: "ru",
     };
+  },
+  modules: {
+    climate: climateModule,
   },
   actions: {
     /**
@@ -129,11 +133,9 @@ const store = createStore<RootState>({
      * @example
      * "ru"
      */
-    getLocales(state: RootState): string {
-      return state.locales;
-    },
+    getLocales: (state: RootState): string => state.locales,
     /**
-     * Возвращает копию объекта с настройками фильтров, полученными из store
+     * Возвращает объект с настройками фильтров, полученными из store
      * @param state Текущее состояние store.
      * @example
      * [
@@ -144,10 +146,7 @@ const store = createStore<RootState>({
      * 6: {name: 'Неблагоприятно', amount: 0, status: 2}
      * ];
      */
-    getFilters(state: RootState): Filters {
-      const copyFilter: Filters = JSON.parse(JSON.stringify(state.filters));
-      return copyFilter;
-    },
+    getFilters: (state: RootState): Filters => state.filters,
     /**
      * Возвращает общее количество фильтров со определенным статусом, который получает
      * как параметр.

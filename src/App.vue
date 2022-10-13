@@ -1,5 +1,6 @@
 <template>
   <div class="app">
+    <ClimateWidget />
     <AlertsWidget />
   </div>
 </template>
@@ -7,10 +8,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import AlertsWidget from "@/components/AlertsWidget.vue";
+import ClimateWidget from "@/components/ClimateWidget.vue";
 
 export default defineComponent({
   components: {
     AlertsWidget,
+    ClimateWidget,
   },
   created() {
     /**

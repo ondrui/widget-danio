@@ -1,5 +1,8 @@
 /* UI Colors */
 $color-white: #FFFFFF;
+$color-black: #000000;
+
+//alerts widget
 //primary
 $color-primary-darker: #75BD92;
 $color-primary-dark: #DBF8E8;
@@ -25,3 +28,11 @@ $color-filter-font-checked: #58667E;
 $color-filter-font-disabled: #D1D1D1;
 $color-filter-font-shadow: #2B92D2;
 $color-filter-font-focus: #6EC0FC;
+
+//climate widget
+//
+$color-progress-meter: #CFD6E4;
+$color-progress-bg: #EFF2F5;
+$color-navbar-font: #58667E;
+$color-item-font-light: #808A9D;
+$color-item-font-dark: #384558;

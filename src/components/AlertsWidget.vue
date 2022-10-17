@@ -1,5 +1,5 @@
 <template>
-  <div class="widget">
+  <div class="alerts">
     <h1>Главное</h1>
     <AlertsWidgetFilters
       :filters="getfilters"
@@ -69,9 +69,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.widget {
+.alerts {
   border-radius: 12px;
-  min-width: 300px;
+  min-width: 352px;
   height: 100%;
   background: $color-white;
   box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.1);

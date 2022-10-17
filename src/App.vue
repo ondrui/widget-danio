@@ -119,6 +119,46 @@ export default defineComponent({
         ],
       });
     }, 1000);
+
+    setTimeout(() => {
+      this.$store.commit("setDataClimate", {
+        climate: [
+          {
+            title: {
+              ru: "Температура",
+              en: "Temperature",
+            },
+
+            value: [
+              {
+                dimension: "°",
+                10: {
+                  avgmin: -3.6,
+                  avgmax: 5.1,
+                  extmin: -10.3,
+                  extmax: 11.5,
+                  avg: 2.4,
+                },
+                20: {
+                  avgmin: -4.3,
+                  avgmax: 6.4,
+                  extmin: -11.3,
+                  extmax: 14.5,
+                  avg: 3.4,
+                },
+                30: {
+                  avgmin: -5.7,
+                  avgmax: 6.5,
+                  extmin: -13.8,
+                  extmax: 17.9,
+                  avg: 4.4,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    }, 1000);
   },
 });
 </script>

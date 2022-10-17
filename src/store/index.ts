@@ -50,7 +50,7 @@ const store = createStore<RootState>({
      * @param filters Объект, который управляет отображением
      * блока с фильтрами и их состояниями.
      */
-    setData(
+    setDataAlerts(
       state: RootState,
       { events, filters }: { events?: Data[]; filters?: Filters }
     ): void {

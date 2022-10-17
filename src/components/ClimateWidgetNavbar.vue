@@ -36,6 +36,7 @@ export default defineComponent({
   align-items: flex-start;
   gap: 12px;
   padding-right: 13px;
+  margin-bottom: 10px;
 }
 .date-nav {
   white-space: nowrap;

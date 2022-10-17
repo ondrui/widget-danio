@@ -1,12 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="container-main">
-      <ClimateWidgetItem
-        v-for="(event, index) in 5"
-        :key="`wn-${index}`"
-        :event="event"
-        :index="+index"
-      />
+      <ClimateWidgetItem v-for="(event, index) in 20" :key="`wn-${index}`" />
     </div>
   </div>
 </template>
@@ -26,10 +21,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .wrapper {
-  margin: 10px 13px 32px 27px;
-  // height: calc(100% - 101px);
-  max-height: 448px;
+  padding-left: 5px;
+  max-height: 160px;
   display: flex;
+  margin-bottom: 32px;
 }
 
 .container-main {
@@ -39,7 +34,7 @@ export default defineComponent({
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 10px 6px 1px 0;
+  padding-right: 6px;
   flex-basis: 100%;
 }
 </style>

@@ -1,26 +1,38 @@
+import { Module } from "vuex";
+import { RootState } from "./index";
 import { DataClimate } from "@/types/typesClimate";
 type State = {
-  climate: DataClimate[];
+  values: DataClimate[];
   timestamp: number;
+  dateFormat: string;
 };
 
-export const climateModule = {
+export const climateModule: Module<State, RootState> = {
   state: (): State => ({
-    climate: [],
+    values: [],
     timestamp: 0,
+    dateFormat: "",
   }),
   actions: {},
   mutations: {
     setDataClimate(
       state: State,
-      { climate }: { climate: DataClimate[] }
+      { climate, format }: { climate: DataClimate[]; format: string }
     ): void {
       if (climate == null) {
         climate = [];
       }
-      state.climate = climate;
+      state.values = climate;
+      state.dateFormat = format;
+    },
+    setTimestampClimate(state: State, timestamp: number): void {
+      state.timestamp = timestamp;
     },
   },
-  getters: {},
-  namespace: true,
+  getters: {
+    getClimateData: (state: State): { value: DataClimate[]; date: string } => {
+      return "";
+    },
+  },
+  namespaced: true,
 };

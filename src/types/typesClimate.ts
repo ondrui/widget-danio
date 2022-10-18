@@ -1,4 +1,4 @@
-export interface Params {
+interface ParamsValue {
   avgmin: string;
   avgmax: string;
   extmin: string;
@@ -6,16 +6,18 @@ export interface Params {
   avg: string;
 }
 
-export interface ClimateValue {
-  [index: string]: string | Params | undefined;
+interface ClimateValue {
+  [index: string]: string | ParamsValue;
   dim: string;
-  def?: string;
+}
+
+interface Locales {
+  ru?: string;
+  en?: string;
 }
 
 export interface DataClimate {
-  title: {
-    ru: string;
-    en: string;
-  };
+  title: Locales;
+  def?: Locales;
   value: ClimateValue[];
 }

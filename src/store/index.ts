@@ -5,7 +5,7 @@ import { FilterStatus } from "@/constants/alerts";
 import { HandlerEvent } from "./../handlers/HandlerEvent";
 import { climateModule } from "./climateModule";
 
-interface RootState {
+export interface RootState {
   filters: Filters;
   events: HandlerEvent[];
   locales: string;

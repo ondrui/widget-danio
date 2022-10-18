@@ -137,7 +137,6 @@ export default defineComponent({
           ru: "Температура",
           en: "Temperature",
         },
-
         value: [
           {
             dim: "°",
@@ -170,7 +169,6 @@ export default defineComponent({
           ru: "Давление",
           en: "Pressure",
         },
-
         value: [
           {
             dim: "мм рт. ст.",
@@ -203,11 +201,10 @@ export default defineComponent({
           ru: "Осадки",
           en: "Precipitation",
         },
-
+        def: { ru: "вероятность" },
         value: [
           {
             dim: "%",
-            def: "вероятность",
             "10": {
               avgmin: "0",
               avgmax: "0",
@@ -268,9 +265,14 @@ export default defineComponent({
     ];
 
     setTimeout(() => {
-      this.$store.commit("setDataClimate", {
+      this.$store.commit("climate/setDataClimate", {
         climate: dataClimate,
+        format: "d F",
       });
+    }, 1000);
+
+    setTimeout(() => {
+      this.$store.commit("climate/setTimestampClimate", Date.now());
     }, 1000);
   },
 });

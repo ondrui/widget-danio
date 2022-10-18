@@ -1,11 +1,11 @@
 <template>
   <div class="container-nav">
-    <div class="date-nav">9 Января</div>
+    <div class="date-nav">{{ date }}</div>
     <div class="radio-btn-nav">
       <input type="radio" name="radios" id="usually" checked />
-      <label for="usually">обычно</label>
+      <label for="usually" tabindex="0">обычно</label>
       <input type="radio" name="radios" id="records" />
-      <label for="records">рекорды</label>
+      <label for="records" tabindex="0">рекорды</label>
     </div>
     <div class="select-nav">
       <div>В среднем за</div>
@@ -20,12 +20,22 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { HandlerEvent } from "@/handlers/HandlerEvent";
+
 export default defineComponent({
-  components: {},
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    date(): string {
+      return HandlerEvent.setTimeFormat(
+        this.$store.getters["climate/getTimestamp"],
+        this.$store.getters["climate/getDateFormat"],
+        this.$store.getters.getLocales
+      );
+      // return "";
+    },
+  },
   methods: {},
 });
 </script>

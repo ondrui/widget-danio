@@ -17,10 +17,9 @@ export default defineComponent({
     ClimateWidgetNavbar,
     ClimateWidgetList,
   },
-  data() {
-    return {};
+  computed: {
+    getClimateData
   },
-  computed: {},
   methods: {},
 });
 </script>

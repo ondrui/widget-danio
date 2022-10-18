@@ -2,7 +2,7 @@
   <div class="alerts">
     <h1>Главное</h1>
     <AlertsWidgetFilters
-      :filters="getfilters"
+      :filters="getFilters"
       :totalAppliedFilters="totalAppliedFilters"
     />
     <div class="wrapper">
@@ -53,7 +53,7 @@ export default defineComponent({
     /**
      * Возвращает объект с фильтрами, полученными из store
      */
-    getfilters(): Filters {
+    getFilters(): Filters {
       return this.$store.getters.getFilters;
     },
     /**

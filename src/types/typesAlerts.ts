@@ -1,8 +1,8 @@
-import { FilterStatus, CodeEvent } from "@/basic";
+import { FilterStatus, CodeEvent } from "@/constants/alerts";
 /**
  * Интерфейс для объекта со свойствами, которые определяют содержание и внешний вид предупреждения.
  */
-export interface Data {
+export interface DataAlerts {
   /**
    * eventType - Код типа предупреждения (важность). Будет предопределено
    * несколько типов предупреждений. Определяет цветовую схему и параметры
@@ -108,7 +108,7 @@ export interface ExpressionLocales {
 /**
  * Вспомогательный тип.
  */
-export type Datakeys = keyof Data;
+export type Datakeys = keyof DataAlerts;
 
 /**
  * Все разрешенные ключи объекта формата отображения времени и даты.

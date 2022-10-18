@@ -28,8 +28,8 @@
 import { defineComponent } from "vue";
 import AlertsWidgetItem from "./AlertsWidgetItem.vue";
 import AlertsWidgetFilters from "./AlertsWidgetFilters.vue";
-import { Data, Filters } from "@/types/types";
-import { FilterStatus, expression } from "@/basic";
+import { DataAlerts, Filters } from "@/types/typesAlerts";
+import { FilterStatus, expression } from "@/constants/alerts";
 
 export default defineComponent({
   components: {
@@ -47,7 +47,7 @@ export default defineComponent({
     /**
      * Возвращает массив объектов с предупреждениями, полученными из store
      */
-    getEvents(): Data[] {
+    getEvents(): DataAlerts[] {
       return this.$store.getters.getFilteredAndSortedEvents;
     },
     /**

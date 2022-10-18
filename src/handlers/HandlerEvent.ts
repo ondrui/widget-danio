@@ -1,20 +1,20 @@
 import type {
-  Data,
+  DataAlerts,
   Datakeys,
   KeyNameListFormat,
   KeyOptionsDateTimeFormat,
-} from "../types/types";
+} from "../types/typesAlerts";
 import {
   CodeEvent,
   defaultOptionsDateTimeFormat,
   formatListDateTime,
-} from "@/basic";
+} from "@/constants/alerts";
 /**
  * Класс HandlerEvent модифицирует данные из объекта предупреждения в соответствии с
  * потребностью компоненты.
  * @class
  */
-export class HandlerEvent implements Data {
+export class HandlerEvent implements DataAlerts {
   [index: string]:
     | number
     | number[]
@@ -63,7 +63,7 @@ export class HandlerEvent implements Data {
    */
   isDayShow?: boolean;
 
-  constructor(_event: Data) {
+  constructor(_event: DataAlerts) {
     for (const prop in _event) {
       const key = prop as Datakeys;
       this[prop] = _event[key];

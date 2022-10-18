@@ -58,8 +58,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import { Filters, Filter } from "@/types/types";
-import { FilterStatus, filterIcon, expression } from "@/basic";
+import { Filters, Filter } from "@/types/typesAlerts";
+import { FilterStatus, filterIcon, expression } from "@/constants/alerts";
 
 export default defineComponent({
   props: {

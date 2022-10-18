@@ -30,9 +30,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import { Data, ExpressionLocales } from "@/types/types";
+import { DataAlerts, ExpressionLocales } from "@/types/typesAlerts";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
-import { CodeEvent, ALLDAYMS, expression, iconItem } from "@/basic";
+import { CodeEvent, ALLDAYMS, expression, iconItem } from "@/constants/alerts";
 
 export default defineComponent({
   props: {
@@ -50,7 +50,7 @@ export default defineComponent({
      * "isDayShow":true}
      */
     event: {
-      type: Object as PropType<Data>,
+      type: Object as PropType<DataAlerts>,
       required: true,
     },
     /**

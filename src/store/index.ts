@@ -1,7 +1,7 @@
 import { createStore, Store } from "vuex";
 
-import type { Data, Filters, Filter } from "@/types/types";
-import { FilterStatus } from "@/basic";
+import type { DataAlerts, Filters, Filter } from "@/types/typesAlerts";
+import { FilterStatus } from "@/constants/alerts";
 import { HandlerEvent } from "./../handlers/HandlerEvent";
 import { climateModule } from "./climateModule";
 
@@ -52,7 +52,7 @@ const store = createStore<RootState>({
      */
     setDataAlerts(
       state: RootState,
-      { events, filters }: { events?: Data[]; filters?: Filters }
+      { events, filters }: { events?: DataAlerts[]; filters?: Filters }
     ): void {
       if (events == null) {
         events = [];
@@ -65,7 +65,7 @@ const store = createStore<RootState>({
        * Класс HandlerEvent добавляет в объект предупреждения методы,
        * которые будут применяться в дальнейшем.
        */
-      state.events = events.map((event: Data) => new HandlerEvent(event));
+      state.events = events.map((event: DataAlerts) => new HandlerEvent(event));
       /**
        * Вычисляется общее количество предупреждений с определенным типом и записывает
        * его в свойство amount объекта фильтра, а также присваивает свойству status значение
@@ -170,7 +170,7 @@ const store = createStore<RootState>({
      * отвечает за отображение блока с датой. Если true, то блок отрисовывается.
      * @param state Текущее состояние store.
      */
-    getFilteredAndSortedEvents(state: RootState, getters): Data[] {
+    getFilteredAndSortedEvents(state: RootState, getters): DataAlerts[] {
       const copyEvents = [...state.events];
       const filters: Filters = getters.getFilters;
       return (

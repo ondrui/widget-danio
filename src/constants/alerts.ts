@@ -1,4 +1,8 @@
-import { KeyNameListFormat, ExpressionLocales, IconItem } from "@/types/types";
+import {
+  KeyNameListFormat,
+  ExpressionLocales,
+  IconItem,
+} from "@/types/typesAlerts";
 /**
  * Enum связывает код типа
  * предупреждения eventType из объекта event

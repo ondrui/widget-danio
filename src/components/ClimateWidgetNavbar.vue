@@ -40,8 +40,8 @@ export default defineComponent({
 .container-nav {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  padding-right: 13px;
+  column-gap: 12px;
+  margin-right: 13px;
   margin-bottom: 10px;
 }
 .date-nav {
@@ -88,9 +88,8 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  gap: 5px;
+  row-gap: 5px;
   align-items: flex-end;
-
   & > div {
     white-space: nowrap;
     font-weight: 400;
@@ -99,13 +98,12 @@ export default defineComponent({
     color: $color-navbar-font;
   }
 
-  & > select {
+  & select {
     padding: 3px 1px;
     border: none;
     font-weight: 500;
     font-size: 12px;
     line-height: 13px;
-
     background: $color-progress-bg;
     color: $color-navbar-font;
     border-radius: 3.8134px;

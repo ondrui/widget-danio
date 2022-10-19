@@ -1,7 +1,11 @@
 <template>
   <div class="wrapper">
     <div class="container-main">
-      <ClimateWidgetItem v-for="value in values" :key="value.title.en" />
+      <ClimateWidgetItem
+        v-for="value in values"
+        :key="value.title.en?.slice(0, 4)"
+        :value="value"
+      />
     </div>
   </div>
 </template>

@@ -32,7 +32,7 @@ export default defineComponent({
 .climate {
   padding: 12px 13px 20px 22px;
   border-radius: 12px;
-  min-width: 438px;
+  min-width: 460px;
   height: 100%;
   background: $color-white;
   box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.1);

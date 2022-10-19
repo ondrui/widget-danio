@@ -1,16 +1,24 @@
 <template>
   <div class="wrapper">
     <div class="container-main">
-      <ClimateWidgetItem v-for="(event, index) in 20" :key="`wn-${index}`" />
+      <ClimateWidgetItem v-for="value in values" :key="value.title.en" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import ClimateWidgetItem from "./ClimateWidgetItem.vue";
+import { DataClimate } from "@/types/typesClimate";
+
 export default defineComponent({
   components: { ClimateWidgetItem },
+  props: {
+    values: {
+      type: Array as PropType<DataClimate[]>,
+      required: true,
+    },
+  },
   data() {
     return {};
   },

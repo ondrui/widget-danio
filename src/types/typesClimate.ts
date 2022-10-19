@@ -21,3 +21,8 @@ export interface DataClimate {
   def?: Locales;
   value: ClimateValue[];
 }
+
+export interface GetterClimateData {
+  values: DataClimate[];
+  date: string;
+}

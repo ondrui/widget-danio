@@ -1,7 +1,7 @@
 <template>
   <div class="climate">
-    <ClimateWidgetNavbar />
-    <ClimateWidgetList />
+    <ClimateWidgetNavbar :date="getClimateData.date" />
+    <ClimateWidgetList :values="getClimateData.values" />
     <div class="btn-block">
       <button class="btn">Подробнее</button>
     </div>
@@ -12,13 +12,17 @@
 import { defineComponent } from "vue";
 import ClimateWidgetNavbar from "./ClimateWidgetNavbar.vue";
 import ClimateWidgetList from "./ClimateWidgetList.vue";
+import { GetterClimateData } from "@/types/typesClimate";
+
 export default defineComponent({
   components: {
     ClimateWidgetNavbar,
     ClimateWidgetList,
   },
   computed: {
-    getClimateData
+    getClimateData(): GetterClimateData {
+      return this.$store.getters["climate/getClimateData"];
+    },
   },
   methods: {},
 });

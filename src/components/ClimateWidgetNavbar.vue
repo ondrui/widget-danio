@@ -20,22 +20,18 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { HandlerEvent } from "@/handlers/HandlerEvent";
 
 export default defineComponent({
+  props: {
+    date: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {};
   },
-  computed: {
-    date(): string {
-      return HandlerEvent.setTimeFormat(
-        this.$store.getters["climate/getTimestamp"],
-        this.$store.getters["climate/getDateFormat"],
-        this.$store.getters.getLocales
-      );
-      // return "";
-    },
-  },
+  computed: {},
   methods: {},
 });
 </script>

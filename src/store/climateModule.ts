@@ -1,6 +1,7 @@
 import { Module } from "vuex";
 import { RootState } from "./index";
-import { DataClimate } from "@/types/typesClimate";
+import { DataClimate, GetterClimateData } from "@/types/typesClimate";
+import { HandlerEvent } from "@/handlers/HandlerEvent";
 type State = {
   values: DataClimate[];
   timestamp: number;
@@ -30,8 +31,21 @@ export const climateModule: Module<State, RootState> = {
     },
   },
   getters: {
-    getClimateData: (state: State): { value: DataClimate[]; date: string } => {
-      return "";
+    getClimateData: (
+      state: State,
+      getters,
+      rootState: RootState,
+      rootGetters
+    ): GetterClimateData => {
+      const dateStr = HandlerEvent.setTimeFormat(
+        state.timestamp,
+        state.dateFormat,
+        rootGetters.getLocales
+      );
+      return {
+        values: state.values,
+        date: dateStr,
+      };
     },
   },
   namespaced: true,

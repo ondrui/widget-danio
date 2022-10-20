@@ -33,10 +33,9 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .wrapper {
-  padding-left: 5px;
-  max-height: 160px;
+  margin: 10px 7px 0 27px;
+  max-height: 177px;
   display: flex;
-  margin-bottom: 32px;
 }
 
 .container-main {

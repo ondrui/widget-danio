@@ -71,7 +71,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .alerts {
   border-radius: 12px;
-  min-width: 460px;
+  min-width: 438px;
   height: 100%;
   background: $color-white;
   box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.1);

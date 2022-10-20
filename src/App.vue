@@ -272,7 +272,7 @@ export default defineComponent({
     }, 1000);
 
     setTimeout(() => {
-      this.$store.commit("climate/setTimestampClimate", Date.now());
+      this.$store.commit("climate/setTimestampClimate", 1664514900000);
     }, 1000);
   },
 });

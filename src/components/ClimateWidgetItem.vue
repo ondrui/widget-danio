@@ -10,22 +10,21 @@
       <svg
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 310 35"
-        preserveAspectRatio="xMinYMax meet"
+        width="320px"
+        height="37px"
+        viewBox="0 0 320 37"
       >
+        <g transform="translate(115, 9)">
+          <text x="5" y="7" fill="black" font-size="12">21dddd</text>
+          <path class="triangle" d="M 30 9 L 25.5 16.8 L 34.5 16.8 Z" />
+        </g>
         <path
-          d="M5 20 H300 Z"
-          stroke="#EFF2F5"
-          stroke-width="1px"
-          stroke-linecap="round"
-          vector-effect="non-scaling-stroke"
+          class="bg"
+          d="M 5 33 L 305 33 A 4 4 180 0 0 305 25 L 5 25 A 4 4 0 0 0 5 33"
         />
         <path
-          d="M5 20 H150 Z"
-          stroke="#CFD6E4"
-          stroke-width="zpx"
-          stroke-linecap="round"
-          vector-effect="non-scaling-stroke"
+          class="meter"
+          d="M 5 33 L 150 33 A 4 4 180 0 0 150 25 L 5 25 A 4 4 0 0 0 5 33"
         />
       </svg>
     </div>
@@ -53,7 +52,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .container-item {
   display: flex;
-  gap: 20px;
+  gap: 18px;
 }
 
 .block-text {
@@ -62,7 +61,6 @@ export default defineComponent({
 }
 .title {
   width: 90px;
-  padding-bottom: 4px;
   color: $color-item-font-dark;
   font-weight: 500;
   font-size: 14px;
@@ -82,8 +80,18 @@ export default defineComponent({
 }
 
 .chart-item {
-  flex-grow: 1;
-  height: 33px;
-  border: 1px solid teal;
+  display: flex;
+}
+
+path.meter {
+  fill: $color-progress-meter;
+}
+
+path.bg {
+  fill: $color-progress-bg;
+}
+
+path.triangle {
+  fill: $color-progress-meter;
 }
 </style>

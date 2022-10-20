@@ -30,12 +30,11 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .climate {
-  padding: 12px 13px 20px 22px;
-  border-radius: 12px;
-  min-width: 460px;
-  height: 100%;
   background: $color-white;
-  box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.1);
+  width: 475px;
+  height: 322px;
+  box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
   overflow: hidden;
   margin-bottom: 30px;
 }
@@ -43,6 +42,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 32px;
 }
 .btn {
   padding: 10px 95px;

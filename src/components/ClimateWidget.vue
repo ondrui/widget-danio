@@ -31,7 +31,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .climate {
   background: $color-white;
-  width: 475px;
+  min-width: 475px;
+  max-width: 900px;
   height: 322px;
   box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.1);
   border-radius: 8px;

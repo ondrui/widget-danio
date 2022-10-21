@@ -164,104 +164,104 @@ export default defineComponent({
           },
         ],
       },
-      {
-        title: {
-          ru: "Давление",
-          en: "Pressure",
-        },
-        value: [
-          {
-            dim: "мм рт. ст.",
-            "10": {
-              avgmin: "741",
-              avgmax: "773",
-              extmin: "733",
-              extmax: "771",
-              avg: "760",
-            },
-            "20": {
-              avgmin: "738",
-              avgmax: "778",
-              extmin: "730",
-              extmax: "780",
-              avg: "760",
-            },
-            "30": {
-              avgmin: "735",
-              avgmax: "780",
-              extmin: "730",
-              extmax: "783",
-              avg: "763",
-            },
-          },
-        ],
-      },
-      {
-        title: {
-          ru: "Осадки",
-          en: "Precipitation",
-        },
-        def: { ru: "вероятность" },
-        value: [
-          {
-            dim: "%",
-            "10": {
-              avgmin: "0",
-              avgmax: "0",
-              extmin: "0",
-              extmax: "0",
-              avg: "0",
-            },
-            "20": {
-              avgmin: "0",
-              avgmax: "0",
-              extmin: "0",
-              extmax: "0",
-              avg: "0",
-            },
-            "30": {
-              avgmin: "0",
-              avgmax: "0",
-              extmin: "0",
-              extmax: "0",
-              avg: "0",
-            },
-          },
-        ],
-      },
-      {
-        title: {
-          ru: "Высота снега",
-          en: "Snow depth",
-        },
+      // {
+      //   title: {
+      //     ru: "Давление",
+      //     en: "Pressure",
+      //   },
+      //   value: [
+      //     {
+      //       dim: "мм рт. ст.",
+      //       "10": {
+      //         avgmin: "741",
+      //         avgmax: "773",
+      //         extmin: "733",
+      //         extmax: "771",
+      //         avg: "760",
+      //       },
+      //       "20": {
+      //         avgmin: "738",
+      //         avgmax: "778",
+      //         extmin: "730",
+      //         extmax: "780",
+      //         avg: "760",
+      //       },
+      //       "30": {
+      //         avgmin: "735",
+      //         avgmax: "780",
+      //         extmin: "730",
+      //         extmax: "783",
+      //         avg: "763",
+      //       },
+      //     },
+      //   ],
+      // },
+      // {
+      //   title: {
+      //     ru: "Осадки",
+      //     en: "Precipitation",
+      //   },
+      //   def: { ru: "вероятность" },
+      //   value: [
+      //     {
+      //       dim: "%",
+      //       "10": {
+      //         avgmin: "0",
+      //         avgmax: "0",
+      //         extmin: "0",
+      //         extmax: "0",
+      //         avg: "0",
+      //       },
+      //       "20": {
+      //         avgmin: "0",
+      //         avgmax: "0",
+      //         extmin: "0",
+      //         extmax: "0",
+      //         avg: "0",
+      //       },
+      //       "30": {
+      //         avgmin: "0",
+      //         avgmax: "0",
+      //         extmin: "0",
+      //         extmax: "0",
+      //         avg: "0",
+      //       },
+      //     },
+      //   ],
+      // },
+      // {
+      //   title: {
+      //     ru: "Высота снега",
+      //     en: "Snow depth",
+      //   },
 
-        value: [
-          {
-            dim: "см",
-            "10": {
-              avgmin: "8",
-              avgmax: "21",
-              extmin: "5",
-              extmax: "25",
-              avg: "12",
-            },
-            "20": {
-              avgmin: "8",
-              avgmax: "25",
-              extmin: "4",
-              extmax: "26",
-              avg: "14",
-            },
-            "30": {
-              avgmin: "4",
-              avgmax: "26",
-              extmin: "4",
-              extmax: "30",
-              avg: "14",
-            },
-          },
-        ],
-      },
+      //   value: [
+      //     {
+      //       dim: "см",
+      //       "10": {
+      //         avgmin: "8",
+      //         avgmax: "21",
+      //         extmin: "5",
+      //         extmax: "25",
+      //         avg: "12",
+      //       },
+      //       "20": {
+      //         avgmin: "8",
+      //         avgmax: "25",
+      //         extmin: "4",
+      //         extmax: "26",
+      //         avg: "14",
+      //       },
+      //       "30": {
+      //         avgmin: "4",
+      //         avgmax: "26",
+      //         extmin: "4",
+      //         extmax: "30",
+      //         avg: "14",
+      //       },
+      //     },
+      //   ],
+      // },
     ];
 
     setTimeout(() => {

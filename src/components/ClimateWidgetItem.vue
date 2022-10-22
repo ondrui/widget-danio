@@ -8,6 +8,7 @@
     </div>
     <div class="chart-item">
       <svg
+        ref="svg"
         class="svg"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -23,11 +24,8 @@
           </svg>
         </g>
         <path
-          id="bg"
-          :d="
-            resizeBrowserHandler() ??
-            `M 5 33 L 330 33 A 4 4 180 0 0 330 25 L 5 25 A 4 4 0 0 0 5 33`
-          "
+          class="bg"
+          :d="`M 5 33 L ${pathLength} 33 A 4 4 180 0 0 ${pathLength} 25 L 5 25 A 4 4 0 0 0 5 33`"
         />
         <path
           class="meter"
@@ -95,10 +93,11 @@ export default defineComponent({
     },
   },
   data() {
-    return {};
+    return {
+      pathLength: 300,
+    };
   },
   created() {
-    console.log("created");
     this.resizeBrowserHandler();
     window.addEventListener("resize", this.resizeBrowserHandler);
   },
@@ -107,18 +106,17 @@ export default defineComponent({
   },
   computed: {},
   methods: {
-    resizeBrowserHandler(): string {
-      console.log("handler");
-      const svg = document.getElementById("svg");
-      console.log(svg);
-      if (svg === null) {
-        return " ";
-      }
-      const lengthSVG = svg.getBoundingClientRect().width;
-      console.log(lengthSVG);
-      return `M 5 33 L ${lengthSVG - 40} 33 A 4 4 180 0 0 ${
-        lengthSVG - 40
-      } 25 L 5 25 A 4 4 0 0 0 5 33`;
+    resizeBrowserHandler(): void {
+      this.$nextTick(() => {
+        const svg = this.$refs.svg as HTMLElement;
+        const lengthSVG = svg.getBoundingClientRect().width;
+        this.pathLength = lengthSVG - 50;
+      });
+      // const svg = this.$refs.svg as HTMLElement;
+
+      // return `M 5 33 L ${lengthSVG - 40} 33 A 4 4 180 0 0 ${
+      //   lengthSVG - 40
+      // } 25 L 5 25 A 4 4 0 0 0 5 33`;
       // const text = document.querySelector("text");
       // function getValue(size: number) {
       //   let p = svg?.createSVGPoint();

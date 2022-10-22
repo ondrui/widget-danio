@@ -307,11 +307,10 @@ export default defineComponent({
   background: #cfd6e4;
 }
 
-html,
-body,
-body > div {
-  height: 100%;
-}
+// html,
+// body {
+//   height: 100%;
+// }
 
 *:focus-visible {
   outline: 2px solid $color-filter-font-focus;

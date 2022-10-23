@@ -9,6 +9,9 @@ interface ParamsValue {
 interface ClimateValue {
   [index: string]: string | ParamsValue;
   dim: string;
+  "10": ParamsValue;
+  "20": ParamsValue;
+  "30": ParamsValue;
 }
 
 interface Locales {

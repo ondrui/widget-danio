@@ -7,27 +7,16 @@
       </div>
     </div>
     <div class="chart-item">
-      <svg
-        ref="svg"
-        class="svg"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        width="100%"
-        height="37px"
-      >
-        <svg :x="`${calcMeterLength - 15}`" y="9" height="100%">
-          <text x="0" y="0" fill="black" font-size="12" text-anchor="middle">
-            21dddd
-          </text>
-          <path class="triangle" d="M 10 9 L 6.5 16.8 L 14.5 16.8 Z" />
+      <svg ref="svg" class="svg-container" xmlns="http://www.w3.org/2000/svg">
+        <svg class="svg-block" :x="`${calcMeterLength - 15}`" y="9">
+          <text x="0" y="0" text-anchor="middle">21dddd</text>
+          <path class="svg-triangle" d="M 10 9 L 6.5 16.8 L 14.5 16.8 Z" />
         </svg>
         <path
-          class="bg"
-          :d="`M 5 33 L ${pathLength} 33 A 4 4 180 0 0 ${pathLength} 25 L 5 25 A 4 4 0 0 0 5 33`"
-        />
-        <path
-          class="meter"
-          :d="`M 5 33 L ${calcMeterLength} 33 A 4 4 180 0 0 ${calcMeterLength} 25 L 5 25 A 4 4 0 0 0 5 33`"
+          v-for="path in showPaths"
+          :key="path.class"
+          :class="path.class"
+          :d="path.def"
         />
       </svg>
     </div>
@@ -35,8 +24,10 @@
 </template>
 
 <script lang="ts">
-import { DataClimate } from "@/types/typesClimate";
+import { DataClimate, PathSVG } from "@/types/typesClimate";
 import { defineComponent, PropType } from "vue";
+import { svgClassForPath } from "@/constants/climate";
+
 export default defineComponent({
   props: {
     value: {
@@ -47,6 +38,7 @@ export default defineComponent({
   data() {
     return {
       pathLength: 300,
+      classNameForPath: svgClassForPath,
     };
   },
   created() {
@@ -59,15 +51,29 @@ export default defineComponent({
   computed: {
     calcMeterLength(): number {
       const absLength =
-        parseFloat(this.value.value[0]["10"].avgmax) -
-        parseFloat(this.value.value[0]["10"].avgmin);
+        parseInt(this.value.value[0]["10"].avgmax) -
+        parseInt(this.value.value[0]["10"].avgmin);
       const bgLength = this.pathLength;
-      const avg = parseFloat(this.value.value[0]["10"].avg);
+      const avg = parseInt(this.value.value[0]["10"].avg);
       console.log(bgLength);
 
       const x = Math.round((bgLength * avg) / absLength);
       console.log(x);
       return x;
+    },
+    showPaths(): PathSVG[] {
+      const pathStr = (prop: number): string =>
+        `M 5 33 L ${prop} 33 A 4 4 180 0 0 ${prop} 25 L 5 25 A 4 4 0 0 0 5 33`;
+      const paths = this.classNameForPath.map((p: string) => {
+        return {
+          class: p,
+          def:
+            p === "svg-bg"
+              ? pathStr(this.pathLength)
+              : pathStr(this.calcMeterLength),
+        };
+      });
+      return paths;
     },
   },
   methods: {
@@ -117,15 +123,30 @@ export default defineComponent({
   flex-grow: 1;
 }
 
-path.meter {
+.svg-container {
+  fill: none;
+  width: 100%;
+  height: 37px;
+}
+
+.svg-block {
+  height: 100%;
+}
+
+.svg-block > text {
+  fill: black;
+  font-size: 12;
+}
+
+.svg-meter {
   fill: $color-progress-meter;
 }
 
-path.bg {
+.svg-bg {
   fill: $color-progress-bg;
 }
 
-path.triangle {
+.svg-triangle {
   fill: $color-progress-meter;
 }
 </style>

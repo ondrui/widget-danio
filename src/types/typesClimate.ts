@@ -29,3 +29,8 @@ export interface GetterClimateData {
   values: DataClimate[];
   date: string;
 }
+
+export interface PathSVG {
+  class: string;
+  def: string;
+}

@@ -8,10 +8,13 @@
     </div>
     <div class="chart-item">
       <svg ref="svg" class="svg-container" xmlns="http://www.w3.org/2000/svg">
-        <svg class="svg-block" :x="`${calcMeterLength - 15}`" y="9">
-          <text x="0" y="0" text-anchor="middle">21dddd</text>
-          <path class="svg-triangle" d="M 10 9 L 6.5 16.8 L 14.5 16.8 Z" />
-        </svg>
+        <text :x="calcMeterLength - calcMiddlePosition" y="15">
+          <tspan ref="tspan" class="tspan">
+            {{ value.value[0][10].avg }}
+          </tspan>
+          <tspan>{{ value.value[0].dim }}</tspan>
+        </text>
+        <path class="svg-triangle" :d="createdTriagle" />
         <path
           v-for="path in showPaths"
           :key="path.class"
@@ -39,6 +42,7 @@ export default defineComponent({
     return {
       pathLength: 300,
       classNameForPath: svgClassForPath,
+      textNumWidth: 0,
     };
   },
   created() {
@@ -50,15 +54,11 @@ export default defineComponent({
   },
   computed: {
     calcMeterLength(): number {
-      const absLength =
-        parseInt(this.value.value[0]["10"].avgmax) -
-        parseInt(this.value.value[0]["10"].avgmin);
-      const bgLength = this.pathLength;
-      const avg = parseInt(this.value.value[0]["10"].avg);
-      console.log(bgLength);
-
-      const x = Math.round((bgLength * avg) / absLength);
-      console.log(x);
+      const val = this.value.value[0]["10"];
+      const segmentLength = parseInt(val.avgmax) - parseInt(val.avgmin);
+      const svgLength = this.pathLength;
+      const avg = parseInt(val.avg) - parseInt(val.avgmin);
+      const x = Math.round((svgLength * avg) / segmentLength);
       return x;
     },
     showPaths(): PathSVG[] {
@@ -75,13 +75,23 @@ export default defineComponent({
       });
       return paths;
     },
+    calcMiddlePosition(): number {
+      return this.textNumWidth / 2 + 4;
+    },
+    createdTriagle(): string {
+      return `M ${-3.5 + this.calcMeterLength} 18 L ${
+        1 + this.calcMeterLength
+      } 25.8 L ${-8 + this.calcMeterLength} 25.8 Z`;
+    },
   },
   methods: {
     resizeBrowserHandler(): void {
       this.$nextTick(() => {
-        const svg = this.$refs.svg as HTMLElement;
+        const svg = this.$refs.svg as SVGGraphicsElement;
+        const tspan = this.$refs.tspan as SVGGraphicsElement;
         const lengthSVG = svg.getBoundingClientRect().width;
-        this.pathLength = lengthSVG - 50;
+        this.pathLength = lengthSVG - 20;
+        this.textNumWidth = Math.round(tspan.getBoundingClientRect().width);
       });
     },
   },
@@ -126,16 +136,16 @@ export default defineComponent({
 .svg-container {
   fill: none;
   width: 100%;
-  height: 37px;
+  height: 60px;
+  border: 1px solid teal;
 }
 
-.svg-block {
-  height: 100%;
-}
-
-.svg-block > text {
-  fill: black;
-  font-size: 12;
+.svg-container > text {
+  fill: $color-black;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21px;
+  overflow: visible;
 }
 
 .svg-meter {

@@ -8,7 +8,7 @@
     </div>
     <div class="chart-item">
       <svg ref="svg" class="svg-container" xmlns="http://www.w3.org/2000/svg">
-        <text :x="calcMeterLength - calcMiddlePosition" y="15">
+        <text ref="text" :x="calcTextBlockMeterPosition" y="13">
           <tspan ref="tspan" class="tspan">
             {{ value.value[0][10].avg }}
           </tspan>
@@ -16,7 +16,7 @@
         </text>
         <path class="svg-triangle" :d="createdTriagle" />
         <path
-          v-for="path in showPaths"
+          v-for="path in showProgressPaths"
           :key="path.class"
           :class="path.class"
           :d="path.def"
@@ -29,7 +29,11 @@
 <script lang="ts">
 import { DataClimate, PathSVG } from "@/types/typesClimate";
 import { defineComponent, PropType } from "vue";
-import { svgClassForPath } from "@/constants/climate";
+import {
+  svgClassForPath,
+  thicknessProgress,
+  triagleSideLength,
+} from "@/constants/climate";
 
 export default defineComponent({
   props: {
@@ -40,9 +44,10 @@ export default defineComponent({
   },
   data() {
     return {
-      pathLength: 300,
+      SVGWidth: 300,
       classNameForPath: svgClassForPath,
-      textNumWidth: 0,
+      textNumBlockMeterWidth: 0,
+      textBlockMeterWidth: 0,
     };
   },
   created() {
@@ -53,30 +58,61 @@ export default defineComponent({
     window.removeEventListener("resize", this.resizeBrowserHandler);
   },
   computed: {
+    progressBgWidth(): number {
+      return this.SVGWidth - thicknessProgress / 2;
+    },
     calcMeterLength(): number {
       const val = this.value.value[0]["10"];
-      const segmentLength = parseInt(val.avgmax) - parseInt(val.avgmin);
-      const svgLength = this.pathLength;
-      const avg = parseInt(val.avg) - parseInt(val.avgmin);
-      const x = Math.round((svgLength * avg) / segmentLength);
+      const minMaxsegmentLength = parseInt(val.avgmax) - parseInt(val.avgmin);
+      const svgLength = this.progressBgWidth;
+      const avgSegmentLength = parseInt(val.avg) - parseInt(val.avgmin);
+
+      const x = Math.round(
+        (svgLength * avgSegmentLength) / minMaxsegmentLength
+      );
+
+      if (x <= thicknessProgress + triagleSideLength) {
+        return thicknessProgress / 2 + triagleSideLength - 1;
+      }
+
+      if (x >= svgLength) {
+        return svgLength;
+      }
+
       return x;
     },
-    showPaths(): PathSVG[] {
+    showProgressPaths(): PathSVG[] {
       const pathStr = (prop: number): string =>
-        `M 5 33 L ${prop} 33 A 4 4 180 0 0 ${prop} 25 L 5 25 A 4 4 0 0 0 5 33`;
+        `M 4 33 H ${prop} A 4 4 180 0 0 ${prop} 25 H 4 A 4 4 0 0 0 5 33`;
       const paths = this.classNameForPath.map((p: string) => {
         return {
           class: p,
           def:
             p === "svg-bg"
-              ? pathStr(this.pathLength)
+              ? pathStr(this.progressBgWidth)
               : pathStr(this.calcMeterLength),
         };
       });
       return paths;
     },
-    calcMiddlePosition(): number {
-      return this.textNumWidth / 2 + 4;
+    calcTextBlockMeterPosition(): number {
+      const widthText = this.textBlockMeterWidth;
+      const diffRightBorder =
+        this.SVGWidth - this.calcMeterLength - widthText / 2;
+      const diffLeftBorder = this.calcMeterLength - widthText / 2;
+      if (diffRightBorder <= 0) {
+        return this.SVGWidth - widthText - 1;
+      }
+
+      if (diffLeftBorder <= 0) {
+        return 1;
+      }
+
+      return (
+        this.calcMeterLength -
+        this.textNumBlockMeterWidth / 2 -
+        thicknessProgress / 2
+      );
     },
     createdTriagle(): string {
       return `M ${-3.5 + this.calcMeterLength} 18 L ${
@@ -88,10 +124,21 @@ export default defineComponent({
     resizeBrowserHandler(): void {
       this.$nextTick(() => {
         const svg = this.$refs.svg as SVGGraphicsElement;
+        const text = this.$refs.text as SVGGraphicsElement;
         const tspan = this.$refs.tspan as SVGGraphicsElement;
-        const lengthSVG = svg.getBoundingClientRect().width;
-        this.pathLength = lengthSVG - 20;
-        this.textNumWidth = Math.round(tspan.getBoundingClientRect().width);
+        const widthSVG = Math.round(svg.getBoundingClientRect().width);
+        const widthNumTextBlockMeter = Math.round(
+          tspan.getBoundingClientRect().width
+        );
+        const widthTextBlockMeter = Math.round(
+          text.getBoundingClientRect().width
+        );
+        console.log("text", widthTextBlockMeter);
+        console.log("SVG", widthSVG);
+        console.log("tspan", widthNumTextBlockMeter);
+        this.SVGWidth = widthSVG;
+        this.textNumBlockMeterWidth = widthNumTextBlockMeter;
+        this.textBlockMeterWidth = widthTextBlockMeter;
       });
     },
   },
@@ -137,7 +184,7 @@ export default defineComponent({
   fill: none;
   width: 100%;
   height: 60px;
-  border: 1px solid teal;
+  background-color: rgb(209, 247, 205);
 }
 
 .svg-container > text {

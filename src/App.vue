@@ -145,7 +145,7 @@ export default defineComponent({
               avgmax: "5.1",
               extmin: "-10.3",
               extmax: "11.5",
-              avg: "5.1",
+              avg: "115.1",
             },
             "20": {
               avgmin: "-4.3",
@@ -317,6 +317,6 @@ export default defineComponent({
 }
 
 .app {
-  padding: 20px;
+  padding: 50px;
 }
 </style>

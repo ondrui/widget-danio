@@ -34,3 +34,15 @@ export interface PathSVG {
   class: string;
   def: string;
 }
+
+export interface EndPointsText {
+  text: string;
+  num: string;
+  x: number;
+  y: number;
+}
+
+export interface SubtitleToProgressName {
+  isShow: boolean;
+  text: string | undefined;
+}

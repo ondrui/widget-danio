@@ -34,14 +34,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 .wrapper {
   margin: 10px 19px 0 27px;
-  max-height: 177px;
+  max-height: 227px;
   display: flex;
 }
 
 .container-main {
   display: flex;
   flex-direction: column;
-  row-gap: 6px;
+  row-gap: 3px;
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;

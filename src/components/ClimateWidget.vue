@@ -33,7 +33,6 @@ export default defineComponent({
   background: $color-white;
   min-width: 475px;
   max-width: 900px;
-  height: 322px;
   box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
@@ -43,7 +42,8 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 32px;
+  margin-top: 17px;
+  margin-bottom: 20px;
 }
 .btn {
   padding: 10px 95px;

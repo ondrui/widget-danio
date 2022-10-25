@@ -2,17 +2,19 @@
   <div class="container-item">
     <div class="block-text">
       <div class="title">{{ value.title.ru }}</div>
-      <div v-if="value.def?.ru" class="subtitle">
-        {{ value.def.ru }}
+      <div v-if="SubtitleToProgressName(value).isShow" class="subtitle">
+        {{ SubtitleToProgressName(value).text }}
       </div>
     </div>
     <div class="chart-item">
       <svg ref="svg" class="svg-container" xmlns="http://www.w3.org/2000/svg">
-        <text ref="text" :x="calcTextBlockMeterPosition" y="13">
+        <text ref="text" :x="calcTextBlockMeterPosition" y="15">
           <tspan ref="tspan" class="tspan">
             {{ value.value[0][10].avg }}
           </tspan>
-          <tspan>{{ value.value[0].dim }}</tspan>
+          <tspan>
+            {{ showDimension(value) }}
+          </tspan>
         </text>
         <path class="svg-triangle" :d="createdTriagle" />
         <path
@@ -21,18 +23,39 @@
           :class="path.class"
           :d="path.def"
         />
+        <text
+          class="preposition"
+          v-for="(prop, key) in showEndPointsText"
+          :key="`tn-${key}`"
+          :x="prop.x"
+          :y="prop.y"
+        >
+          <tspan class="preposition-text">{{ prop.text }}</tspan>
+          <tspan dx="5">{{ prop.num }}</tspan>
+          <tspan>
+            {{ showDimension(value) }}
+          </tspan>
+        </text>
       </svg>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { DataClimate, PathSVG } from "@/types/typesClimate";
+import {
+  DataClimate,
+  PathSVG,
+  EndPointsText,
+  SubtitleToProgressName,
+} from "@/types/typesClimate";
 import { defineComponent, PropType } from "vue";
 import {
   svgClassForPath,
   thicknessProgress,
   triagleSideLength,
+  prepositions,
+  subtitleToProgressName,
+  changeDimensionLocale,
 } from "@/constants/climate";
 
 export default defineComponent({
@@ -48,6 +71,7 @@ export default defineComponent({
       classNameForPath: svgClassForPath,
       textNumBlockMeterWidth: 0,
       textBlockMeterWidth: 0,
+      prepositions: prepositions,
     };
   },
   created() {
@@ -88,7 +112,7 @@ export default defineComponent({
         return {
           class: p,
           def:
-            p === "svg-bg"
+            p === svgClassForPath[0]
               ? pathStr(this.progressBgWidth)
               : pathStr(this.calcMeterLength),
         };
@@ -119,6 +143,18 @@ export default defineComponent({
         1 + this.calcMeterLength
       } 25.8 L ${-8 + this.calcMeterLength} 25.8 Z`;
     },
+    showEndPointsText(): EndPointsText[] {
+      const val = this.value.value[0]["10"];
+      const endPoints = this.prepositions.map((p: string) => {
+        return {
+          text: p,
+          num: p === prepositions[0] ? val.avgmin : val.avgmax,
+          x: p === prepositions[0] ? 0 : this.SVGWidth - 65,
+          y: 46,
+        };
+      });
+      return endPoints;
+    },
   },
   methods: {
     resizeBrowserHandler(): void {
@@ -133,13 +169,28 @@ export default defineComponent({
         const widthTextBlockMeter = Math.round(
           text.getBoundingClientRect().width
         );
-        console.log("text", widthTextBlockMeter);
-        console.log("SVG", widthSVG);
-        console.log("tspan", widthNumTextBlockMeter);
         this.SVGWidth = widthSVG;
         this.textNumBlockMeterWidth = widthNumTextBlockMeter;
         this.textBlockMeterWidth = widthTextBlockMeter;
       });
+    },
+    SubtitleToProgressName(value: DataClimate): SubtitleToProgressName {
+      return {
+        isShow:
+          value.title.en === subtitleToProgressName[0] ||
+          value.def?.ru !== undefined,
+        text:
+          value.title.en === subtitleToProgressName[0]
+            ? value.value[0].dim
+            : value.def?.ru,
+      };
+    },
+    showDimension(value: DataClimate): string {
+      return value.title.en === subtitleToProgressName[0]
+        ? ""
+        : value.value[0].dim === changeDimensionLocale[0]
+        ? ` ${value.value[0].dim}`
+        : value.value[0].dim;
     },
   },
 });
@@ -153,6 +204,7 @@ export default defineComponent({
 
 .block-text {
   position: relative;
+  padding-bottom: 15px;
   align-self: flex-end;
 }
 .title {
@@ -183,8 +235,7 @@ export default defineComponent({
 .svg-container {
   fill: none;
   width: 100%;
-  height: 60px;
-  background-color: rgb(209, 247, 205);
+  height: 47px;
 }
 
 .svg-container > text {
@@ -205,5 +256,15 @@ export default defineComponent({
 
 .svg-triangle {
   fill: $color-progress-meter;
+}
+
+.svg-container .preposition {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.svg-container .preposition-text {
+  fill: $color-item-font-light;
 }
 </style>

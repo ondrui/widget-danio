@@ -24,6 +24,7 @@
           :d="path.def"
         />
         <text
+          ref="endpoint"
           class="preposition"
           v-for="(prop, key) in showEndPointsText"
           :key="`tn-${key}`"
@@ -74,7 +75,8 @@ export default defineComponent({
       prepositions: prepositions,
     };
   },
-  created() {
+  mounted() {
+    this.calcWidthRightEndPoint();
     this.resizeBrowserHandler();
     window.addEventListener("resize", this.resizeBrowserHandler);
   },
@@ -158,21 +160,19 @@ export default defineComponent({
   },
   methods: {
     resizeBrowserHandler(): void {
-      this.$nextTick(() => {
-        const svg = this.$refs.svg as SVGGraphicsElement;
-        const text = this.$refs.text as SVGGraphicsElement;
-        const tspan = this.$refs.tspan as SVGGraphicsElement;
-        const widthSVG = Math.round(svg.getBoundingClientRect().width);
-        const widthNumTextBlockMeter = Math.round(
-          tspan.getBoundingClientRect().width
-        );
-        const widthTextBlockMeter = Math.round(
-          text.getBoundingClientRect().width
-        );
-        this.SVGWidth = widthSVG;
-        this.textNumBlockMeterWidth = widthNumTextBlockMeter;
-        this.textBlockMeterWidth = widthTextBlockMeter;
-      });
+      const svg = this.$refs.svg as SVGGraphicsElement;
+      const text = this.$refs.text as SVGGraphicsElement;
+      const tspan = this.$refs.tspan as SVGGraphicsElement;
+      const widthSVG = Math.round(svg.getBoundingClientRect().width);
+      const widthNumTextBlockMeter = Math.round(
+        tspan.getBoundingClientRect().width
+      );
+      const widthTextBlockMeter = Math.round(
+        text.getBoundingClientRect().width
+      );
+      this.SVGWidth = widthSVG;
+      this.textNumBlockMeterWidth = widthNumTextBlockMeter;
+      this.textBlockMeterWidth = widthTextBlockMeter;
     },
     SubtitleToProgressName(value: DataClimate): SubtitleToProgressName {
       return {
@@ -191,6 +191,10 @@ export default defineComponent({
         : value.value[0].dim === changeDimensionLocale[0]
         ? ` ${value.value[0].dim}`
         : value.value[0].dim;
+    },
+    calcWidthRightEndPoint() {
+      const endpoints = this.$refs.endpoint as SVGGraphicsElement[];
+      console.log(Math.round(endpoints[1].getBBox().width));
     },
   },
 });

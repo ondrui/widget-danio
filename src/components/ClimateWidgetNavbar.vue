@@ -2,14 +2,28 @@
   <div class="container-nav">
     <div class="date-nav">{{ date }}</div>
     <div class="radio-btn-nav">
-      <input type="radio" name="radios" id="usually" checked />
+      <input
+        type="radio"
+        name="radios"
+        id="usually"
+        value="usually"
+        v-model="picked"
+        @change="radio"
+      />
       <label for="usually" tabindex="0">обычно</label>
-      <input type="radio" name="radios" id="records" />
+      <input
+        type="radio"
+        name="radios"
+        id="records"
+        value="records"
+        v-model="picked"
+        @change="radio"
+      />
       <label for="records" tabindex="0">рекорды</label>
     </div>
     <div class="select-nav">
       <div>В среднем за</div>
-      <select name="select">
+      <select name="select" v-model="selected" @change="select">
         <option value="10">10 лет</option>
         <option value="20">20 лет</option>
         <option value="30">30 лет</option>
@@ -28,11 +42,22 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ["radio", "select"],
   data() {
-    return {};
+    return {
+      picked: "usually",
+      selected: "10",
+    };
   },
   computed: {},
-  methods: {},
+  methods: {
+    radio() {
+      this.$emit("radio", this.picked);
+    },
+    select() {
+      this.$emit("select", this.selected);
+    },
+  },
 });
 </script>
 

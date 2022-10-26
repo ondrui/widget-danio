@@ -1,4 +1,10 @@
+interface Locales {
+  ru?: string;
+  en?: string;
+}
+
 interface ParamsValue {
+  time: string;
   avgmin: string;
   avgmax: string;
   extmin: string;
@@ -7,16 +13,9 @@ interface ParamsValue {
 }
 
 interface ClimateValue {
-  [index: string]: string | ParamsValue;
+  [index: string]: ParamsValue[] | string;
   dim: string;
-  "10": ParamsValue;
-  "20": ParamsValue;
-  "30": ParamsValue;
-}
-
-interface Locales {
-  ru?: string;
-  en?: string;
+  data: ParamsValue[];
 }
 
 export interface DataClimate {

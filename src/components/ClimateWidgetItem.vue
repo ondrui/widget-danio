@@ -10,7 +10,7 @@
       <svg ref="svg" class="svg-container" xmlns="http://www.w3.org/2000/svg">
         <text ref="text" :x="calcTextBlockMeterPosition" y="15">
           <tspan ref="tspan" class="tspan">
-            {{ value.value[0][10].avg }}
+            {{ value.value[0].data[0].avg }}
           </tspan>
           <tspan>
             {{ showDimension(value) }}
@@ -88,7 +88,7 @@ export default defineComponent({
       return this.SVGWidth - thicknessProgress / 2;
     },
     calcMeterLength(): number {
-      const val = this.value.value[0]["10"];
+      const val = this.value.value[0].data[0];
       const minMaxsegmentLength = parseInt(val.avgmax) - parseInt(val.avgmin);
       const svgLength = this.progressBgWidth;
       const avgSegmentLength = parseInt(val.avg) - parseInt(val.avgmin);
@@ -146,7 +146,7 @@ export default defineComponent({
       } 25.8 L ${-8 + this.calcMeterLength} 25.8 Z`;
     },
     showEndPointsText(): EndPointsText[] {
-      const val = this.value.value[0]["10"];
+      const val = this.value.value[0].data[0];
       const endPoints = this.prepositions.map((p: string) => {
         return {
           text: p,

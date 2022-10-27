@@ -34,25 +34,35 @@ export const climateModule: Module<State, RootState> = {
     },
   },
   getters: {
-    getNavbarSelectOptions(state: State): string[] {
-      const arr: string[] = [];
+    getNavbarSelectOptions(state: State) {
+      const arr = [
+        ...state.values.reduce(
+          (acc, { value }) => (
+            value[0].data.forEach(({ time }) => acc.add(time), acc), acc
+          ),
+          new Set()
+        ),
+      ].sort();
 
-      state.values.forEach((item) => {
-        item.value[0].data.forEach(({ time }) => {
-          if (arr.indexOf(time) === -1) {
-            arr.push(time);
-          }
-        });
-      });
+      // let arr: string[] = [];
+      // const obj: { [index: string]: boolean } = {};
 
-      // const arr = state.values.reduce((prev: string[], { value }) => {
-      //   const time = value[0].data
-      //   if (prev.indexOf(value) === -1) {
-      //     prev.push(value);
-      //   }
-      //   value[0].data.indexOf
-      //   return prev;
-      // }, []);
+      // state.values.forEach((item) => {
+      //   item.value[0].data.forEach(({ time }) => {
+      //     obj[time] = true;
+      //   });
+      //   return Object.keys(obj);
+      // });
+
+      // arr = Object.keys(obj);
+
+      // state.values.forEach((item) => {
+      //   item.value[0].data.forEach(({ time }) => {
+      //     if (arr.indexOf(time) === -1) {
+      //       arr.push(time);
+      //     }
+      //   });
+      // });
       return arr;
     },
 

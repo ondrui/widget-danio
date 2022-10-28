@@ -9,3 +9,9 @@ export const prepositions = ["от", "до"];
 export const subtitleToProgressName = ["Pressure"];
 
 export const changeDimensionLocale = ["см"];
+
+export const radioBtnValue = ["usually", "records"];
+
+export const radioBtnCaptionRu = ["обычно", "рекорды"];
+
+export const selectCaptionsRu = ["В среднем за", "лет"];

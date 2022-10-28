@@ -5,28 +5,33 @@
       <input
         type="radio"
         name="radios"
-        id="usually"
-        value="usually"
+        :id="radioBtnValue[0]"
+        :value="radioBtnValue[0]"
         v-model="picked"
         @change="radio"
       />
-      <label for="usually" tabindex="0">обычно</label>
+      <label for="usually" tabindex="0">{{ radioBtnCaption[0] }}</label>
       <input
         type="radio"
         name="radios"
-        id="records"
-        value="records"
+        :id="radioBtnValue[1]"
+        :value="radioBtnValue[1]"
         v-model="picked"
         @change="radio"
       />
-      <label for="records" tabindex="0">рекорды</label>
+      <label for="records" tabindex="0">{{ radioBtnCaption[1] }}</label>
     </div>
     <div class="select-nav">
-      <div>В среднем за</div>
+      <div>{{ selectCaptions[0] }}</div>
       <select name="select" v-model="selected" @change="select">
-        <option value="10">10 лет</option>
-        <option value="20">20 лет</option>
-        <option value="30">30 лет</option>
+        <option
+          v-for="(option, index) in options"
+          :key="option"
+          :value="option"
+          :selected="index === 0"
+        >
+          {{ `${option} ${selectCaptions[1]}` }}
+        </option>
       </select>
     </div>
   </div>
@@ -34,9 +39,19 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import type { PropType } from "vue";
+import {
+  radioBtnValue,
+  radioBtnCaptionRu,
+  selectCaptionsRu,
+} from "@/constants/climate";
 
 export default defineComponent({
   props: {
+    options: {
+      type: Array as PropType<string[]>,
+      required: true,
+    },
     date: {
       type: String,
       required: true,
@@ -45,11 +60,19 @@ export default defineComponent({
   emits: ["radio", "select"],
   data() {
     return {
+      radioBtnValue: radioBtnValue,
+      radioBtnCaption: radioBtnCaptionRu,
+      selectCaptions: selectCaptionsRu,
       picked: "usually",
-      selected: "10",
+      selected: "",
     };
   },
-  computed: {},
+  // watch: {
+  //   options(newValue) {
+  //     console.log("watch");
+  //     this.selected = newValue[0];
+  //   },
+  // },
   methods: {
     radio() {
       this.$emit("radio", this.picked);

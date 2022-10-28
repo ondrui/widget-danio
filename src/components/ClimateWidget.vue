@@ -1,6 +1,6 @@
 <template>
   <div class="climate">
-    <ClimateWidgetNavbar :date="getClimateData.date" />
+    <ClimateWidgetNavbar :date="getDate" :options="getNavbarSelectOptions" />
     <ClimateWidgetList :values="getClimateData.values" />
     <div class="btn-block">
       <button class="btn">Подробнее</button>
@@ -19,9 +19,18 @@ export default defineComponent({
     ClimateWidgetNavbar,
     ClimateWidgetList,
   },
+  updated() {
+    this.$store.getters["climate/getCoolData"]();
+  },
   computed: {
+    getNavbarSelectOptions(): string[] {
+      return this.$store.getters["climate/getNavbarSelectOptions"];
+    },
     getClimateData(): GetterClimateData {
       return this.$store.getters["climate/getClimateData"];
+    },
+    getDate(): string {
+      return this.$store.getters["climate/getDate"];
     },
   },
   methods: {},

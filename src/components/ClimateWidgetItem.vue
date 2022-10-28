@@ -162,7 +162,7 @@ export default defineComponent({
     resizeBrowserHandler(): void {
       const svg = this.$refs.svg as SVGGraphicsElement;
       const text = this.$refs.text as SVGGraphicsElement;
-      const tspan = this.$refs.tspan as SVGGraphicsElement;
+      const tspan = this.$refs.tspan as SVGTextContentElement;
       const widthSVG = Math.round(svg.getBoundingClientRect().width);
       const widthNumTextBlockMeter = Math.round(
         tspan.getBoundingClientRect().width
@@ -170,6 +170,8 @@ export default defineComponent({
       const widthTextBlockMeter = Math.round(
         text.getBoundingClientRect().width
       );
+      console.log(tspan.getComputedTextLength());
+      console.log(tspan.getBoundingClientRect().width);
       this.SVGWidth = widthSVG;
       this.textNumBlockMeterWidth = widthNumTextBlockMeter;
       this.textBlockMeterWidth = widthTextBlockMeter;

@@ -195,7 +195,7 @@ export default defineComponent({
                 avg: "760",
               },
               {
-                time: "50",
+                time: "30",
                 avgmin: "735",
                 avgmax: "780",
                 extmin: "730",
@@ -225,7 +225,7 @@ export default defineComponent({
                 avg: "45",
               },
               {
-                time: "60",
+                time: "20",
                 avgmin: "0",
                 avgmax: "100",
                 extmin: "0",

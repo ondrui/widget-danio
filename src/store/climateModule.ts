@@ -2,6 +2,8 @@ import { Module } from "vuex";
 import { RootState } from "./index";
 import { DataClimate, GetterClimateData } from "@/types/typesClimate";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
+import { radioBtnValue } from "@/constants/climate";
+
 type State = {
   values: DataClimate[];
   timestamp: number;
@@ -34,38 +36,50 @@ export const climateModule: Module<State, RootState> = {
     },
   },
   getters: {
+    getDate: (
+      state: State,
+      getters,
+      rootState: RootState,
+      rootGetters
+    ): string => {
+      const dateStr = HandlerEvent.setTimeFormat(
+        state.timestamp,
+        state.dateFormat,
+        rootGetters.getLocales
+      );
+      return dateStr;
+    },
     getNavbarSelectOptions(state: State) {
       const arr = [
         ...state.values.reduce(
           (acc, { value }) => (
-            value[0].data.forEach(({ time }) => acc.add(time), acc), acc
+            value[0].data.forEach(
+              ({ time }: { time: string }) => acc.add(time),
+              acc
+            ),
+            acc
           ),
           new Set()
         ),
       ].sort();
-
-      // let arr: string[] = [];
-      // const obj: { [index: string]: boolean } = {};
-
-      // state.values.forEach((item) => {
-      //   item.value[0].data.forEach(({ time }) => {
-      //     obj[time] = true;
-      //   });
-      //   return Object.keys(obj);
-      // });
-
-      // arr = Object.keys(obj);
-
-      // state.values.forEach((item) => {
-      //   item.value[0].data.forEach(({ time }) => {
-      //     if (arr.indexOf(time) === -1) {
-      //       arr.push(time);
-      //     }
-      //   });
-      // });
+      console.log("getter climate", arr);
       return arr;
     },
-
+    getCoolData:
+      (state: State): ((radio: string, select: string) => DataClimate[]) =>
+      (radio = "usually", select = "10"): DataClimate[] => {
+        const climate = state.values;
+        const climate1 = state.values.map((val) => {
+          return {
+            ...val,
+            value: value[0].data.find(
+              ({ time }: { time: string }) => time === select
+            ),
+          };
+        });
+        console.log("climate1", climate1);
+        return climate;
+      },
     getClimateData: (
       state: State,
       getters,

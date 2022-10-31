@@ -9,7 +9,7 @@
 import { defineComponent } from "vue";
 import AlertsWidget from "@/components/AlertsWidget.vue";
 import ClimateWidget from "@/components/ClimateWidget.vue";
-import { DataClimate } from "@/types/typesClimate";
+import { StoreClimateData } from "@/types/typesClimate";
 import { DataAlerts } from "@/types/typesAlerts";
 
 export default defineComponent({
@@ -131,7 +131,7 @@ export default defineComponent({
       this.$store.commit("setDataAlerts", { filters, events });
     }, 1000);
 
-    const dataClimate: DataClimate[] = [
+    const dataClimate: StoreClimateData[] = [
       {
         title: {
           ru: "Температура",
@@ -144,10 +144,8 @@ export default defineComponent({
               {
                 time: "10",
                 avgmin: "-3.6",
-                avgmax: "5.1",
                 extmin: "-10.3",
                 extmax: "11.5",
-                avg: "2.4",
               },
               {
                 time: "20",
@@ -180,7 +178,6 @@ export default defineComponent({
             data: [
               {
                 time: "10",
-                avgmin: "741",
                 avgmax: "773",
                 extmin: "733",
                 extmax: "771",

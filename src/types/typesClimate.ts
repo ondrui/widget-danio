@@ -5,28 +5,34 @@ interface Locales {
 
 interface ParamsValue {
   time: string;
-  avgmin: string;
-  avgmax: string;
-  extmin: string;
-  extmax: string;
-  avg: string;
+  avgmin?: string;
+  avgmax?: string;
+  extmin?: string;
+  extmax?: string;
+  avg?: string;
 }
 
-interface ClimateValue {
+export interface ClimateValue {
   [index: string]: ParamsValue[] | string;
   dim: string;
   data: ParamsValue[];
 }
 
-export interface DataClimate {
+export interface StoreClimateData {
   title: Locales;
   def?: Locales;
   value: ClimateValue[];
 }
 
-export interface GetterClimateData {
-  values: DataClimate[];
-  date: string;
+export interface WidgetClimateData {
+  title: Locales;
+  def?: Locales | undefined;
+  dim: string;
+  data: {
+    min: string | undefined;
+    max: string | undefined;
+    avg: string | undefined;
+  };
 }
 
 export interface PathSVG {
@@ -36,7 +42,7 @@ export interface PathSVG {
 
 export interface EndPointsText {
   text: string;
-  num: string;
+  num: string | undefined;
   x: number;
   y: number;
 }

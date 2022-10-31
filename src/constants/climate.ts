@@ -15,3 +15,5 @@ export const radioBtnValue = ["usually", "records"];
 export const radioBtnCaptionRu = ["обычно", "рекорды"];
 
 export const selectCaptionsRu = ["В среднем за", "лет"];
+
+export const noDataRu = "н/д";

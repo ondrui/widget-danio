@@ -3,7 +3,7 @@
     <div class="container-main">
       <ClimateWidgetItem
         v-for="value in values"
-        :key="value.title.en?.slice(0, 4)"
+        :key="value.title?.en?.slice(0, 4)"
         :value="value"
       />
     </div>
@@ -13,13 +13,13 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import ClimateWidgetItem from "./ClimateWidgetItem.vue";
-import { DataClimate } from "@/types/typesClimate";
+import { WidgetClimateData } from "@/types/typesClimate";
 
 export default defineComponent({
   components: { ClimateWidgetItem },
   props: {
     values: {
-      type: Array as PropType<DataClimate[]>,
+      type: Array as PropType<WidgetClimateData[]>,
       required: true,
     },
   },

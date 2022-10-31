@@ -1,12 +1,15 @@
 import { Module } from "vuex";
 import { RootState } from "./index";
-import { DataClimate, GetterClimateData } from "@/types/typesClimate";
+import {
+  StoreClimateData,
+  WidgetClimateData,
+  ClimateValue,
+} from "@/types/typesClimate";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
 import { radioBtnValue } from "@/constants/climate";
-import { title } from "process";
 
 type State = {
-  values: DataClimate[];
+  values: StoreClimateData[];
   timestamp: number;
   dateFormat: string;
   maxEndpointRightWidth: number;
@@ -23,7 +26,7 @@ export const climateModule: Module<State, RootState> = {
   mutations: {
     setDataClimate(
       state: State,
-      { climate, format }: { climate: DataClimate[]; format: string }
+      { climate, format }: { climate: StoreClimateData[]; format: string }
     ): void {
       if (climate == null) {
         climate = [];
@@ -66,41 +69,55 @@ export const climateModule: Module<State, RootState> = {
       //console.log("getter climate", arr);
       return arr;
     },
-    getCoolData:
-      (state: State): ((radio: string, select: string) => DataClimate[]) =>
-      (radio = "usually", select = "10"): DataClimate[] => {
-        const climate = state.values;
-        const climate1 = state.values.map(({ value, title }) => {
-          const findValue = value[0].data.find(
-            ({ time }: { time: string }) => time === select
-          );
-          // console.log("value[0]", value[0]);
-          // console.log("findValue", findValue);
-          return {
-            ...title,
-            ...value[0],
-            data: findValue,
-          };
-        });
-        console.log("climate1", climate1);
-        return climate;
+    getClimateData:
+      (state: State) =>
+      (
+        radio = "usually",
+        select = "10"
+      ): Array<WidgetClimateData | undefined> => {
+        return state.values
+          .map(({ value, title, def }) => {
+            /**
+             * Функция будет реализована позже. Пока всегда возвращает первый элемент массива.
+             * @param prop
+             * @returns
+             */
+            const findDimValue: (
+              prop: ClimateValue[],
+              dim?: string
+            ) => ClimateValue = (prop) => prop[0];
+            const { dim, data } = findDimValue(value);
+            const dataSelect = data.find(
+              ({ time }: { time: string }) => time === select
+            );
+
+            if (dataSelect === undefined) {
+              return undefined;
+            }
+
+            const dataSelectRadio = () => {
+              return {
+                min:
+                  radio === radioBtnValue[0]
+                    ? dataSelect?.avgmin
+                    : dataSelect?.extmin,
+                max:
+                  radio === radioBtnValue[0]
+                    ? dataSelect?.avgmax
+                    : dataSelect?.extmax,
+                avg: dataSelect?.avg,
+              };
+            };
+
+            return {
+              title,
+              def,
+              dim,
+              data: dataSelectRadio(),
+            };
+          })
+          .filter((i) => i !== undefined);
       },
-    getClimateData: (
-      state: State,
-      getters,
-      rootState: RootState,
-      rootGetters
-    ): GetterClimateData => {
-      const dateStr = HandlerEvent.setTimeFormat(
-        state.timestamp,
-        state.dateFormat,
-        rootGetters.getLocales
-      );
-      return {
-        values: state.values,
-        date: dateStr,
-      };
-    },
   },
   namespaced: true,
 };

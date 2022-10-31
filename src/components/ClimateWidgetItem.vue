@@ -10,7 +10,7 @@
       <svg ref="svg" class="svg-container" xmlns="http://www.w3.org/2000/svg">
         <text ref="text" :x="calcTextBlockMeterPosition" y="15">
           <tspan ref="tspan" class="tspan">
-            {{ value.value[0].data[0].avg }}
+            {{ showNumberPoint(value.data.avg) }}
           </tspan>
           <tspan>
             {{ showDimension(value) }}
@@ -32,9 +32,9 @@
           :y="prop.y"
         >
           <tspan class="preposition-text">{{ prop.text }}</tspan>
-          <tspan dx="5">{{ prop.num }}</tspan>
+          <tspan dx="5">{{ showNumberPoint(prop.num) }}</tspan>
           <tspan>
-            {{ showDimension(value) }}
+            {{ showDimension(value, prop.num) }}
           </tspan>
         </text>
       </svg>
@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import {
-  DataClimate,
+  WidgetClimateData,
   PathSVG,
   EndPointsText,
   SubtitleToProgressName,
@@ -57,12 +57,13 @@ import {
   prepositions,
   subtitleToProgressName,
   changeDimensionLocale,
+  noDataRu,
 } from "@/constants/climate";
 
 export default defineComponent({
   props: {
     value: {
-      type: Object as PropType<DataClimate>,
+      type: Object as PropType<WidgetClimateData>,
       required: true,
     },
   },
@@ -73,6 +74,7 @@ export default defineComponent({
       textNumBlockMeterWidth: 0,
       textBlockMeterWidth: 0,
       prepositions: prepositions,
+      noData: noDataRu,
     };
   },
   mounted() {
@@ -88,10 +90,17 @@ export default defineComponent({
       return this.SVGWidth - thicknessProgress / 2;
     },
     calcMeterLength(): number {
-      const val = this.value.value[0].data[0];
-      const minMaxsegmentLength = parseInt(val.avgmax) - parseInt(val.avgmin);
       const svgLength = this.progressBgWidth;
-      const avgSegmentLength = parseInt(val.avg) - parseInt(val.avgmin);
+      const val = this.value.data;
+      if (
+        val.max === undefined ||
+        val.min === undefined ||
+        val.avg === undefined
+      ) {
+        return svgLength / 2;
+      }
+      const minMaxsegmentLength = parseInt(val.max) - parseInt(val.min);
+      const avgSegmentLength = parseInt(val.avg) - parseInt(val.min);
 
       const x = Math.round(
         (svgLength * avgSegmentLength) / minMaxsegmentLength
@@ -146,11 +155,11 @@ export default defineComponent({
       } 25.8 L ${-8 + this.calcMeterLength} 25.8 Z`;
     },
     showEndPointsText(): EndPointsText[] {
-      const val = this.value.value[0].data[0];
+      const val = this.value.data;
       const endPoints = this.prepositions.map((p: string) => {
         return {
           text: p,
-          num: p === prepositions[0] ? val.avgmin : val.avgmax,
+          num: p === prepositions[0] ? val.min : val.max,
           x: p === prepositions[0] ? 0 : this.SVGWidth - 65,
           y: 46,
         };
@@ -176,23 +185,27 @@ export default defineComponent({
       this.textNumBlockMeterWidth = widthNumTextBlockMeter;
       this.textBlockMeterWidth = widthTextBlockMeter;
     },
-    SubtitleToProgressName(value: DataClimate): SubtitleToProgressName {
+    SubtitleToProgressName(value: WidgetClimateData): SubtitleToProgressName {
       return {
         isShow:
           value.title.en === subtitleToProgressName[0] ||
           value.def?.ru !== undefined,
         text:
           value.title.en === subtitleToProgressName[0]
-            ? value.value[0].dim
+            ? value.dim
             : value.def?.ru,
       };
     },
-    showDimension(value: DataClimate): string {
-      return value.title.en === subtitleToProgressName[0]
+    showDimension(value: WidgetClimateData, num?: string | undefined): string {
+      return value.title.en === subtitleToProgressName[0] ||
+        (!num && !value.data.avg)
         ? ""
-        : value.value[0].dim === changeDimensionLocale[0]
-        ? ` ${value.value[0].dim}`
-        : value.value[0].dim;
+        : value.dim === changeDimensionLocale[0]
+        ? ` ${value.dim}`
+        : value.dim;
+    },
+    showNumberPoint(val: string | undefined) {
+      return val === undefined ? this.noData : val;
     },
     calcWidthRightEndPoint() {
       const endpoints = this.$refs.endpoint as SVGGraphicsElement[];

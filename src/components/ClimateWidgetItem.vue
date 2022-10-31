@@ -170,8 +170,8 @@ export default defineComponent({
       const widthTextBlockMeter = Math.round(
         text.getBoundingClientRect().width
       );
-      console.log(tspan.getComputedTextLength());
-      console.log(tspan.getBoundingClientRect().width);
+      //console.log(tspan.getComputedTextLength());
+      //console.log(tspan.getBoundingClientRect().width);
       this.SVGWidth = widthSVG;
       this.textNumBlockMeterWidth = widthNumTextBlockMeter;
       this.textBlockMeterWidth = widthTextBlockMeter;
@@ -196,7 +196,7 @@ export default defineComponent({
     },
     calcWidthRightEndPoint() {
       const endpoints = this.$refs.endpoint as SVGGraphicsElement[];
-      console.log(Math.round(endpoints[1].getBBox().width));
+      //console.log(Math.round(endpoints[1].getBBox().width));
     },
   },
 });

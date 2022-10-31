@@ -3,6 +3,7 @@ import { RootState } from "./index";
 import { DataClimate, GetterClimateData } from "@/types/typesClimate";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
 import { radioBtnValue } from "@/constants/climate";
+import { title } from "process";
 
 type State = {
   values: DataClimate[];
@@ -62,19 +63,23 @@ export const climateModule: Module<State, RootState> = {
           new Set()
         ),
       ].sort();
-      console.log("getter climate", arr);
+      //console.log("getter climate", arr);
       return arr;
     },
     getCoolData:
       (state: State): ((radio: string, select: string) => DataClimate[]) =>
       (radio = "usually", select = "10"): DataClimate[] => {
         const climate = state.values;
-        const climate1 = state.values.map((val) => {
+        const climate1 = state.values.map(({ value, title }) => {
+          const findValue = value[0].data.find(
+            ({ time }: { time: string }) => time === select
+          );
+          // console.log("value[0]", value[0]);
+          // console.log("findValue", findValue);
           return {
-            ...val,
-            value: value[0].data.find(
-              ({ time }: { time: string }) => time === select
-            ),
+            ...title,
+            ...value[0],
+            data: findValue,
           };
         });
         console.log("climate1", climate1);

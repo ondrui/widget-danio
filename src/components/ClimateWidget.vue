@@ -1,6 +1,11 @@
 <template>
   <div class="climate">
-    <ClimateWidgetNavbar :date="getDate" :options="getNavbarSelectOptions" />
+    <ClimateWidgetNavbar
+      :date="getDate"
+      :options="getNavbarSelectOptions"
+      @radio="radio"
+      @select="select"
+    />
     <ClimateWidgetList :values="getClimateData" />
     <div class="btn-block">
       <button class="btn">Подробнее</button>
@@ -19,21 +24,33 @@ export default defineComponent({
     ClimateWidgetNavbar,
     ClimateWidgetList,
   },
-  updated() {
-    console.log(this.$store.getters["climate/getClimateData"]());
+  data() {
+    return {
+      options: {
+        radio: "usually",
+        select: "10",
+      },
+    };
   },
   computed: {
     getNavbarSelectOptions(): string[] {
       return this.$store.getters["climate/getNavbarSelectOptions"];
     },
     getClimateData(): WidgetClimateData[] {
-      return this.$store.getters["climate/getClimateData"]();
+      return this.$store.getters["climate/getClimateData"](this.options);
     },
     getDate(): string {
       return this.$store.getters["climate/getDate"];
     },
   },
-  methods: {},
+  methods: {
+    radio(val: string): void {
+      this.options.radio = val;
+    },
+    select(val: string): void {
+      this.options.select = val;
+    },
+  },
 });
 </script>
 

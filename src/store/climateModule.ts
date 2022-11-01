@@ -73,10 +73,10 @@ export const climateModule: Module<State, RootState> = {
     },
     getClimateData:
       (state: State) =>
-      (
+      ({
         radio = "usually",
-        select = "10"
-      ): Array<WidgetClimateData | undefined> => {
+        select = "10",
+      }): Array<WidgetClimateData | undefined> => {
         return state.values
           .map(({ value, title, def }) => {
             /**

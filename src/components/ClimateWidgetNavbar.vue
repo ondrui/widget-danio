@@ -23,7 +23,7 @@
     </div>
     <div class="select-nav">
       <div>{{ selectCaptions[0] }}</div>
-      <select name="select" v-model="selected" @change="select">
+      <select name="select" @change="select($event)">
         <option
           v-for="(option, index) in options"
           :key="option"
@@ -57,16 +57,23 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["radio", "select"],
+  emits: {
+    radio(payload: string) {
+      return payload;
+    },
+    select(payload: string) {
+      return payload;
+    },
+  },
   data() {
     return {
       radioBtnValue: radioBtnValue,
       radioBtnCaption: radioBtnCaptionRu,
       selectCaptions: selectCaptionsRu,
       picked: "usually",
-      selected: "",
     };
   },
+  computed: {},
   // watch: {
   //   options(newValue) {
   //     console.log("watch");
@@ -77,8 +84,9 @@ export default defineComponent({
     radio() {
       this.$emit("radio", this.picked);
     },
-    select() {
-      this.$emit("select", this.selected);
+    select(e: Event) {
+      const a = e.target as HTMLSelectElement;
+      this.$emit("select", a.value);
     },
   },
 });

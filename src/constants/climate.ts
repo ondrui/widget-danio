@@ -6,11 +6,12 @@ export const triagleSideLength = 9;
 
 export const prepositions = ["от", "до"];
 
-export const subtitleToProgressName = ["Pressure"];
-
 export const changeDimensionLocale = ["см"];
 
-export const radioBtnValue = ["usually", "records"];
+export const radioBtnValue = {
+  usually: ["avgmin", "avgmax"],
+  records: ["extmin", "extmax"],
+};
 
 export const radioBtnCaptionRu = ["обычно", "рекорды"];
 

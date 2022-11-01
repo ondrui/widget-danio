@@ -144,8 +144,10 @@ export default defineComponent({
               {
                 time: "10",
                 avgmin: "-3.6",
+                avgmax: "5.1",
                 extmin: "-10.3",
                 extmax: "11.5",
+                avg: "2.4",
               },
               {
                 time: "20",
@@ -172,12 +174,14 @@ export default defineComponent({
           ru: "Давление",
           en: "Pressure",
         },
+        def: { ru: "мм рт. ст." },
         value: [
           {
-            dim: "мм рт. ст.",
+            dim: "",
             data: [
               {
                 time: "10",
+                avgmin: "731",
                 avgmax: "773",
                 extmin: "733",
                 extmax: "771",
@@ -253,7 +257,6 @@ export default defineComponent({
             data: [
               {
                 time: "10",
-                avgmin: "8",
                 avgmax: "21",
                 extmin: "5",
                 extmax: "25",

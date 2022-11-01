@@ -10,10 +10,10 @@
       <svg ref="svg" class="svg-container" xmlns="http://www.w3.org/2000/svg">
         <text ref="text" :x="calcTextBlockMeterPosition" y="15">
           <tspan ref="tspan" class="tspan">
-            {{ showNumberPoint(value.data.avg) }}
+            {{ showPoint(value.data.avg) }}
           </tspan>
           <tspan>
-            {{ showDimension(value) }}
+            {{ showDimension(value.data.avg) }}
           </tspan>
         </text>
         <path class="svg-triangle" :d="createdTriagle" />
@@ -32,9 +32,9 @@
           :y="prop.y"
         >
           <tspan class="preposition-text">{{ prop.text }}</tspan>
-          <tspan dx="5">{{ showNumberPoint(prop.num) }}</tspan>
+          <tspan dx="5">{{ showPoint(prop.num) }}</tspan>
           <tspan>
-            {{ showDimension(value, prop.num) }}
+            {{ showDimension(prop.num) }}
           </tspan>
         </text>
       </svg>
@@ -55,7 +55,6 @@ import {
   thicknessProgress,
   triagleSideLength,
   prepositions,
-  subtitleToProgressName,
   changeDimensionLocale,
   noDataRu,
 } from "@/constants/climate";
@@ -187,25 +186,19 @@ export default defineComponent({
     },
     SubtitleToProgressName(value: WidgetClimateData): SubtitleToProgressName {
       return {
-        isShow:
-          value.title.en === subtitleToProgressName[0] ||
-          value.def?.ru !== undefined,
-        text:
-          value.title.en === subtitleToProgressName[0]
-            ? value.dim
-            : value.def?.ru,
+        isShow: !!value.def?.ru,
+        text: value.def?.ru,
       };
     },
-    showDimension(value: WidgetClimateData, num?: string | undefined): string {
-      return value.title.en === subtitleToProgressName[0] ||
-        (!num && !value.data.avg)
+    showDimension(val: string | undefined): string {
+      return !val
         ? ""
-        : value.dim === changeDimensionLocale[0]
-        ? ` ${value.dim}`
-        : value.dim;
+        : this.value.dim === changeDimensionLocale[0]
+        ? ` ${this.value.dim}`
+        : this.value.dim;
     },
-    showNumberPoint(val: string | undefined) {
-      return val === undefined ? this.noData : val;
+    showPoint(val: string | undefined) {
+      return val ?? this.noData;
     },
     calcWidthRightEndPoint() {
       const endpoints = this.$refs.endpoint as SVGGraphicsElement[];

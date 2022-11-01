@@ -3,7 +3,7 @@ interface Locales {
   en?: string;
 }
 
-interface ParamsValue {
+export interface ParamsValue {
   time: string;
   avgmin?: string;
   avgmax?: string;
@@ -24,15 +24,17 @@ export interface StoreClimateData {
   value: ClimateValue[];
 }
 
+export interface SelectRadioData {
+  min: string | undefined;
+  max: string | undefined;
+  avg: string | undefined;
+}
+
 export interface WidgetClimateData {
   title: Locales;
   def?: Locales | undefined;
   dim: string;
-  data: {
-    min: string | undefined;
-    max: string | undefined;
-    avg: string | undefined;
-  };
+  data: SelectRadioData;
 }
 
 export interface PathSVG {

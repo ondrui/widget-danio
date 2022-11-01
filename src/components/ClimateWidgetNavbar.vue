@@ -5,8 +5,8 @@
       <input
         type="radio"
         name="radios"
-        :id="radioBtnValue[0]"
-        :value="radioBtnValue[0]"
+        id="usually"
+        value="usually"
         v-model="picked"
         @change="radio"
       />
@@ -14,8 +14,8 @@
       <input
         type="radio"
         name="radios"
-        :id="radioBtnValue[1]"
-        :value="radioBtnValue[1]"
+        id="records"
+        value="records"
         v-model="picked"
         @change="radio"
       />

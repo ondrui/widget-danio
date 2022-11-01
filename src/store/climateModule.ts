@@ -4,6 +4,8 @@ import {
   StoreClimateData,
   WidgetClimateData,
   ClimateValue,
+  ParamsValue,
+  SelectRadioData,
 } from "@/types/typesClimate";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
 import { radioBtnValue } from "@/constants/climate";
@@ -91,21 +93,15 @@ export const climateModule: Module<State, RootState> = {
               ({ time }: { time: string }) => time === select
             );
 
-            if (dataSelect === undefined) {
-              return undefined;
-            }
+            if (dataSelect === undefined) return undefined;
 
-            const dataSelectRadio = () => {
+            const dataSelectRadio = (): SelectRadioData => {
+              const min = radioBtnValue[radio as keyof typeof radioBtnValue][0];
+              const max = radioBtnValue[radio as keyof typeof radioBtnValue][1];
               return {
-                min:
-                  radio === radioBtnValue[0]
-                    ? dataSelect?.avgmin
-                    : dataSelect?.extmin,
-                max:
-                  radio === radioBtnValue[0]
-                    ? dataSelect?.avgmax
-                    : dataSelect?.extmax,
-                avg: dataSelect?.avg,
+                min: dataSelect[min as keyof ParamsValue],
+                max: dataSelect[max as keyof ParamsValue],
+                avg: dataSelect.avg,
               };
             };
 

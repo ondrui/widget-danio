@@ -156,7 +156,7 @@ const store = createStore<RootState>({
      * 3
      */
     calcTotalFilters:
-      (state: RootState): ((status: FilterStatus) => number) =>
+      (state: RootState) =>
       (status: FilterStatus): number => {
         return Object.values(state.filters).reduce<number>(
           (previousValue: number, currentValue: Filter) =>

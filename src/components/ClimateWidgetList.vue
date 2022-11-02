@@ -1,5 +1,11 @@
 <template>
   <div class="wrapper">
+    <div class="content">
+      <div class="content-right" v-for="(value, index) in values" :key="index">
+        <div>{{ prepositions }}</div>
+        {{ ` ${value.data.max ?? "н/д"}${value.dim === "см" ? " см": value.dim` }}
+      </div>
+    </div>
     <div class="container-main">
       <ClimateWidgetItem
         v-for="value in values"
@@ -15,6 +21,7 @@
 import { defineComponent, PropType } from "vue";
 import ClimateWidgetItem from "./ClimateWidgetItem.vue";
 import { WidgetClimateData } from "@/types/typesClimate";
+import { expression } from "@/constants/climate";
 
 export default defineComponent({
   components: { ClimateWidgetItem },
@@ -26,7 +33,9 @@ export default defineComponent({
     maxWidth: Number,
   },
   data() {
-    return {};
+    return {
+      prepositions: expression.ru.prepositions[1],
+    };
   },
   computed: {},
   methods: {},
@@ -38,6 +47,36 @@ export default defineComponent({
   margin: 10px 19px 0 27px;
   max-height: 227px;
   display: flex;
+  position: relative;
+  background-color: aquamarine;
+}
+
+.content {
+  position: absolute;
+  display: flex;
+  row-gap: 3px;
+  flex-direction: column;
+  background-color: tan;
+  opacity: 0.6;
+  right: 2px;
+
+  & .content-right {
+    padding-top: 37px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 10px;
+
+    & div {
+      display: inline-block;
+    }
+
+    & span {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 16px;
+      color: $color-item-font-light;
+    }
+  }
 }
 
 .container-main {

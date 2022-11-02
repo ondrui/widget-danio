@@ -45,11 +45,21 @@ export interface PathSVG {
 export interface EndPointsText {
   text: string;
   num: string | undefined;
-  x: number;
+  x: number | undefined;
   y: number;
 }
 
 export interface SubtitleToProgressName {
   isShow: boolean;
   text: string | undefined;
+}
+
+export interface ExpressionLocales {
+  ru: {
+    prepositions: string[];
+    changeDimensionLocale: string[];
+    radioBtnCaption: string[];
+    selectCaptions: string[];
+    noData: string;
+  };
 }

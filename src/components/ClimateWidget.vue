@@ -6,9 +6,9 @@
       @radio="radio"
       @select="select"
     />
-    <ClimateWidgetList :values="getClimateData" />
+    <ClimateWidgetList :values="getClimateData" :maxWidth="getMaxWidth" />
     <div class="btn-block">
-      <button class="btn">Подробнее</button>
+      <button class="btn-custom">Подробнее</button>
     </div>
   </div>
 </template>
@@ -42,6 +42,9 @@ export default defineComponent({
     getDate(): string {
       return this.$store.getters["climate/getDate"];
     },
+    getMaxWidth(): number {
+      return this.$store.getters["climate/getMaxWidth"];
+    },
   },
   methods: {
     radio(val: string): void {
@@ -71,7 +74,7 @@ export default defineComponent({
   margin-top: 17px;
   margin-bottom: 20px;
 }
-.btn {
+.btn-custom {
   padding: 10px 95px;
   color: $color-black;
   background: none;

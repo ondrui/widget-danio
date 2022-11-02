@@ -54,9 +54,7 @@ import {
   svgClassForPath,
   thicknessProgress,
   triagleSideLength,
-  prepositions,
-  changeDimensionLocale,
-  noDataRu,
+  expression,
 } from "@/constants/climate";
 
 export default defineComponent({
@@ -65,6 +63,10 @@ export default defineComponent({
       type: Object as PropType<WidgetClimateData>,
       required: true,
     },
+    maxWidth: {
+      type: Number,
+      default: 65,
+    },
   },
   data() {
     return {
@@ -72,8 +74,8 @@ export default defineComponent({
       classNameForPath: svgClassForPath,
       textNumBlockMeterWidth: 0,
       textBlockMeterWidth: 0,
-      prepositions: prepositions,
-      noData: noDataRu,
+      prepositions: expression.ru.prepositions,
+      noData: expression.ru.noData,
     };
   },
   mounted() {
@@ -83,6 +85,9 @@ export default defineComponent({
   },
   unmounted() {
     window.removeEventListener("resize", this.resizeBrowserHandler);
+  },
+  updated() {
+    this.calcWidthRightEndPoint();
   },
   computed: {
     progressBgWidth(): number {
@@ -158,8 +163,11 @@ export default defineComponent({
       const endPoints = this.prepositions.map((p: string) => {
         return {
           text: p,
-          num: p === prepositions[0] ? val.min : val.max,
-          x: p === prepositions[0] ? 0 : this.SVGWidth - 65,
+          num: p === expression.ru.prepositions[0] ? val.min : val.max,
+          x:
+            p === expression.ru.prepositions[0]
+              ? 0
+              : this.SVGWidth - 1 - this.maxWidth,
           y: 46,
         };
       });
@@ -178,8 +186,6 @@ export default defineComponent({
       const widthTextBlockMeter = Math.round(
         text.getBoundingClientRect().width
       );
-      //console.log(tspan.getComputedTextLength());
-      //console.log(tspan.getBoundingClientRect().width);
       this.SVGWidth = widthSVG;
       this.textNumBlockMeterWidth = widthNumTextBlockMeter;
       this.textBlockMeterWidth = widthTextBlockMeter;
@@ -193,7 +199,7 @@ export default defineComponent({
     showDimension(val: string | undefined): string {
       return !val
         ? ""
-        : this.value.dim === changeDimensionLocale[0]
+        : this.value.dim === expression.ru.changeDimensionLocale[0]
         ? ` ${this.value.dim}`
         : this.value.dim;
     },
@@ -202,7 +208,8 @@ export default defineComponent({
     },
     calcWidthRightEndPoint() {
       const endpoints = this.$refs.endpoint as SVGGraphicsElement[];
-      //console.log(Math.round(endpoints[1].getBBox().width));
+      const width = Math.round(endpoints[1].getBoundingClientRect().width);
+      this.$store.commit("climate/setEndPointRightWidth", width);
     },
   },
 });

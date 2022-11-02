@@ -40,11 +40,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import {
-  radioBtnValue,
-  radioBtnCaptionRu,
-  selectCaptionsRu,
-} from "@/constants/climate";
+import { radioBtnValue, expression } from "@/constants/climate";
 
 export default defineComponent({
   props: {
@@ -68,25 +64,21 @@ export default defineComponent({
   data() {
     return {
       radioBtnValue: radioBtnValue,
-      radioBtnCaption: radioBtnCaptionRu,
-      selectCaptions: selectCaptionsRu,
+      radioBtnCaption: expression.ru.radioBtnCaption,
+      selectCaptions: expression.ru.selectCaptions,
       picked: "usually",
     };
   },
   computed: {},
-  // watch: {
-  //   options(newValue) {
-  //     console.log("watch");
-  //     this.selected = newValue[0];
-  //   },
-  // },
   methods: {
     radio() {
       this.$emit("radio", this.picked);
+      this.$store.commit("climate/zero");
     },
     select(e: Event) {
       const a = e.target as HTMLSelectElement;
       this.$emit("select", a.value);
+      this.$store.commit("climate/zero");
     },
   },
 });

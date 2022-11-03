@@ -281,6 +281,114 @@ export default defineComponent({
           },
         ],
       },
+      {
+        title: {
+          ru: "Температура",
+          en: "Temperature",
+        },
+        value: [
+          {
+            dim: "°",
+            data: [
+              {
+                time: "10",
+                avgmin: "-3.6",
+                avgmax: "5.1",
+                extmin: "-10.3",
+                extmax: "11.5",
+              },
+              {
+                time: "20",
+                avgmin: "-4.3",
+                avgmax: "6.4",
+                extmin: "-11.3",
+                extmax: "-114.5",
+                avg: "3.4",
+              },
+              {
+                time: "30",
+                avgmin: "-5.7",
+                avgmax: "6.5",
+                extmin: "-13.8",
+                extmax: "17.9",
+                avg: "4.4",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        title: {
+          ru: "Температура",
+          en: "Temperature",
+        },
+        value: [
+          {
+            dim: "°",
+            data: [
+              {
+                time: "10",
+                avgmin: "-3.6",
+                avgmax: "5.1",
+                extmin: "-10.3",
+                extmax: "11.5",
+              },
+              {
+                time: "20",
+                avgmin: "-4.3",
+                avgmax: "6.4",
+                extmin: "-11.3",
+                extmax: "-114.5",
+                avg: "3.4",
+              },
+              {
+                time: "30",
+                avgmin: "-5.7",
+                avgmax: "6.5",
+                extmin: "-13.8",
+                extmax: "17.9",
+                avg: "4.4",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        title: {
+          ru: "Температура",
+          en: "Temperature",
+        },
+        value: [
+          {
+            dim: "°",
+            data: [
+              {
+                time: "10",
+                avgmin: "-3.6",
+                avgmax: "5.1",
+                extmin: "-10.3",
+                extmax: "11.5",
+              },
+              {
+                time: "20",
+                avgmin: "-4.3",
+                avgmax: "6.4",
+                extmin: "-11.3",
+                extmax: "-114.5",
+                avg: "3.4",
+              },
+              {
+                time: "30",
+                avgmin: "-5.7",
+                avgmax: "6.5",
+                extmin: "-13.8",
+                extmax: "17.9",
+                avg: "4.4",
+              },
+            ],
+          },
+        ],
+      },
     ];
 
     setTimeout(() => {

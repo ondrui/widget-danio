@@ -26,15 +26,13 @@
         <text
           ref="endpoint"
           class="preposition"
-          v-for="(prop, key) in showEndPointsText"
-          :key="`tn-${key}`"
-          :x="prop.x"
-          :y="prop.y"
+          :x="showEndPointsText.x"
+          :y="showEndPointsText.y"
         >
-          <tspan class="preposition-text">{{ prop.text }}</tspan>
-          <tspan dx="5">{{ showPoint(prop.num) }}</tspan>
+          <tspan class="preposition-text">{{ showEndPointsText.text }}</tspan>
+          <tspan dx="5">{{ showPoint(showEndPointsText.num) }}</tspan>
           <tspan>
-            {{ showDimension(prop.num) }}
+            {{ showDimension(showEndPointsText.num) }}
           </tspan>
         </text>
       </svg>
@@ -79,15 +77,11 @@ export default defineComponent({
     };
   },
   mounted() {
-    this.calcWidthRightEndPoint();
     this.resizeBrowserHandler();
     window.addEventListener("resize", this.resizeBrowserHandler);
   },
   unmounted() {
     window.removeEventListener("resize", this.resizeBrowserHandler);
-  },
-  updated() {
-    this.calcWidthRightEndPoint();
   },
   computed: {
     progressBgWidth(): number {
@@ -158,19 +152,14 @@ export default defineComponent({
         1 + this.calcMeterLength
       } 25.8 L ${-8 + this.calcMeterLength} 25.8 Z`;
     },
-    showEndPointsText(): EndPointsText[] {
+    showEndPointsText(): EndPointsText {
       const val = this.value.data;
-      const endPoints = this.prepositions.map((p: string) => {
-        return {
-          text: p,
-          num: p === expression.ru.prepositions[0] ? val.min : val.max,
-          x:
-            p === expression.ru.prepositions[0]
-              ? 0
-              : this.SVGWidth - 1 - this.maxWidth,
-          y: 46,
-        };
-      });
+      const endPoints = {
+        text: this.prepositions[0],
+        num: val.min,
+        x: 0,
+        y: 46,
+      };
       return endPoints;
     },
   },
@@ -205,11 +194,6 @@ export default defineComponent({
     },
     showPoint(val: string | undefined) {
       return val ?? this.noData;
-    },
-    calcWidthRightEndPoint() {
-      const endpoints = this.$refs.endpoint as SVGGraphicsElement[];
-      const width = Math.round(endpoints[1].getBoundingClientRect().width);
-      this.$store.commit("climate/setEndPointRightWidth", width);
     },
   },
 });

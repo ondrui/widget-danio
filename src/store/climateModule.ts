@@ -14,7 +14,6 @@ type State = {
   values: StoreClimateData[];
   timestamp: number;
   dateFormat: string;
-  EndpointRightWidth: number[];
 };
 
 export const climateModule: Module<State, RootState> = {
@@ -22,7 +21,6 @@ export const climateModule: Module<State, RootState> = {
     values: [],
     timestamp: 0,
     dateFormat: "",
-    EndpointRightWidth: [],
   }),
   actions: {},
   mutations: {
@@ -39,20 +37,8 @@ export const climateModule: Module<State, RootState> = {
     setTimestampClimate(state: State, timestamp: number): void {
       state.timestamp = timestamp;
     },
-    setEndPointRightWidth(state: State, width: number): void {
-      if (!state.EndpointRightWidth.includes(width))
-        state.EndpointRightWidth.push(width);
-    },
-    zero(state: State) {
-      state.EndpointRightWidth = [];
-    },
   },
   getters: {
-    getMaxWidth(state): number | undefined {
-      return isFinite(Math.max(...state.EndpointRightWidth))
-        ? Math.max(...state.EndpointRightWidth)
-        : undefined;
-    },
     getDate: (
       state: State,
       getters,

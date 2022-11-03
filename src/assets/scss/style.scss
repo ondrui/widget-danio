@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,200,300,regular,500,700,900&display=swap&subset=cyrillic,cyrillic-ext');
+@import 'variables';
 
 * {
   font-family: 'Roboto', sans-serif;
+  color: $color-black;
 }
 
-@import 'variables';
 @import 'classes';

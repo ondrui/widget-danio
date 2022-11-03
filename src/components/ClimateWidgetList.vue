@@ -1,12 +1,16 @@
 <template>
   <div class="wrapper">
-    <div class="content">
-      <div class="content-right" v-for="(value, index) in values" :key="index">
-        <div>{{ prepositions }}</div>
-        {{ ` ${value.data.max ?? "н/д"}${value.dim === "см" ? " см": value.dim` }}
-      </div>
-    </div>
     <div class="container-main">
+      <div class="content">
+        <div
+          class="content-right"
+          v-for="(value, index) in values"
+          :key="index"
+        >
+          <div>{{ prepositions }}</div>
+          {{ EndPointText(value) }}
+        </div>
+      </div>
       <ClimateWidgetItem
         v-for="value in values"
         :key="value.title?.en?.slice(0, 4)"
@@ -38,7 +42,15 @@ export default defineComponent({
     };
   },
   computed: {},
-  methods: {},
+  methods: {
+    EndPointText(value: WidgetClimateData): string {
+      return ` ${value.data.max ?? expression.ru.noData}${
+        value.dim === expression.ru.changeDimensionLocale[0]
+          ? ` ${value.dim}`
+          : value.dim
+      }`;
+    },
+  },
 });
 </script>
 
@@ -47,8 +59,6 @@ export default defineComponent({
   margin: 10px 19px 0 27px;
   max-height: 227px;
   display: flex;
-  position: relative;
-  background-color: aquamarine;
 }
 
 .content {
@@ -56,30 +66,24 @@ export default defineComponent({
   display: flex;
   row-gap: 3px;
   flex-direction: column;
-  background-color: tan;
-  opacity: 0.6;
-  right: 2px;
+  right: 206px;
 
   & .content-right {
-    padding-top: 37px;
+    padding-top: 36px;
     font-weight: 400;
     font-size: 14px;
-    line-height: 10px;
+    line-height: 11px;
 
     & div {
       display: inline-block;
-    }
-
-    & span {
       font-weight: 400;
-      font-size: 14px;
-      line-height: 16px;
       color: $color-item-font-light;
     }
   }
 }
 
 .container-main {
+  position: relative;
   display: flex;
   flex-direction: column;
   row-gap: 3px;

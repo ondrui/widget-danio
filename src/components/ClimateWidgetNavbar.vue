@@ -73,12 +73,10 @@ export default defineComponent({
   methods: {
     radio() {
       this.$emit("radio", this.picked);
-      this.$store.commit("climate/zero");
     },
     select(e: Event) {
       const a = e.target as HTMLSelectElement;
       this.$emit("select", a.value);
-      this.$store.commit("climate/zero");
     },
   },
 });

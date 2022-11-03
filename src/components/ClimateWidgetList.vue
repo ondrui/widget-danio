@@ -15,7 +15,6 @@
         v-for="value in values"
         :key="value.title?.en?.slice(0, 4)"
         :value="value"
-        :maxWidth="maxWidth"
       />
     </div>
   </div>
@@ -34,7 +33,6 @@ export default defineComponent({
       type: Array as PropType<WidgetClimateData[]>,
       required: true,
     },
-    maxWidth: Number,
   },
   data() {
     return {
@@ -66,7 +64,7 @@ export default defineComponent({
   display: flex;
   row-gap: 3px;
   flex-direction: column;
-  right: 206px;
+  right: 6px;
 
   & .content-right {
     padding-top: 36px;

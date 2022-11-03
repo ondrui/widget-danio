@@ -2,34 +2,27 @@
   <div class="container-nav">
     <div class="date-nav">{{ date }}</div>
     <div class="radio-btn-nav">
-      <input
-        type="radio"
-        name="radios"
-        id="usually"
-        value="usually"
-        v-model="picked"
-        @change="radio"
-      />
-      <label for="usually" tabindex="0">{{ radioBtnCaption[0] }}</label>
-      <input
-        type="radio"
-        name="radios"
-        id="records"
-        value="records"
-        v-model="picked"
-        @change="radio"
-      />
-      <label for="records" tabindex="0">{{ radioBtnCaption[1] }}</label>
+      <label
+        :class="{ checked: isChecked(value[0]) }"
+        :for="value[0]"
+        v-for="value in radioValues"
+        :key="value[0]"
+        tabindex="0"
+      >
+        <input
+          type="radio"
+          name="radios"
+          :id="value[0]"
+          :value="value[0]"
+          @change="radioHandler"
+        />
+        {{ value[1] }}
+      </label>
     </div>
     <div class="select-nav">
       <div>{{ selectCaptions[0] }}</div>
-      <select name="select" @change="select($event)">
-        <option
-          v-for="(option, index) in options"
-          :key="option"
-          :value="option"
-          :selected="index === 0"
-        >
+      <select name="select" @change="selectHandler">
+        <option v-for="option in options" :key="option" :value="option">
           {{ `${option} ${selectCaptions[1]}` }}
         </option>
       </select>
@@ -52,6 +45,18 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    radioValues: {
+      type: Array as PropType<string[][]>,
+      required: true,
+    },
+    radio: {
+      type: String,
+      required: true,
+    },
+    select: {
+      type: String,
+      required: true,
+    },
   },
   emits: {
     radio(payload: string) {
@@ -60,23 +65,31 @@ export default defineComponent({
     select(payload: string) {
       return payload;
     },
+    "update:radio": String,
+    "update:select": String,
   },
   data() {
     return {
       radioBtnValue: radioBtnValue,
       radioBtnCaption: expression.ru.radioBtnCaption,
       selectCaptions: expression.ru.selectCaptions,
-      picked: "usually",
+      defaultCheckedRadioBtn: this.radioValues[0][0],
     };
   },
-  computed: {},
-  methods: {
-    radio() {
-      this.$emit("radio", this.picked);
+  watch: {
+    options() {
+      this.$emit("select", this.options[0]);
     },
-    select(e: Event) {
-      const a = e.target as HTMLSelectElement;
-      this.$emit("select", a.value);
+  },
+  methods: {
+    isChecked(value: string): boolean {
+      return this.radio === value;
+    },
+    radioHandler(e: Event) {
+      this.$emit("update:radio", (e.target as HTMLInputElement).value);
+    },
+    selectHandler(e: Event) {
+      this.$emit("update:select", (e.target as HTMLSelectElement).value);
     },
   },
 });
@@ -107,11 +120,6 @@ export default defineComponent({
   background: $color-progress-bg;
   border-radius: 10px;
 
-  & input[type="radio"] {
-    display: none;
-    appearance: none;
-  }
-
   & label {
     padding: 2px 8px;
     color: $color-navbar-font;
@@ -120,12 +128,17 @@ export default defineComponent({
     line-height: 21px;
     text-align: center;
     cursor: pointer;
-  }
 
-  & input[type="radio"]:checked + label {
-    background: $color-white;
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    & input[type="radio"] {
+      display: none;
+      appearance: none;
+    }
+
+    &.checked {
+      background: $color-white;
+      box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
   }
 }
 

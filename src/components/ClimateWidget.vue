@@ -3,10 +3,12 @@
     <ClimateWidgetNavbar
       :date="getDate"
       :options="getNavbarSelectOptions"
-      @radio="radio"
+      :radioValues="radioValues"
+      v-model:radio="options.radio"
+      v-model:select="options.select"
       @select="select"
     />
-    <ClimateWidgetList :values="getClimateData" :maxWidth="getMaxWidth" />
+    <ClimateWidgetList :values="getClimateData" />
     <div class="btn-block">
       <button class="btn-custom">Подробнее</button>
     </div>
@@ -18,6 +20,7 @@ import { defineComponent } from "vue";
 import ClimateWidgetNavbar from "./ClimateWidgetNavbar.vue";
 import ClimateWidgetList from "./ClimateWidgetList.vue";
 import { WidgetClimateData } from "@/types/typesClimate";
+import { expression } from "@/constants/climate";
 
 export default defineComponent({
   components: {
@@ -28,8 +31,12 @@ export default defineComponent({
     return {
       options: {
         radio: "usually",
-        select: "10",
+        select: "",
       },
+      radioValues: [
+        ["usually", expression.ru.radioBtnCaption[0]],
+        ["records", expression.ru.radioBtnCaption[1]],
+      ],
     };
   },
   computed: {
@@ -41,9 +48,6 @@ export default defineComponent({
     },
     getDate(): string {
       return this.$store.getters["climate/getDate"];
-    },
-    getMaxWidth(): number {
-      return this.$store.getters["climate/getMaxWidth"];
     },
   },
   methods: {

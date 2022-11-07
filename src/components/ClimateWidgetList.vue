@@ -2,13 +2,25 @@
   <div class="wrapper">
     <div class="container-main">
       <div class="content">
-        <div
-          class="content-right"
-          v-for="(value, index) in values"
-          :key="index"
-        >
-          <div>{{ prepositions }}</div>
-          {{ EndPointText(value) }}
+        <div class="content-main">
+          <div
+            class="content-left"
+            v-for="(value, index) in values"
+            :key="index"
+          >
+            <div>{{ prepositions[0] }}</div>
+            {{ EndPointTextLeft(value) }}
+          </div>
+        </div>
+        <div class="content-main">
+          <div
+            class="content-right"
+            v-for="(value, index) in values"
+            :key="index"
+          >
+            <div>{{ prepositions[1] }}</div>
+            {{ EndPointTextRight(value) }}
+          </div>
         </div>
       </div>
       <ClimateWidgetItem
@@ -36,13 +48,20 @@ export default defineComponent({
   },
   data() {
     return {
-      prepositions: expression.ru.prepositions[1],
+      prepositions: expression.ru.prepositions,
     };
   },
   computed: {},
   methods: {
-    EndPointText(value: WidgetClimateData): string {
+    EndPointTextRight(value: WidgetClimateData): string {
       return ` ${value.data.max ?? expression.ru.noData}${
+        value.dim === expression.ru.changeDimensionLocale[0]
+          ? ` ${value.dim}`
+          : value.dim
+      }`;
+    },
+    EndPointTextLeft(value: WidgetClimateData): string {
+      return ` ${value.data.min ?? expression.ru.noData}${
         value.dim === expression.ru.changeDimensionLocale[0]
           ? ` ${value.dim}`
           : value.dim
@@ -61,21 +80,37 @@ export default defineComponent({
 
 .content {
   position: absolute;
+  right: 0;
   display: flex;
-  row-gap: 3px;
-  flex-direction: column;
-  right: 6px;
+  justify-content: space-between;
+  width: 100%;
+  font-weight: 400;
+  font-size: 14px;
 
-  & .content-right {
-    padding-top: 36px;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 11px;
+  & .content-main {
+    display: flex;
+    row-gap: 3px;
+    flex-direction: column;
 
-    & div {
-      display: inline-block;
-      font-weight: 400;
-      color: $color-item-font-light;
+    & .content-right {
+      padding-top: 36px;
+      line-height: 11px;
+      padding-right: 6px;
+
+      & div {
+        display: inline-block;
+        color: $color-item-font-light;
+      }
+    }
+    & .content-left {
+      padding-top: 36px;
+      line-height: 11px;
+      padding-left: 108px;
+
+      & div {
+        display: inline-block;
+        color: $color-item-font-light;
+      }
     }
   }
 }

@@ -23,18 +23,6 @@
           :class="path.class"
           :d="path.def"
         />
-        <text
-          ref="endpoint"
-          class="preposition"
-          :x="showEndPointsText.x"
-          :y="showEndPointsText.y"
-        >
-          <tspan class="preposition-text">{{ showEndPointsText.text }}</tspan>
-          <tspan dx="5">{{ showPoint(showEndPointsText.num) }}</tspan>
-          <tspan>
-            {{ showDimension(showEndPointsText.num) }}
-          </tspan>
-        </text>
       </svg>
     </div>
   </div>
@@ -44,7 +32,6 @@
 import {
   WidgetClimateData,
   PathSVG,
-  EndPointsText,
   SubtitleToProgressName,
 } from "@/types/typesClimate";
 import { defineComponent, PropType } from "vue";
@@ -151,16 +138,6 @@ export default defineComponent({
       return `M ${-3.5 + this.calcMeterLength} 18 L ${
         1 + this.calcMeterLength
       } 25.8 L ${-8 + this.calcMeterLength} 25.8 Z`;
-    },
-    showEndPointsText(): EndPointsText {
-      const val = this.value.data;
-      const endPoints = {
-        text: this.prepositions[0],
-        num: val.min,
-        x: 0,
-        y: 46,
-      };
-      return endPoints;
     },
   },
   methods: {

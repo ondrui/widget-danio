@@ -7,7 +7,6 @@
         :for="value[0]"
         v-for="value in radioValues"
         :key="value[0]"
-        tabindex="0"
       >
         <input
           type="radio"
@@ -120,6 +119,10 @@ export default defineComponent({
   background: $color-progress-bg;
   border-radius: 10px;
 
+  &:focus-within {
+    outline: 2px solid #6ec0fc;
+  }
+
   & label {
     padding: 2px 8px;
     color: $color-navbar-font;
@@ -128,10 +131,18 @@ export default defineComponent({
     line-height: 21px;
     text-align: center;
     cursor: pointer;
+    border-radius: 8px;
 
     & input[type="radio"] {
-      display: none;
       appearance: none;
+      margin: 0;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
     }
 
     &.checked {

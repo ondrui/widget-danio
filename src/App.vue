@@ -382,7 +382,6 @@ export default defineComponent({
                 avgmin: "-5.7",
                 avgmax: "6.5",
                 extmin: "-13.8",
-                extmax: "17.9",
                 avg: "4.4",
               },
             ],

@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper">
     <div class="container-main">
-      <div class="content">
-        <div class="content-main">
+      <div class="endpoint">
+        <div class="endpoint-col">
           <div
-            class="content-left"
+            class="endpoint-item-left"
             v-for="(value, index) in values"
             :key="index"
           >
@@ -12,9 +12,9 @@
             {{ EndPointTextLeft(value) }}
           </div>
         </div>
-        <div class="content-main">
+        <div class="endpoint-col">
           <div
-            class="content-right"
+            class="endpoint-item-right"
             v-for="(value, index) in values"
             :key="index"
           >
@@ -49,11 +49,42 @@ export default defineComponent({
   data() {
     return {
       prepositions: expression.ru.prepositions,
+      endpoints: ["left", "right"],
     };
   },
   computed: {},
   methods: {
+    EndPointText(value: WidgetClimateData) {
+      console.log(value);
+      const endPoints = this.prepositions
+        .map((p: string) => {
+          return {
+            text: p,
+            num:
+              p === expression.ru.prepositions[0]
+                ? value.data.min ?? expression.ru.noData
+                : value.data.max ?? expression.ru.noData,
+          };
+        })
+        .map((p) => {
+          return {
+            ...p,
+            dimention: !p.num
+              ? ""
+              : value.dim === expression.ru.changeDimensionLocale[0]
+              ? ` ${value.dim}`
+              : value.dim,
+          };
+        });
+      return endPoints;
+      // return ` ${value.data.max ?? expression.ru.noData}${
+      //   value.dim === expression.ru.changeDimensionLocale[0]
+      //     ? ` ${value.dim}`
+      //     : value.dim
+      // }`;
+    },
     EndPointTextRight(value: WidgetClimateData): string {
+      console.log(value);
       return ` ${value.data.max ?? expression.ru.noData}${
         value.dim === expression.ru.changeDimensionLocale[0]
           ? ` ${value.dim}`
@@ -78,7 +109,7 @@ export default defineComponent({
   display: flex;
 }
 
-.content {
+.endpoint {
   position: absolute;
   right: 0;
   display: flex;
@@ -87,12 +118,12 @@ export default defineComponent({
   font-weight: 400;
   font-size: 14px;
 
-  & .content-main {
+  & .endpoint-col {
     display: flex;
     row-gap: 3px;
     flex-direction: column;
 
-    & .content-right {
+    & .endpoint-item-right {
       padding-top: 36px;
       line-height: 11px;
       padding-right: 6px;
@@ -102,7 +133,7 @@ export default defineComponent({
         color: $color-item-font-light;
       }
     }
-    & .content-left {
+    & .endpoint-item-left {
       padding-top: 36px;
       line-height: 11px;
       padding-left: 108px;

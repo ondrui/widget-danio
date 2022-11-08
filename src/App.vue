@@ -153,7 +153,7 @@ export default defineComponent({
                 avgmin: "-4.3",
                 avgmax: "6.4",
                 extmin: "-11.3",
-                extmax: "-114.5",
+                extmax: "114.5",
                 avg: "3.4",
               },
               {
@@ -302,7 +302,7 @@ export default defineComponent({
                 avgmin: "-4.3",
                 avgmax: "6.4",
                 extmin: "-11.3",
-                extmax: "-114.5",
+                extmax: "114.5",
                 avg: "3.4",
               },
               {
@@ -338,7 +338,7 @@ export default defineComponent({
                 avgmin: "-4.3",
                 avgmax: "6.4",
                 extmin: "-11.3",
-                extmax: "-114.5",
+                extmax: "114.5",
                 avg: "3.4",
               },
               {
@@ -374,7 +374,7 @@ export default defineComponent({
                 avgmin: "-4.3",
                 avgmax: "6.4",
                 extmin: "-11.3",
-                extmax: "-114.5",
+                extmax: "114.5",
                 avg: "3.4",
               },
               {

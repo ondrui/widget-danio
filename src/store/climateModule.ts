@@ -8,7 +8,7 @@ import {
   SelectRadioData,
 } from "@/types/typesClimate";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
-import { radioBtnValue } from "@/constants/climate";
+import { radioBtnValue, expression } from "@/constants/climate";
 
 type State = {
   values: StoreClimateData[];
@@ -77,6 +77,11 @@ export const climateModule: Module<State, RootState> = {
         radio: string;
         select: string;
       }): Array<WidgetClimateData | undefined> => {
+        const numRender = (val: string | undefined): string =>
+          val ?? expression.ru.noData;
+        const dimRender = (dim: string): string =>
+          dim === expression.ru.changeDimensionLocale[0] ? ` ${dim}` : dim;
+
         return state.values
           .map(({ value, title, def }) => {
             /**
@@ -99,16 +104,16 @@ export const climateModule: Module<State, RootState> = {
               const min = radioBtnValue[radio as keyof typeof radioBtnValue][0];
               const max = radioBtnValue[radio as keyof typeof radioBtnValue][1];
               return {
-                min: dataSelect[min as keyof ParamsValue],
-                max: dataSelect[max as keyof ParamsValue],
-                avg: dataSelect.avg,
+                min: numRender(dataSelect[min as keyof ParamsValue]),
+                max: numRender(dataSelect[max as keyof ParamsValue]),
+                avg: numRender(dataSelect.avg),
               };
             };
 
             return {
               title,
               def,
-              dim,
+              dim: dimRender(dim),
               data: dataSelectRadio(),
             };
           })

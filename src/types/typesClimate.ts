@@ -25,9 +25,9 @@ export interface StoreClimateData {
 }
 
 export interface SelectRadioData {
-  min: string | undefined;
-  max: string | undefined;
-  avg: string | undefined;
+  min: string;
+  max: string;
+  avg: string;
 }
 
 export interface WidgetClimateData {

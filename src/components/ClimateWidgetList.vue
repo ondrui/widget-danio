@@ -2,24 +2,18 @@
   <div class="wrapper">
     <div class="container-main">
       <div class="endpoint">
-        <div class="endpoint-col">
+        <div
+          class="endpoint-col"
+          v-for="(point, index) in endpoints"
+          :key="index"
+        >
           <div
-            class="endpoint-item-left"
-            v-for="(value, index) in values"
-            :key="index"
+            :class="`endpoint-item-${point}`"
+            v-for="(value, i) in values"
+            :key="i"
           >
-            <div>{{ prepositions[0] }}</div>
-            {{ EndPointTextLeft(value) }}
-          </div>
-        </div>
-        <div class="endpoint-col">
-          <div
-            class="endpoint-item-right"
-            v-for="(value, index) in values"
-            :key="index"
-          >
-            <div>{{ prepositions[1] }}</div>
-            {{ EndPointTextRight(value) }}
+            <div>{{ prepositions[index] }}</div>
+            {{ EndPointText(point, value) }}
           </div>
         </div>
       </div>
@@ -54,49 +48,12 @@ export default defineComponent({
   },
   computed: {},
   methods: {
-    EndPointText(value: WidgetClimateData) {
-      console.log(value);
-      const endPoints = this.prepositions
-        .map((p: string) => {
-          return {
-            text: p,
-            num:
-              p === expression.ru.prepositions[0]
-                ? value.data.min ?? expression.ru.noData
-                : value.data.max ?? expression.ru.noData,
-          };
-        })
-        .map((p) => {
-          return {
-            ...p,
-            dimention: !p.num
-              ? ""
-              : value.dim === expression.ru.changeDimensionLocale[0]
-              ? ` ${value.dim}`
-              : value.dim,
-          };
-        });
-      return endPoints;
-      // return ` ${value.data.max ?? expression.ru.noData}${
-      //   value.dim === expression.ru.changeDimensionLocale[0]
-      //     ? ` ${value.dim}`
-      //     : value.dim
-      // }`;
-    },
-    EndPointTextRight(value: WidgetClimateData): string {
-      console.log(value);
-      return ` ${value.data.max ?? expression.ru.noData}${
-        value.dim === expression.ru.changeDimensionLocale[0]
-          ? ` ${value.dim}`
-          : value.dim
-      }`;
-    },
-    EndPointTextLeft(value: WidgetClimateData): string {
-      return ` ${value.data.min ?? expression.ru.noData}${
-        value.dim === expression.ru.changeDimensionLocale[0]
-          ? ` ${value.dim}`
-          : value.dim
-      }`;
+    EndPointText(point: string, value: WidgetClimateData): string {
+      const pointNum =
+        point === this.endpoints[1] ? value.data.max : value.data.min;
+      const snowDimention = (val: string): string =>
+        val === expression.ru.noData ? "" : value.dim;
+      return `${pointNum}${snowDimention(pointNum)}`;
     },
   },
 });

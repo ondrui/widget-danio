@@ -10,7 +10,7 @@
       <svg ref="svg" class="svg-container" xmlns="http://www.w3.org/2000/svg">
         <text ref="text" :x="calcTextBlockMeterPosition" y="15">
           <tspan ref="tspan" class="tspan">
-            {{ showPoint(value.data.avg) }}
+            {{ value.data.avg }}
           </tspan>
           <tspan>
             {{ showDimension(value.data.avg) }}
@@ -78,9 +78,9 @@ export default defineComponent({
       const svgLength = this.progressBgWidth;
       const val = this.value.data;
       if (
-        val.max === undefined ||
-        val.min === undefined ||
-        val.avg === undefined
+        val.max === expression.ru.noData ||
+        val.min === expression.ru.noData ||
+        val.avg === expression.ru.noData
       ) {
         return svgLength / 2;
       }
@@ -162,15 +162,8 @@ export default defineComponent({
         text: value.def?.ru,
       };
     },
-    showDimension(val: string | undefined): string {
-      return !val
-        ? ""
-        : this.value.dim === expression.ru.changeDimensionLocale[0]
-        ? ` ${this.value.dim}`
-        : this.value.dim;
-    },
-    showPoint(val: string | undefined) {
-      return val ?? this.noData;
+    showDimension(val: string): string {
+      return val === expression.ru.noData ? "" : this.value.dim;
     },
   },
 });

@@ -39,6 +39,18 @@ export default defineComponent({
       ],
     };
   },
+  created() {
+    this.$watch(
+      () => this.$route,
+      () => {
+        if (this.$route.path === "/climate") {
+          console.log(
+            "Позже здесь будет размещена подробная инфа по каждому параметру!"
+          );
+        }
+      }
+    );
+  },
   computed: {
     getNavbarSelectOptions(): string[] {
       return this.$store.getters["climate/getNavbarSelectOptions"];

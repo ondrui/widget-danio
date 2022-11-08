@@ -31,6 +31,7 @@ import { defineComponent, PropType } from "vue";
 import ClimateWidgetItem from "./ClimateWidgetItem.vue";
 import { WidgetClimateData } from "@/types/typesClimate";
 import { expression } from "@/constants/climate";
+import { snowDimension } from "@/constants/functions";
 
 export default defineComponent({
   components: { ClimateWidgetItem },
@@ -51,9 +52,11 @@ export default defineComponent({
     EndPointText(point: string, value: WidgetClimateData): string {
       const pointNum =
         point === this.endpoints[1] ? value.data.max : value.data.min;
-      const snowDimention = (val: string): string =>
-        val === expression.ru.noData ? "" : value.dim;
-      return `${pointNum}${snowDimention(pointNum)}`;
+      return `${pointNum}${snowDimension(
+        pointNum,
+        expression.ru.noData,
+        value.dim
+      )}`;
     },
   },
 });

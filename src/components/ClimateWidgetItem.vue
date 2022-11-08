@@ -13,7 +13,7 @@
             {{ value.data.avg }}
           </tspan>
           <tspan>
-            {{ showDimension(value.data.avg) }}
+            {{ dimension(value.data.avg) }}
           </tspan>
         </text>
         <path class="svg-triangle" :d="createdTriagle" />
@@ -41,6 +41,7 @@ import {
   triagleSideLength,
   expression,
 } from "@/constants/climate";
+import { snowDimension } from "@/constants/functions";
 
 export default defineComponent({
   props: {
@@ -162,8 +163,8 @@ export default defineComponent({
         text: value.def?.ru,
       };
     },
-    showDimension(val: string): string {
-      return val === expression.ru.noData ? "" : this.value.dim;
+    dimension(val: string): string {
+      return snowDimension(val, expression.ru.noData, this.value.dim);
     },
   },
 });

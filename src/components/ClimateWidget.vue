@@ -9,8 +9,13 @@
       @select="select"
     />
     <ClimateWidgetList :values="getClimateData" />
-    <div class="btn-block">
-      <button class="btn-custom">Подробнее</button>
+    <div class="link-block">
+      <router-link class="link-custom" to="/climate">{{
+        expression.ru.navBarLink.replace(
+          /^./,
+          expression.ru.navBarLink[0].toUpperCase()
+        )
+      }}</router-link>
     </div>
   </div>
 </template>
@@ -37,6 +42,7 @@ export default defineComponent({
         ["usually", expression.ru.radioBtnCaption[0]],
         ["records", expression.ru.radioBtnCaption[1]],
       ],
+      expression: expression,
     };
   },
   created() {
@@ -83,14 +89,14 @@ export default defineComponent({
   overflow: hidden;
   margin-bottom: 30px;
 }
-.btn-block {
+.link-block {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 17px;
   margin-bottom: 20px;
 }
-.btn-custom {
+.link-custom {
   padding: 10px 95px;
   color: $color-black;
   background: none;
@@ -99,6 +105,7 @@ export default defineComponent({
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
+  text-decoration: none;
   cursor: pointer;
 }
 </style>

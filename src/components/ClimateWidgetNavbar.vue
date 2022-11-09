@@ -19,10 +19,17 @@
       </label>
     </div>
     <div class="select-nav">
-      <div>{{ selectCaptions[0] }}</div>
+      <div>
+        {{
+          expression.ru.selectCaptions[0].replace(
+            /^./,
+            expression.ru.selectCaptions[0][0].toUpperCase()
+          )
+        }}
+      </div>
       <select name="select" @change="selectHandler">
         <option v-for="option in options" :key="option" :value="option">
-          {{ `${option} ${selectCaptions[1]}` }}
+          {{ `${option} ${expression.ru.selectCaptions[1]}` }}
         </option>
       </select>
     </div>
@@ -32,7 +39,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import { radioBtnValue, expression } from "@/constants/climate";
+import { expression } from "@/constants/climate";
 
 export default defineComponent({
   props: {
@@ -69,9 +76,7 @@ export default defineComponent({
   },
   data() {
     return {
-      radioBtnValue: radioBtnValue,
-      radioBtnCaption: expression.ru.radioBtnCaption,
-      selectCaptions: expression.ru.selectCaptions,
+      expression: expression,
       defaultCheckedRadioBtn: this.radioValues[0][0],
     };
   },

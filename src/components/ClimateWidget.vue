@@ -11,10 +11,7 @@
     <ClimateWidgetList :values="getClimateData" />
     <div class="link-block">
       <router-link class="link-custom" to="/climate">{{
-        expression.ru.navBarLink.replace(
-          /^./,
-          expression.ru.navBarLink[0].toUpperCase()
-        )
+        expression.ru.navBarLink
       }}</router-link>
     </div>
   </div>
@@ -107,5 +104,8 @@ export default defineComponent({
   line-height: 16px;
   text-decoration: none;
   cursor: pointer;
+}
+.link-custom::first-letter {
+  text-transform: capitalize;
 }
 </style>

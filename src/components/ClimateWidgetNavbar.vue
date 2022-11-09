@@ -20,12 +20,7 @@
     </div>
     <div class="select-nav">
       <div>
-        {{
-          expression.ru.selectCaptions[0].replace(
-            /^./,
-            expression.ru.selectCaptions[0][0].toUpperCase()
-          )
-        }}
+        {{ expression.ru.selectCaptions[0] }}
       </div>
       <select name="select" @change="selectHandler">
         <option v-for="option in options" :key="option" :value="option">
@@ -170,6 +165,10 @@ export default defineComponent({
     font-size: 14px;
     line-height: 16px;
     color: $color-navbar-font;
+  }
+
+  & > div::first-letter {
+    text-transform: capitalize;
   }
 
   & select {

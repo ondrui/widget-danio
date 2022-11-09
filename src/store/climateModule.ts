@@ -11,8 +11,17 @@ import { HandlerEvent } from "@/handlers/HandlerEvent";
 import { radioBtnValue, expression } from "@/constants/climate";
 
 type State = {
+  /**
+   * Свойство содержит объект с данными с сервера для отображения виджета.
+   */
   values: StoreClimateData[];
+  /**
+   * Дата для которой отображаются данные. Приходит с сервера в виде timestamp.
+   */
   timestamp: number;
+  /**
+   * Формат отображения даты. Приходит с сервера в строковом формате.
+   */
   dateFormat: string;
 };
 
@@ -22,8 +31,13 @@ export const climateModule: Module<State, RootState> = {
     timestamp: 0,
     dateFormat: "",
   }),
-  actions: {},
   mutations: {
+    /**
+     * Заполняет store данными, полученными с бэкэнда.
+     * @param state Текущее состояние store.
+     * @param climate Массив с данными для отображения виджетом.
+     * @param format Формат отображения даты.
+     */
     setDataClimate(
       state: State,
       { climate, format }: { climate: StoreClimateData[]; format: string }
@@ -34,11 +48,24 @@ export const climateModule: Module<State, RootState> = {
       state.values = climate;
       state.dateFormat = format;
     },
+    /**
+     * Получение timestamp даты.
+     * @param state Текущее состояние store.
+     * @param timestamp Дата для которой отображаются данные.
+     */
     setTimestampClimate(state: State, timestamp: number): void {
       state.timestamp = timestamp;
     },
   },
   getters: {
+    /**
+     * Возвращает дату в виде строки в заданном формате.
+     * @param state Текущее состояние store.
+     * @param getters not used
+     * @param rootState not used
+     * @param rootGetters Доступ к глобальным геттерам.
+     * @example "30 сентября"
+     */
     getDate: (
       state: State,
       getters,
@@ -52,9 +79,15 @@ export const climateModule: Module<State, RootState> = {
       );
       return dateStr;
     },
-    getNavbarSelectOptions(state: State) {
-      const arr = [
-        ...state.values.reduce(
+    /**
+     * Возвращает массив временных интервалов для отображения в меню опций
+     * элемента select.
+     * @param state Текущее состояние store.
+     * @example ["10","20","30"]
+     */
+    getNavbarSelectOptions(state: State): string[] {
+      const arr: string[] = [
+        ...state.values.reduce<Set<string>>(
           (acc, { value }) => (
             value[0].data.forEach(
               ({ time }: { time: string }) => acc.add(time),
@@ -65,9 +98,16 @@ export const climateModule: Module<State, RootState> = {
           new Set()
         ),
       ].sort();
-      //console.log("getter climate", arr);
       return arr;
     },
+    /**
+     * Возвращает массив объектов с данными передаваемые из
+     * store в компоненты для отображения.
+     * @param state Текущее состояние store.
+     * @param radio -
+     * @param select - Интервал времени, который задается выбором опции
+     * элемента select в компоненте Navbar.vue.
+     */
     getClimateData:
       (state: State) =>
       ({
@@ -87,7 +127,6 @@ export const climateModule: Module<State, RootState> = {
             /**
              * Функция будет реализована позже. Пока всегда возвращает первый элемент массива.
              * @param prop
-             * @returns
              */
             const findDimValue: (
               prop: ClimateValue[],
@@ -120,5 +159,8 @@ export const climateModule: Module<State, RootState> = {
           .filter((i) => i !== undefined);
       },
   },
+  /**
+   * Задаем собственное пространство имён для этого модуля.
+   */
   namespaced: true,
 };

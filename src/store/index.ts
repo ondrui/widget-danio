@@ -138,13 +138,13 @@ const store = createStore<RootState>({
      * Возвращает объект с настройками фильтров, полученными из store
      * @param state Текущее состояние store.
      * @example
-     * [
+     * {
      * 1: {name: 'Внимание', amount: 3, status: 0}
      * 2: {name: 'Опасно', amount: 5, status: 0}
      * 3: {name: 'Общие', amount: 2, status: 0}
      * 5: {name: 'Очень опасно', amount: 0, status: 2}
      * 6: {name: 'Неблагоприятно', amount: 0, status: 2}
-     * ];
+     * }
      */
     getFilters: (state: RootState): Filters => state.filters,
     /**

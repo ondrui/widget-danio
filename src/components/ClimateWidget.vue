@@ -31,18 +31,42 @@ export default defineComponent({
   },
   data() {
     return {
+      /**
+       * Свойства передаваемые в store для изменения данных для отображения.
+       * Значения определяются выбранными радио кнопками и селектом
+       * в компоненте ClimateWidgetNavbar.vue.
+       */
       options: {
+        /**
+         * Свойство содержит значение атрибута value радиокнопки
+         * в компоненте Navbar.vue.
+         */
         radio: "usually",
+        /**
+         * Свойство содержит значение интервала времени, который задается
+         * выбором опции элемента select в компоненте Navbar.vue.
+         */
         select: "",
       },
+      /**
+       * Массив с данными для отрисовки радио кнопок.
+       */
       radioValues: [
         ["usually", expression.ru.radioBtnCaption[0]],
         ["records", expression.ru.radioBtnCaption[1]],
       ],
+      /**
+       * Определяем импортированные строковые константы с учетом локали
+       * для применения в шаблоне компоненты.
+       */
       expression: expression,
     };
   },
   created() {
+    /**
+     * Функция следит за строкой URL и выводит сообщение в консоль
+     * при определенном совпадении части строки в URL.
+     */
     this.$watch(
       () => this.$route,
       () => {
@@ -55,20 +79,41 @@ export default defineComponent({
     );
   },
   computed: {
+    /**
+     * Возвращает из store массив временных интервалов для отображения в меню опций
+     * элемента select.
+     */
     getNavbarSelectOptions(): string[] {
       return this.$store.getters["climate/getNavbarSelectOptions"];
     },
+    /**
+     * Возвращает массив объектов с данными передаваемые из
+     * store в компоненты для отображения.
+     */
     getClimateData(): WidgetClimateData[] {
       return this.$store.getters["climate/getClimateData"](this.options);
     },
+    /**
+     * Возвращает из store дату в виде строки в заданном формате.
+     */
     getDate(): string {
       return this.$store.getters["climate/getDate"];
     },
   },
   methods: {
+    /**
+     * Обработчик для радио кнопок.
+     * @param val - содержит значение атрибута value радиокнопки
+     * в компоненте Navbar.vue.
+     */
     radio(val: string): void {
       this.options.radio = val;
     },
+    /**
+     * Обработчик для селекта.
+     * @param val - содержит значение интервала времени, который задается
+     * выбором опции элемента select в компоненте Navbar.vue.
+     */
     select(val: string): void {
       this.options.select = val;
     },

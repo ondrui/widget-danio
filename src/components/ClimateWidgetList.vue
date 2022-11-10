@@ -36,6 +36,10 @@ import { snowDimension } from "@/constants/functions";
 export default defineComponent({
   components: { ClimateWidgetItem },
   props: {
+    /**
+     * Массив объектов с данными передаваемые из
+     * store в компоненты для отображения.
+     */
     values: {
       type: Array as PropType<WidgetClimateData[]>,
       required: true,
@@ -43,12 +47,27 @@ export default defineComponent({
   },
   data() {
     return {
+      /**
+       * Определяем импортированные строковые константы с учетом локали
+       * для применения в шаблоне компоненты.
+       */
       prepositions: expression.ru.prepositions,
+      /**
+       * Массив для отрисовки и размещения правого и левого блока с
+       * подписями и значениями прогресс бара.
+       */
       endpoints: ["left", "right"],
     };
   },
-  computed: {},
   methods: {
+    /**
+     * Возвращает отформатированную строку с минимальным и максимальным значением
+     * параметра и его размерностью.
+     * @param point - Задает с какой стороны будет отрисовываться блок с подписями.
+     * @param value - Объект с данными передаваемые из store в компоненты
+     * для отображения.
+     * @example "-3.6°"
+     */
     EndPointText(point: string, value: WidgetClimateData): string {
       const pointNum =
         point === this.endpoints[1] ? value.data.max : value.data.min;

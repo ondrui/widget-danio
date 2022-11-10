@@ -2,7 +2,7 @@
  * Вспомогательный интерфейс описывает наличие локализованного
  * названия параметра.
  */
-interface Locales {
+export interface Locales {
   ru?: string;
   en?: string;
 }

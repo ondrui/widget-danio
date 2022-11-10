@@ -2,8 +2,8 @@
   <div class="container-item">
     <div class="block-text">
       <div class="title">{{ value.title.ru }}</div>
-      <div v-if="SubtitleToProgressName(value).isShow" class="subtitle">
-        {{ SubtitleToProgressName(value).text }}
+      <div v-if="subtitleToProgressName(value).isShow" class="subtitle">
+        {{ subtitleToProgressName(value).text }}
       </div>
     </div>
     <div class="chart-item">
@@ -143,21 +143,16 @@ export default defineComponent({
   },
   methods: {
     resizeBrowserHandler(): void {
-      const svg = this.$refs.svg as SVGGraphicsElement;
-      const text = this.$refs.text as SVGGraphicsElement;
-      const tspan = this.$refs.tspan as SVGTextContentElement;
-      const widthSVG = Math.round(svg.getBoundingClientRect().width);
-      const widthNumTextBlockMeter = Math.round(
-        tspan.getBoundingClientRect().width
-      );
-      const widthTextBlockMeter = Math.round(
-        text.getBoundingClientRect().width
-      );
-      this.SVGWidth = widthSVG;
-      this.textNumBlockMeterWidth = widthNumTextBlockMeter;
-      this.textBlockMeterWidth = widthTextBlockMeter;
+      const getWidth = (element: string): number => {
+        return Math.round(
+          (this.$refs[element] as SVGElement).getBoundingClientRect().width
+        );
+      };
+      this.SVGWidth = getWidth("svg");
+      this.textNumBlockMeterWidth = getWidth("text");
+      this.textBlockMeterWidth = getWidth("tspan");
     },
-    SubtitleToProgressName(value: WidgetClimateData): SubtitleToProgressName {
+    subtitleToProgressName(value: WidgetClimateData): SubtitleToProgressName {
       return {
         isShow: !!value.def?.ru,
         text: value.def?.ru,

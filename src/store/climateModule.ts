@@ -6,6 +6,7 @@ import {
   ClimateValue,
   ParamsValue,
   SelectRadioData,
+  Locales,
 } from "@/types/typesClimate";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
 import { radioBtnValue, expression } from "@/constants/climate";
@@ -104,7 +105,8 @@ export const climateModule: Module<State, RootState> = {
      * Возвращает массив объектов с данными передаваемые из
      * store в компоненты для отображения.
      * @param state Текущее состояние store.
-     * @param radio -
+     * @param radio - Содержит значение атрибута value радиокнопки
+     * в компоненте Navbar.vue.
      * @param select - Интервал времени, который задается выбором опции
      * элемента select в компоненте Navbar.vue.
      */
@@ -117,46 +119,90 @@ export const climateModule: Module<State, RootState> = {
         radio: string;
         select: string;
       }): Array<WidgetClimateData | undefined> => {
+        /**
+         * Функция проверяет значение параметра и если оно равно undefined
+         * возвращает строку определенную в expression.ru.noData или значение.
+         * @param val - Значение параметра.
+         */
         const numRender = (val: string | undefined): string =>
           val ?? expression.ru.noData;
+        /**
+         * Функция проверяет требуется ли модификация при отображении размерности
+         * параметра. Например добавляет пробел перед "см". Возвращает исходную или
+         * модифицированную строку с размерностью.
+         * @param dim - Строка с размерностью.
+         * @example " см"
+         */
         const dimRender = (dim: string): string =>
           dim === expression.ru.changeDimensionLocale[0] ? ` ${dim}` : dim;
 
-        return state.values
-          .map(({ value, title, def }) => {
+        return (
+          state.values
+            .map(
+              ({
+                value,
+                title,
+                def,
+              }: {
+                value: ClimateValue[];
+                title: Locales;
+                def?: Locales;
+              }) => {
+                /**
+                 * Функция фильтрации массива с данными в зависимости от требуемой
+                 * размерности будет реализована позже.
+                 * Пока она всегда возвращает первый элемент массива.
+                 * @param prop - Исходный массив с данными.
+                 * @param [dim] - Размерность.
+                 */
+                const findDimValue: (
+                  prop: ClimateValue[],
+                  dim?: string
+                ) => ClimateValue = (prop) => prop[0];
+                const { dim, data } = findDimValue(value);
+                /**
+                 * Функция возвращает объект с данными соответствующий выбранному
+                 * интервалу который задается выбором опции
+                 * элемента select в компоненте Navbar.vue.
+                 */
+                const dataSelect = data.find(
+                  ({ time }: { time: string }) => time === select
+                );
+
+                /**
+                 * Если требуемых данных нет в массив запишется undefined.
+                 */
+                if (dataSelect === undefined) return undefined;
+
+                /**
+                 * Функция возвращает данные соответствующие значению атрибута value радиокнопки в компоненте Navbar.vue.
+                 */
+                const dataSelectRadio = (): SelectRadioData => {
+                  const min =
+                    radioBtnValue[radio as keyof typeof radioBtnValue][0];
+                  const max =
+                    radioBtnValue[radio as keyof typeof radioBtnValue][1];
+                  return {
+                    min: numRender(dataSelect[min as keyof ParamsValue]),
+                    max: numRender(dataSelect[max as keyof ParamsValue]),
+                    avg: numRender(dataSelect.avg),
+                  };
+                };
+
+                return {
+                  title,
+                  def,
+                  dim: dimRender(dim),
+                  data: dataSelectRadio(),
+                };
+              }
+            )
             /**
-             * Функция будет реализована позже. Пока всегда возвращает первый элемент массива.
-             * @param prop
+             * Убираем из полученного массива с данными для виджета элементы со значением
+             *  undefined.
              */
-            const findDimValue: (
-              prop: ClimateValue[],
-              dim?: string
-            ) => ClimateValue = (prop) => prop[0];
-            const { dim, data } = findDimValue(value);
-            const dataSelect = data.find(
-              ({ time }: { time: string }) => time === select
-            );
-
-            if (dataSelect === undefined) return undefined;
-
-            const dataSelectRadio = (): SelectRadioData => {
-              const min = radioBtnValue[radio as keyof typeof radioBtnValue][0];
-              const max = radioBtnValue[radio as keyof typeof radioBtnValue][1];
-              return {
-                min: numRender(dataSelect[min as keyof ParamsValue]),
-                max: numRender(dataSelect[max as keyof ParamsValue]),
-                avg: numRender(dataSelect.avg),
-              };
-            };
-
-            return {
-              title,
-              def,
-              dim: dimRender(dim),
-              data: dataSelectRadio(),
-            };
-          })
-          .filter((i) => i !== undefined);
+            .filter((i: WidgetClimateData | undefined) => i !== undefined)
+        );
       },
   },
   /**

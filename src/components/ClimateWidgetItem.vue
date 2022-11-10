@@ -45,39 +45,82 @@ import { snowDimension } from "@/constants/functions";
 
 export default defineComponent({
   props: {
+    /**
+     * Объект с данными для отображения.
+     * @example
+     * {
+     *  "title":{"ru":"Температура","en":"Temperature"},
+     *  "dim":"°",
+     *  "data":{"min":"-3.6","max":"5.1","avg":"н/д"}
+     * }
+     */
     value: {
       type: Object as PropType<WidgetClimateData>,
       required: true,
     },
-    maxWidth: {
-      type: Number,
-      default: 65,
-    },
   },
   data() {
     return {
+      /**
+       * Ширина элемента SVG, в котором отрисовывается прогресс бар с меткой
+       * и средним значением.
+       */
       SVGWidth: 300,
+      /**
+       * Массив в названиями классов элементов path прогресс бара.
+       */
       classNameForPath: svgClassForPath,
+      /**
+       * Ширина текстового блока, в котором размещается среднее значение параметра и его размерность.
+       * Используется для вычисления координат расположения текстового блока.
+       */
       textNumBlockMeterWidth: 0,
+      /**
+       * Ширина элемента tspan , в котором размещается среднее значение параметра.
+       * Используется для вычисления координат расположения текстового блока.
+       */
       textBlockMeterWidth: 0,
-      prepositions: expression.ru.prepositions,
-      noData: expression.ru.noData,
     };
   },
   mounted() {
+    /**
+     * После монтирования компоненты вызываем функцию обработчик, которая
+     * отвечает за вычисление и установку следующих значений:
+     * SVGWidth, textNumBlockMeterWidth, textBlockMeterWidth.
+     */
     this.resizeBrowserHandler();
+    /**
+     * Устанавливаем оброботчик на событие resize, которое срабатывает при
+     * изменении размера окна. Функция обработчик описана выше.
+     */
     window.addEventListener("resize", this.resizeBrowserHandler);
   },
   unmounted() {
+    /**
+     * Удаляем оброботчик на событие resize когда компонент размонтирован.
+     */
     window.removeEventListener("resize", this.resizeBrowserHandler);
   },
   computed: {
+    /**
+     * Вычисляем ширину элемента индикации максимального значения
+     * прогресс бара.
+     */
     progressBgWidth(): number {
       return this.SVGWidth - thicknessProgress / 2;
     },
+    /**
+     * Вычисляем и возвращаем ширину элемента индикации среднего значения
+     * прогресс бара.
+     */
     calcMeterLength(): number {
       const svgLength = this.progressBgWidth;
       const val = this.value.data;
+      /**
+       * Если отсутствует максимальное, минимальное или среднее значение
+       * параметра, то метку индикации среднего значения
+       * прогресс бара устанавливается посередине.
+       */
       if (
         val.max === expression.ru.noData ||
         val.min === expression.ru.noData ||
@@ -85,13 +128,24 @@ export default defineComponent({
       ) {
         return svgLength / 2;
       }
-      const minMaxsegmentLength = parseInt(val.max) - parseInt(val.min);
-      const avgSegmentLength = parseInt(val.avg) - parseInt(val.min);
+      /**
+       * Логика вычисления ширины индикации среднего значения
+       * прогресс бара относительно ширины SVG элемента.
+       */
+      const length = (val1: string, val2: string): number =>
+        parseInt(val1) - parseInt(val2);
+
+      const minMaxsegmentLength = length(val.max, val.min);
+      const avgSegmentLength = length(val.avg, val.min);
 
       const x = Math.round(
         (svgLength * avgSegmentLength) / minMaxsegmentLength
       );
 
+      /**
+       * Условия ограничения максимальной и минимальной ширины
+       * индикации среднего значения прогресс бара.
+       */
       if (x <= thicknessProgress + triagleSideLength) {
         return thicknessProgress / 2 + triagleSideLength - 1;
       }
@@ -102,6 +156,10 @@ export default defineComponent({
 
       return x;
     },
+    /**
+     * Возвращает массив объектов, которые содержат значение атрибута d
+     * элементов path прогресс бара и класс CSS.
+     */
     showProgressPaths(): PathSVG[] {
       const pathStr = (prop: number): string =>
         `M 4 33 H ${prop} A 4 4 180 0 0 ${prop} 25 H 4 A 4 4 0 0 0 5 33`;
@@ -116,6 +174,9 @@ export default defineComponent({
       });
       return paths;
     },
+    /**
+     *
+     */
     calcTextBlockMeterPosition(): number {
       const widthText = this.textBlockMeterWidth;
       const diffRightBorder =
@@ -135,6 +196,9 @@ export default defineComponent({
         thicknessProgress / 2
       );
     },
+    /**
+     *
+     */
     createdTriagle(): string {
       return `M ${-3.5 + this.calcMeterLength} 18 L ${
         1 + this.calcMeterLength
@@ -142,7 +206,14 @@ export default defineComponent({
     },
   },
   methods: {
+    /**
+     *
+     */
     resizeBrowserHandler(): void {
+      /**
+       *
+       * @param element
+       */
       const getWidth = (element: string): number => {
         return Math.round(
           (this.$refs[element] as SVGElement).getBoundingClientRect().width
@@ -152,12 +223,20 @@ export default defineComponent({
       this.textNumBlockMeterWidth = getWidth("text");
       this.textBlockMeterWidth = getWidth("tspan");
     },
+    /**
+     *
+     * @param value
+     */
     subtitleToProgressName(value: WidgetClimateData): SubtitleToProgressName {
       return {
         isShow: !!value.def?.ru,
         text: value.def?.ru,
       };
     },
+    /**
+     *
+     * @param val
+     */
     dimension(val: string): string {
       return snowDimension(val, expression.ru.noData, this.value.dim);
     },

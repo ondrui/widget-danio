@@ -38,32 +38,53 @@ import { expression } from "@/constants/climate";
 
 export default defineComponent({
   props: {
+    /**
+     * Массив временных интервалов для отображения в меню опций элемента select.
+     * @example ["10","20","30"]
+     */
     options: {
       type: Array as PropType<string[]>,
       required: true,
     },
+    /**
+     * Дата в виде строки в заданном формате.
+     * @example "30 сентября"
+     */
     date: {
       type: String,
       required: true,
     },
+    /**
+     * Массив с данными для отрисовки радио кнопок.
+     * @example [["usually","обычно"],["records","рекорды"]]
+     */
     radioValues: {
       type: Array as PropType<string[][]>,
       required: true,
     },
+    /**
+     * входной параметр modelValue options.radio определенный в родителе.
+     */
     radio: {
       type: String,
       required: true,
     },
+    /**
+     * входной параметр modelValue options.select определенный в родителе.
+     */
     select: {
       type: String,
       required: true,
     },
   },
+  /**
+   * Аннотация типов для событий.
+   */
   emits: {
-    radio(payload: string) {
+    radio(payload: string): string {
       return payload;
     },
-    select(payload: string) {
+    select(payload: string): string {
       return payload;
     },
     "update:radio": String,
@@ -71,23 +92,45 @@ export default defineComponent({
   },
   data() {
     return {
+      /**
+       * Определяем импортированные строковые константы с учетом локали
+       * для применения в шаблоне компоненты.
+       */
       expression: expression,
-      defaultCheckedRadioBtn: this.radioValues[0][0],
     };
   },
   watch: {
+    /**
+     * Устанавливаем первоначальное значение селекта, после получения
+     * массива временных интервалов для отображения в меню опций.
+     */
     options() {
       this.$emit("select", this.options[0]);
     },
   },
   methods: {
+    /**
+     * Используется для указания стилей внешнего вида кнопок при их выборе.
+     * @param value - содержит значение атрибута value радиокнопки.
+     */
     isChecked(value: string): boolean {
       return this.radio === value;
     },
-    radioHandler(e: Event) {
+    /**
+     * Обработчик события для радио кнопок.
+     * Отправляет значение атрибута value радиокнопки в родительский компонент.
+     * @param e - объект Event.
+     */
+    radioHandler(e: Event): void {
       this.$emit("update:radio", (e.target as HTMLInputElement).value);
     },
-    selectHandler(e: Event) {
+    /**
+     * Обработчик события для элемента select.
+     * Отправляет значение атрибута value опции элемента select
+     * в родительский компонент.
+     * @param e - объект Event.
+     */
+    selectHandler(e: Event): void {
       this.$emit("update:select", (e.target as HTMLSelectElement).value);
     },
   },

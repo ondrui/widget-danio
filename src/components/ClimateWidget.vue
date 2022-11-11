@@ -10,10 +10,10 @@
       :locales="getLocales"
     />
     <ClimateWidgetList :values="getClimateData" :locales="getLocales" />
-    <div class="link-block">
-      <router-link class="link-custom" to="/climate">{{
-        expression[getLocales].navBarLink
-      }}</router-link>
+    <div class="btn-block">
+      <button class="btn-custom" @click="detail">
+        {{ expression[getLocales].navBarLink }}
+      </button>
     </div>
   </div>
 </template>
@@ -58,6 +58,13 @@ export default defineComponent({
        * для применения в шаблоне компоненты.
        */
       expression: expression,
+      pathParams: {
+        locales: "",
+        widget: "",
+      } as {
+        locales: string;
+        widget?: string;
+      },
     };
   },
   created() {
@@ -65,20 +72,25 @@ export default defineComponent({
       ["usually", expression[this.getLocales].radioBtnCaption[0]],
       ["records", expression[this.getLocales].radioBtnCaption[1]],
     ];
+  },
+  watch: {
     /**
      * Функция следит за строкой URL и выводит сообщение в консоль
      * при определенном совпадении части строки в URL.
      */
-    this.$watch(
-      () => this.$route,
-      () => {
-        if (this.$route.path === "/climate") {
-          console.log(
-            "Позже здесь будет размещена подробная инфа по каждому параметру!"
-          );
-        }
+    "$route.params.locales"(val, past) {
+      console.log(val);
+      console.log(past);
+      this.$store.commit("climate/setLocales", val);
+    },
+    "$route.params.widget"(val) {
+      console.log(val);
+      if (this.$route.params.widget === "detail") {
+        console.log(
+          "Позже здесь будет размещена подробная инфа по каждому параметру!"
+        );
       }
-    );
+    },
   },
   computed: {
     /**
@@ -126,6 +138,12 @@ export default defineComponent({
     select(val: string): void {
       this.options.select = val;
     },
+    detail(): void {
+      this.$router.push({
+        name: "main",
+        params: { locales: this.getLocales, widget: "detail" },
+      });
+    },
   },
 });
 </script>
@@ -140,14 +158,14 @@ export default defineComponent({
   overflow: hidden;
   margin-bottom: 30px;
 }
-.link-block {
+.btn-block {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 17px;
   margin-bottom: 20px;
 }
-.link-custom {
+.btn-custom {
   padding: 10px 95px;
   color: $color-black;
   background: none;
@@ -156,10 +174,9 @@ export default defineComponent({
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
-  text-decoration: none;
   cursor: pointer;
 }
-.link-custom::first-letter {
+.btn-custom::first-letter {
   text-transform: capitalize;
 }
 </style>

@@ -69,6 +69,7 @@ export const climateModule: Module<State, RootState> = {
      * @param locales Языковая метка.
      */
     setLocales(state: State, locales: string): void {
+      console.log("mutation", locales);
       state.locales = locales;
     },
   },

@@ -20,11 +20,11 @@
     </div>
     <div class="select-nav">
       <div>
-        {{ expression.ru.selectCaptions[0] }}
+        {{ expression[locales].selectCaptions[0] }}
       </div>
       <select name="select" @change="selectHandler">
         <option v-for="option in options" :key="option" :value="option">
-          {{ `${option} ${expression.ru.selectCaptions[1]}` }}
+          {{ `${option} ${expression[locales].selectCaptions[1]}` }}
         </option>
       </select>
     </div>
@@ -35,6 +35,7 @@
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
 import { expression } from "@/constants/climate";
+import { ExpressionLocales } from "@/types/typesClimate";
 
 export default defineComponent({
   props: {
@@ -74,6 +75,14 @@ export default defineComponent({
      */
     select: {
       type: String,
+      required: true,
+    },
+    /**
+     * Языковая метка для определения локали.
+     * @example "ru"
+     */
+    locales: {
+      type: String as PropType<keyof ExpressionLocales>,
       required: true,
     },
   },

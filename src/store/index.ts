@@ -125,6 +125,14 @@ const store = createStore<RootState>({
           ? FilterStatus.Removed
           : FilterStatus.Applied;
     },
+    /**
+     * Устанавливает языковую метку для определения локали.
+     * @param state Текущее состояние store.
+     * @param locales Языковая метка.
+     */
+    setLocales(state: RootState, locales: string): void {
+      state.locales = locales;
+    },
   },
   getters: {
     /**

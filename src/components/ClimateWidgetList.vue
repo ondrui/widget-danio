@@ -12,7 +12,7 @@
             v-for="(value, i) in values"
             :key="i"
           >
-            <div>{{ prepositions[index] }}</div>
+            <div>{{ expression[locales].prepositions[index] }}</div>
             {{ EndPointText(point, value) }}
           </div>
         </div>
@@ -21,6 +21,7 @@
         v-for="value in values"
         :key="value.title?.en?.slice(0, 4)"
         :value="value"
+        :locales="locales"
       />
     </div>
   </div>
@@ -29,7 +30,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import ClimateWidgetItem from "./ClimateWidgetItem.vue";
-import { WidgetClimateData } from "@/types/typesClimate";
+import { ExpressionLocales, WidgetClimateData } from "@/types/typesClimate";
 import { expression } from "@/constants/climate";
 import { snowDimension } from "@/constants/functions";
 
@@ -44,6 +45,14 @@ export default defineComponent({
       type: Array as PropType<WidgetClimateData[]>,
       required: true,
     },
+    /**
+     * Языковая метка для определения локали.
+     * @example "ru"
+     */
+    locales: {
+      type: String as PropType<keyof ExpressionLocales>,
+      required: true,
+    },
   },
   data() {
     return {
@@ -51,7 +60,7 @@ export default defineComponent({
        * Определяем импортированные строковые константы с учетом локали
        * для применения в шаблоне компоненты.
        */
-      prepositions: expression.ru.prepositions,
+      expression: expression,
       /**
        * Массив для отрисовки и размещения правого и левого блока с
        * подписями и значениями прогресс бара.
@@ -73,7 +82,7 @@ export default defineComponent({
         point === this.endpoints[1] ? value.data.max : value.data.min;
       return `${pointNum}${snowDimension(
         pointNum,
-        expression.ru.noData,
+        expression[this.locales].noData,
         value.dim
       )}`;
     },

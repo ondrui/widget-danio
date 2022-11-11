@@ -7,11 +7,12 @@
       v-model:radio="options.radio"
       v-model:select="options.select"
       @select="select"
+      :locales="getLocales"
     />
-    <ClimateWidgetList :values="getClimateData" />
+    <ClimateWidgetList :values="getClimateData" :locales="getLocales" />
     <div class="link-block">
       <router-link class="link-custom" to="/climate">{{
-        expression.ru.navBarLink
+        expression[getLocales].navBarLink
       }}</router-link>
     </div>
   </div>
@@ -21,7 +22,7 @@
 import { defineComponent } from "vue";
 import ClimateWidgetNavbar from "./ClimateWidgetNavbar.vue";
 import ClimateWidgetList from "./ClimateWidgetList.vue";
-import { WidgetClimateData } from "@/types/typesClimate";
+import { ExpressionLocales, WidgetClimateData } from "@/types/typesClimate";
 import { expression } from "@/constants/climate";
 
 export default defineComponent({
@@ -51,10 +52,7 @@ export default defineComponent({
       /**
        * Массив с данными для отрисовки радио кнопок.
        */
-      radioValues: [
-        ["usually", expression.ru.radioBtnCaption[0]],
-        ["records", expression.ru.radioBtnCaption[1]],
-      ],
+      radioValues: [] as string[][],
       /**
        * Определяем импортированные строковые константы с учетом локали
        * для применения в шаблоне компоненты.
@@ -63,6 +61,10 @@ export default defineComponent({
     };
   },
   created() {
+    this.radioValues = [
+      ["usually", expression[this.getLocales].radioBtnCaption[0]],
+      ["records", expression[this.getLocales].radioBtnCaption[1]],
+    ];
     /**
      * Функция следит за строкой URL и выводит сообщение в консоль
      * при определенном совпадении части строки в URL.
@@ -98,6 +100,13 @@ export default defineComponent({
      */
     getDate(): string {
       return this.$store.getters["climate/getDate"];
+    },
+    /**
+     * Возвращает языковую метку для определения локали.
+     * @example "ru"
+     */
+    getLocales(): keyof ExpressionLocales {
+      return this.$store.getters["climate/getLocales"];
     },
   },
   methods: {

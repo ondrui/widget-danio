@@ -15,7 +15,9 @@
       }"
       :key="`fw-${filter}`"
       :tabindex="isDisabledFilter(filter) ? '' : 0"
-      :title="isLastFilter(filter) ? messageForOneFilter : ''"
+      :title="
+        isLastFilter(filter) ? expression[locales].messageForOneFilter : ''
+      "
     >
       <div>{{ filter.name }}</div>
       <span class="filter-count">{{ filter.amount }}</span>
@@ -50,7 +52,7 @@
       }"
       :tabindex="isDisabledShowAll ? '' : 0"
     >
-      {{ valueButtonShowAll }}
+      {{ expression[locales].valueButtonShowAll }}
     </div>
   </div>
 </template>
@@ -58,7 +60,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import { Filters, Filter } from "@/types/typesAlerts";
+import { Filters, Filter, ExpressionLocales } from "@/types/typesAlerts";
 import { FilterStatus, filterIcon, expression } from "@/constants/alerts";
 
 export default defineComponent({
@@ -85,11 +87,18 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    /**
+     * Языковая метка для определения локали.
+     * @example "ru"
+     */
+    locales: {
+      type: String as PropType<keyof ExpressionLocales>,
+      required: true,
+    },
   },
   data() {
     return {
-      messageForOneFilter: expression.ru.messageForOneFilter,
-      valueButtonShowAll: expression.ru.valueButtonShowAll,
+      expression: expression,
     };
   },
   computed: {

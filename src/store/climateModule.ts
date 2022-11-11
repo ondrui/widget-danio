@@ -7,6 +7,7 @@ import {
   ParamsValue,
   SelectRadioData,
   Locales,
+  ExpressionLocales,
 } from "@/types/typesClimate";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
 import { radioBtnValue, expression } from "@/constants/climate";
@@ -24,6 +25,10 @@ type State = {
    * Формат отображения даты. Приходит с сервера в строковом формате.
    */
   dateFormat: string;
+  /**
+   * Языковая метка для определения локали.
+   */
+  locales: string;
 };
 
 export const climateModule: Module<State, RootState> = {
@@ -31,6 +36,7 @@ export const climateModule: Module<State, RootState> = {
     values: [],
     timestamp: 0,
     dateFormat: "",
+    locales: "ru",
   }),
   mutations: {
     /**
@@ -57,26 +63,33 @@ export const climateModule: Module<State, RootState> = {
     setTimestampClimate(state: State, timestamp: number): void {
       state.timestamp = timestamp;
     },
+    /**
+     * Устанавливает языковую метку для определения локали.
+     * @param state Текущее состояние store.
+     * @param locales Языковая метка.
+     */
+    setLocales(state: State, locales: string): void {
+      state.locales = locales;
+    },
   },
   getters: {
     /**
+     * Возвращает языковую метку для определения локали.
+     * @param state Текущее состояние store.
+     * @example
+     * "ru"
+     */
+    getLocales: (state: State): string => state.locales,
+    /**
      * Возвращает дату в виде строки в заданном формате.
      * @param state Текущее состояние store.
-     * @param getters not used
-     * @param rootState not used
-     * @param rootGetters Доступ к глобальным геттерам.
      * @example "30 сентября"
      */
-    getDate: (
-      state: State,
-      getters,
-      rootState: RootState,
-      rootGetters
-    ): string => {
+    getDate: (state: State): string => {
       const dateStr = HandlerEvent.setTimeFormat(
         state.timestamp,
         state.dateFormat,
-        rootGetters.getLocales
+        state.locales
       );
       return dateStr;
     },
@@ -125,7 +138,7 @@ export const climateModule: Module<State, RootState> = {
          * @param val - Значение параметра.
          */
         const numRender = (val: string | undefined): string =>
-          val ?? expression.ru.noData;
+          val ?? expression[state.locales as keyof ExpressionLocales].noData;
         /**
          * Функция проверяет требуется ли модификация при отображении размерности
          * параметра. Например добавляет пробел перед "см". Возвращает исходную или
@@ -134,7 +147,11 @@ export const climateModule: Module<State, RootState> = {
          * @example " см"
          */
         const dimRender = (dim: string): string =>
-          dim === expression.ru.changeDimensionLocale[0] ? ` ${dim}` : dim;
+          dim ===
+          expression[state.locales as keyof ExpressionLocales]
+            .changeDimensionLocale[0]
+            ? ` ${dim}`
+            : dim;
 
         return (
           state.values

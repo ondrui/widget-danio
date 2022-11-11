@@ -1,7 +1,7 @@
 <template>
   <div class="container-item">
     <div class="block-text">
-      <div class="title">{{ value.title.ru }}</div>
+      <div class="title">{{ value.title[locales] }}</div>
       <div v-if="subtitleToProgressName(value).isShow" class="subtitle">
         {{ subtitleToProgressName(value).text }}
       </div>
@@ -33,6 +33,7 @@ import {
   WidgetClimateData,
   PathSVG,
   SubtitleToProgressName,
+  ExpressionLocales,
 } from "@/types/typesClimate";
 import { defineComponent, PropType } from "vue";
 import {
@@ -56,6 +57,14 @@ export default defineComponent({
      */
     value: {
       type: Object as PropType<WidgetClimateData>,
+      required: true,
+    },
+    /**
+     * Языковая метка для определения локали.
+     * @example "ru"
+     */
+    locales: {
+      type: String as PropType<keyof ExpressionLocales>,
       required: true,
     },
   },
@@ -122,9 +131,9 @@ export default defineComponent({
        * прогресс бара устанавливается посередине.
        */
       if (
-        val.max === expression.ru.noData ||
-        val.min === expression.ru.noData ||
-        val.avg === expression.ru.noData
+        val.max === expression[this.locales].noData ||
+        val.min === expression[this.locales].noData ||
+        val.avg === expression[this.locales].noData
       ) {
         return svgLength / 2;
       }
@@ -229,8 +238,8 @@ export default defineComponent({
      */
     subtitleToProgressName(value: WidgetClimateData): SubtitleToProgressName {
       return {
-        isShow: !!value.def?.ru,
-        text: value.def?.ru,
+        isShow: !!value.def,
+        text: value.def ? value.def[this.locales] : "",
       };
     },
     /**
@@ -238,7 +247,11 @@ export default defineComponent({
      * @param val
      */
     dimension(val: string): string {
-      return snowDimension(val, expression.ru.noData, this.value.dim);
+      return snowDimension(
+        val,
+        expression[this.locales].noData,
+        this.value.dim
+      );
     },
   },
 });

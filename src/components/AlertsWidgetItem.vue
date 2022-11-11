@@ -58,6 +58,14 @@ export default defineComponent({
      * 'day-info-zero-index'  предупреждению с индексом 0.
      */
     index: { type: Number, required: true },
+    /**
+     * Языковая метка для определения локали.
+     * @example "ru"
+     */
+    locales: {
+      type: String as PropType<keyof ExpressionLocales>,
+      required: true,
+    },
   },
   data() {
     return {
@@ -106,7 +114,7 @@ export default defineComponent({
         return HandlerEvent.setTimeFormat(
           this.event.eventTime,
           this.event.timeFormat,
-          this.$store.getters.getLocales
+          this.locales
         );
       }
 
@@ -116,29 +124,25 @@ export default defineComponent({
        * Логика добавления доп слов после времени.
        */
       return `${
-        expression[this.$store.getters.getLocales as keyof ExpressionLocales]
-          .timeMarker[4]
+        expression[this.locales as keyof ExpressionLocales].timeMarker[4]
       } ${HandlerEvent.setTimeFormat(
         timeStamp1,
         this.event.timeFormat,
-        this.$store.getters.getLocales
+        this.locales
       )} ${
         this.getTimeMarker(timeStamp1) ===
-        expression[this.$store.getters.getLocales as keyof ExpressionLocales]
-          .timeMarker[0]
+        expression[this.locales as keyof ExpressionLocales].timeMarker[0]
           ? this.getTimeMarker(timeStamp1).toLocaleLowerCase()
           : ""
       } ${
-        expression[this.$store.getters.getLocales as keyof ExpressionLocales]
-          .timeMarker[5]
+        expression[this.locales as keyof ExpressionLocales].timeMarker[5]
       } ${HandlerEvent.setTimeFormat(
         timeStamp2,
         this.event.timeFormat,
-        this.$store.getters.getLocales
+        this.locales
       )} ${
         this.getTimeMarker(timeStamp2) ===
-        expression[this.$store.getters.getLocales as keyof ExpressionLocales]
-          .timeMarker[1]
+        expression[this.locales as keyof ExpressionLocales].timeMarker[1]
           ? ""
           : this.getTimeMarker(timeStamp2).toLocaleLowerCase()
       }`;
@@ -155,7 +159,7 @@ export default defineComponent({
         day: "numeric",
       };
       const date = new Date(dateTimestamp).toLocaleString(
-        this.$store.getters.getLocales,
+        this.locales,
         options
       );
       return [this.getTimeMarker(dateTimestamp), date];
@@ -173,8 +177,7 @@ export default defineComponent({
         (timestamp - (new Date().setHours(0, 0, 0, 0) - ALLDAYMS)) / ALLDAYMS
       );
       return diff >= 0 && diff <= 3
-        ? expression[this.$store.getters.getLocales as keyof ExpressionLocales]
-            .timeMarker[diff]
+        ? expression[this.locales as keyof ExpressionLocales].timeMarker[diff]
         : (console.log("неверный диапазон"), "");
     },
   },

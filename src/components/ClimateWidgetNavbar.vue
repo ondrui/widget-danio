@@ -20,11 +20,11 @@
     </div>
     <div class="select-nav">
       <div>
-        {{ expression[locales].selectCaptions[0] }}
+        {{ expressions.selectCaptions[0] }}
       </div>
       <select name="select" @change="selectHandler">
         <option v-for="option in options" :key="option" :value="option">
-          {{ `${option} ${expression[locales].selectCaptions[1]}` }}
+          {{ `${option} ${expressions.selectCaptions[1]}` }}
         </option>
       </select>
     </div>
@@ -34,8 +34,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import { expression } from "@/constants/climate";
-import { ExpressionLocales } from "@/types/typesClimate";
+import { ExpressionsLocales } from "@/types/typesClimate";
 
 export default defineComponent({
   props: {
@@ -78,11 +77,10 @@ export default defineComponent({
       required: true,
     },
     /**
-     * Языковая метка для определения локали.
-     * @example "ru"
+     * Строковые константы с учетом локали.
      */
-    locales: {
-      type: String as PropType<keyof ExpressionLocales>,
+    expressions: {
+      type: Object as PropType<ExpressionsLocales[keyof ExpressionsLocales]>,
       required: true,
     },
   },
@@ -98,15 +96,6 @@ export default defineComponent({
     },
     "update:radio": String,
     "update:select": String,
-  },
-  data() {
-    return {
-      /**
-       * Определяем импортированные строковые константы с учетом локали
-       * для применения в шаблоне компоненты.
-       */
-      expression: expression,
-    };
   },
   watch: {
     /**

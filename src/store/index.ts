@@ -1,7 +1,12 @@
 import { createStore, Store } from "vuex";
 
-import type { DataAlerts, Filters, Filter } from "@/types/typesAlerts";
-import { FilterStatus } from "@/constants/alerts";
+import type {
+  DataAlerts,
+  Filters,
+  Filter,
+  ExpressionsLocales,
+} from "@/types/typesAlerts";
+import { expressions, FilterStatus } from "@/constants/alerts";
 import { HandlerEvent } from "./../handlers/HandlerEvent";
 import { climateModule } from "./climateModule";
 
@@ -9,6 +14,7 @@ export interface RootState {
   filters: Filters;
   events: HandlerEvent[];
   locales: string;
+  expressions: ExpressionsLocales;
 }
 
 const store = createStore<RootState>({
@@ -23,6 +29,10 @@ const store = createStore<RootState>({
        * Языковая метка для определения локали.
        */
       locales: "ru",
+      /**
+       * Строковые константы с учетом локали.
+       */
+      expressions: expressions,
     };
   },
   modules: {
@@ -141,7 +151,8 @@ const store = createStore<RootState>({
      * @example
      * "ru"
      */
-    getLocales: (state: RootState): string => state.locales,
+    getLocales: (state: RootState): string =>
+      state.locales in state.expressions ? state.locales : "ru",
     /**
      * Возвращает объект с настройками фильтров, полученными из store
      * @param state Текущее состояние store.
@@ -207,6 +218,17 @@ const store = createStore<RootState>({
             };
           })
       );
+    },
+    /**
+     * Возвращает строковые константы с учетом локали.
+     * @param state Текущее состояние store.
+     * @param getters Другие геттеры их данного модуля.
+     */
+    getExpressions(
+      state: RootState,
+      getters
+    ): ExpressionsLocales[keyof ExpressionsLocales] {
+      return state.expressions[getters.getLocales as keyof ExpressionsLocales];
     },
   },
 });

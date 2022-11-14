@@ -68,7 +68,7 @@ export interface StoreClimateData {
    */
   title: Locales;
   /**
-   * Дополнительная информация параметра, которая выводится
+   * Дополнит ельная информация параметра, которая выводится
    * под его названием.
    * @example
    * def: { ru: "мм рт. ст." }
@@ -105,12 +105,12 @@ export interface WidgetClimateData {
   /**
    * Название климатических данных на разных языках.
    */
-  title: Locales;
+  title: string | undefined;
   /**
    * Дополнительная информация параметра, которая выводится
    * под его названием.
    */
-  def?: Locales | undefined;
+  def?: string | undefined;
   /**
    * Единица измерения параметра.
    */
@@ -174,7 +174,7 @@ export interface SubtitleToProgressName {
  * @property ru.navBarLink - Название ссылки для отображения подробной
  * информации.
  */
-export interface ExpressionLocales {
+export interface ExpressionsLocales {
   /**
    * Объект содержит строковые константы с учетом локали.
    */

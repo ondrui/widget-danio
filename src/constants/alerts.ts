@@ -1,6 +1,6 @@
 import {
   KeyNameListFormat,
-  ExpressionLocales,
+  ExpressionsLocales,
   IconItem,
 } from "@/types/typesAlerts";
 /**
@@ -54,7 +54,7 @@ export const LOCALES = "ru";
  * отсутствии предупреждений.
  * @property ru.defaultFilters - Начальные настройки фильтров.
  */
-export const expression: ExpressionLocales = {
+export const expressions: ExpressionsLocales = {
   ru: {
     /**
      * Массив содержит слова-указатели времен.

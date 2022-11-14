@@ -7,12 +7,12 @@
       v-model:radio="options.radio"
       v-model:select="options.select"
       @select="select"
-      :locales="getLocales"
+      :expressions="getExpressions"
     />
-    <ClimateWidgetList :values="getClimateData" :locales="getLocales" />
+    <ClimateWidgetList :values="getClimateData" :expressions="getExpressions" />
     <div class="btn-block">
       <button class="btn-custom" @click="detail">
-        {{ expression[getLocales].navBarLink }}
+        {{ getExpressions.navBarLink }}
       </button>
     </div>
   </div>
@@ -22,8 +22,7 @@
 import { defineComponent } from "vue";
 import ClimateWidgetNavbar from "./ClimateWidgetNavbar.vue";
 import ClimateWidgetList from "./ClimateWidgetList.vue";
-import { ExpressionLocales, WidgetClimateData } from "@/types/typesClimate";
-import { expression } from "@/constants/climate";
+import { ExpressionsLocales, WidgetClimateData } from "@/types/typesClimate";
 
 export default defineComponent({
   components: {
@@ -54,38 +53,44 @@ export default defineComponent({
        */
       radioValues: [] as string[][],
       /**
-       * Определяем импортированные строковые константы с учетом локали
-       * для применения в шаблоне компоненты.
+       * Параметры маршрута, которые передаются через адресную строку.
+       * @param locales - определяет языковую локаль.
+       * @param addition - дополнительный параметр. Если принимает значение
+       * "detail", то выводит предварительно заданное сообщение.
        */
-      expression: expression,
       pathParams: {
         locales: "",
-        widget: "",
+        addition: "",
       } as {
         locales: string;
-        widget?: string;
+        addition?: string;
       },
     };
   },
   created() {
+    /**
+     * Задаем настройки отрисовки радио кнопок в компоненте Navbar.vue.
+     */
     this.radioValues = [
-      ["usually", expression[this.getLocales].radioBtnCaption[0]],
-      ["records", expression[this.getLocales].radioBtnCaption[1]],
+      ["usually", this.getExpressions.radioBtnCaption[0]],
+      ["records", this.getExpressions.radioBtnCaption[1]],
     ];
   },
   watch: {
     /**
-     * Функция следит за строкой URL и выводит сообщение в консоль
-     * при определенном совпадении части строки в URL.
+     * Функция следит за параметром locales в строке URL и вызывает
+     * мутацию стора, в которую передается значение locales.
      */
-    "$route.params.locales"(val, past) {
-      console.log(val);
-      console.log(past);
+    "$route.params.locales"(val: string): void {
       this.$store.commit("climate/setLocales", val);
     },
-    "$route.params.widget"(val) {
-      console.log(val);
-      if (this.$route.params.widget === "detail") {
+    /**
+     * Функция следит за параметром addition в строке URL и выводит
+     * предварительно заданное сообщение, если он принимает значение
+     * "detail".
+     */
+    "$route.params.addition"(): void {
+      if (this.$route.params.addition === "detail") {
         console.log(
           "Позже здесь будет размещена подробная инфа по каждому параметру!"
         );
@@ -117,8 +122,21 @@ export default defineComponent({
      * Возвращает языковую метку для определения локали.
      * @example "ru"
      */
-    getLocales(): keyof ExpressionLocales {
+    getLocales(): keyof ExpressionsLocales {
       return this.$store.getters["climate/getLocales"];
+    },
+    /**
+     * Возвращает строковые константы с учетом локали.
+     * @example {
+     *   prepositions: ["от","до"],
+     *   changeDimensionLocale: ["см"],
+     *   radioBtnCaption: ["обычно","рекорды"],
+     *   selectCaptions: ["в среднем за","лет"],
+     *   noData: "н/д",
+     *   navBarLink: "подробнее"}
+     */
+    getExpressions(): ExpressionsLocales[keyof ExpressionsLocales] {
+      return this.$store.getters["climate/getExpressions"];
     },
   },
   methods: {
@@ -138,10 +156,14 @@ export default defineComponent({
     select(val: string): void {
       this.options.select = val;
     },
+    /**
+     * Функция обработчик для установки параметру @param addition значения
+     * "detail".
+     */
     detail(): void {
       this.$router.push({
         name: "main",
-        params: { locales: this.getLocales, widget: "detail" },
+        params: { locales: this.getLocales, addition: "detail" },
       });
     },
   },

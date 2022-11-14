@@ -12,16 +12,16 @@
             v-for="(value, i) in values"
             :key="i"
           >
-            <div>{{ expression[locales].prepositions[index] }}</div>
+            <div>{{ expressions.prepositions[index] }}</div>
             {{ EndPointText(point, value) }}
           </div>
         </div>
       </div>
       <ClimateWidgetItem
-        v-for="value in values"
-        :key="value.title?.en?.slice(0, 4)"
+        v-for="(value, index) in values"
+        :key="`cn-${index}`"
         :value="value"
-        :locales="locales"
+        :expressions="expressions"
       />
     </div>
   </div>
@@ -30,8 +30,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import ClimateWidgetItem from "./ClimateWidgetItem.vue";
-import { ExpressionLocales, WidgetClimateData } from "@/types/typesClimate";
-import { expression } from "@/constants/climate";
+import { ExpressionsLocales, WidgetClimateData } from "@/types/typesClimate";
 import { snowDimension } from "@/constants/functions";
 
 export default defineComponent({
@@ -46,21 +45,15 @@ export default defineComponent({
       required: true,
     },
     /**
-     * Языковая метка для определения локали.
-     * @example "ru"
+     * Строковые константы с учетом локали.
      */
-    locales: {
-      type: String as PropType<keyof ExpressionLocales>,
+    expressions: {
+      type: Object as PropType<ExpressionsLocales[keyof ExpressionsLocales]>,
       required: true,
     },
   },
   data() {
     return {
-      /**
-       * Определяем импортированные строковые константы с учетом локали
-       * для применения в шаблоне компоненты.
-       */
-      expression: expression,
       /**
        * Массив для отрисовки и размещения правого и левого блока с
        * подписями и значениями прогресс бара.
@@ -70,19 +63,20 @@ export default defineComponent({
   },
   methods: {
     /**
-     * Возвращает отформатированную строку с минимальным и максимальным значением
-     * параметра и его размерностью.
-     * @param point - Задает с какой стороны будет отрисовываться блок с подписями.
+     * Возвращает отформатированную строку с минимальным и максимальным
+     * значением параметра и его размерностью.
+     * @param point - Задает с какой стороны будет отрисовываться блок с
+     * подписями.
      * @param value - Объект с данными передаваемые из store в компоненты
      * для отображения.
      * @example "-3.6°"
      */
     EndPointText(point: string, value: WidgetClimateData): string {
-      const pointNum =
-        point === this.endpoints[1] ? value.data.max : value.data.min;
+      const [left] = this.endpoints;
+      const pointNum = point === left ? value.data.max : value.data.min;
       return `${pointNum}${snowDimension(
         pointNum,
-        expression[this.locales].noData,
+        this.expressions.noData,
         value.dim
       )}`;
     },

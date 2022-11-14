@@ -76,7 +76,7 @@ export interface Filters {
 /**
  * Интерфейс для объекта, который определяет строковые константы с учетом локали.
  */
-export interface ExpressionLocales {
+export interface ExpressionsLocales {
   /**
    * Объект содержит строковые константы с учетом локали.
    */

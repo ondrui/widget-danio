@@ -5,6 +5,7 @@
       :filters="getFilters"
       :totalAppliedFilters="totalAppliedFilters"
       :locales="getLocales"
+      :expressions="getExpressions"
     />
     <div class="wrapper">
       <div v-if="getEvents.length" class="container-main">
@@ -14,13 +15,14 @@
           :event="event"
           :index="+index"
           :locales="getLocales"
+          :expressions="getExpressions"
         />
       </div>
       <div class="default-event" v-else>
         <div>
-          {{ expression[getLocales].defaultEventMessage[0] }}
+          {{ getExpressions.defaultEventMessage[0] }}
         </div>
-        <div>{{ expression[getLocales].defaultEventMessage[1] }}</div>
+        <div>{{ getExpressions.defaultEventMessage[1] }}</div>
       </div>
     </div>
   </div>
@@ -30,25 +32,20 @@
 import { defineComponent } from "vue";
 import AlertsWidgetItem from "./AlertsWidgetItem.vue";
 import AlertsWidgetFilters from "./AlertsWidgetFilters.vue";
-import { DataAlerts, Filters, ExpressionLocales } from "@/types/typesAlerts";
-import { FilterStatus, expression } from "@/constants/alerts";
+import { DataAlerts, Filters, ExpressionsLocales } from "@/types/typesAlerts";
+import { FilterStatus } from "@/constants/alerts";
 
 export default defineComponent({
   components: {
     AlertsWidgetItem,
     AlertsWidgetFilters,
   },
-  data() {
-    return {
-      expression: expression,
-    };
-  },
   computed: {
     /**
      * Возвращает языковую метку для определения локали.
      * @example "ru"
      */
-    getLocales(): keyof ExpressionLocales {
+    getLocales(): keyof ExpressionsLocales {
       return this.$store.getters.getLocales;
     },
     /**
@@ -70,6 +67,12 @@ export default defineComponent({
      */
     totalAppliedFilters(): number {
       return this.$store.getters.calcTotalFilters(FilterStatus.Applied);
+    },
+    /**
+     * Возвращает строковые константы с учетом локали.
+     */
+    getExpressions(): ExpressionsLocales[keyof ExpressionsLocales] {
+      return this.$store.getters.getExpressions;
     },
   },
 });

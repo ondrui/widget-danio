@@ -1,4 +1,4 @@
-import { ExpressionLocales } from "@/types/typesClimate";
+import { ExpressionsLocales } from "@/types/typesClimate";
 
 /**
  * Названия классов элемента path, который отвечает за отображение
@@ -44,7 +44,7 @@ export const radioBtnValue = {
  * @property ru.navBarLink - Название ссылки для отображения подробной
  * информации.
  */
-export const expression: ExpressionLocales = {
+export const expressions: ExpressionsLocales = {
   ru: {
     /**
      * Массив содержит предлоги, которые используются в

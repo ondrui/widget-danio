@@ -1,7 +1,7 @@
 <template>
   <div class="container-item">
     <div class="block-text">
-      <div class="title">{{ value.title[locales] }}</div>
+      <div class="title">{{ value.title }}</div>
       <div v-if="subtitleToProgressName(value).isShow" class="subtitle">
         {{ subtitleToProgressName(value).text }}
       </div>
@@ -33,14 +33,13 @@ import {
   WidgetClimateData,
   PathSVG,
   SubtitleToProgressName,
-  ExpressionLocales,
+  ExpressionsLocales,
 } from "@/types/typesClimate";
 import { defineComponent, PropType } from "vue";
 import {
   svgClassForPath,
   thicknessProgress,
   triagleSideLength,
-  expression,
 } from "@/constants/climate";
 import { snowDimension } from "@/constants/functions";
 
@@ -50,9 +49,10 @@ export default defineComponent({
      * Объект с данными для отображения.
      * @example
      * {
-     *  "title":{"ru":"Температура","en":"Temperature"},
-     *  "dim":"°",
-     *  "data":{"min":"-3.6","max":"5.1","avg":"н/д"}
+     *  title: "Температура",
+     *  def: "вероятность",
+     *  dim: "°",
+     *  data: {"min":"-3.6","max":"5.1","avg":"н/д"}
      * }
      */
     value: {
@@ -60,11 +60,10 @@ export default defineComponent({
       required: true,
     },
     /**
-     * Языковая метка для определения локали.
-     * @example "ru"
+     * Строковые константы с учетом локали.
      */
-    locales: {
-      type: String as PropType<keyof ExpressionLocales>,
+    expressions: {
+      type: Object as PropType<ExpressionsLocales[keyof ExpressionsLocales]>,
       required: true,
     },
   },
@@ -131,9 +130,9 @@ export default defineComponent({
        * прогресс бара устанавливается посередине.
        */
       if (
-        val.max === expression[this.locales].noData ||
-        val.min === expression[this.locales].noData ||
-        val.avg === expression[this.locales].noData
+        val.max === this.expressions.noData ||
+        val.min === this.expressions.noData ||
+        val.avg === this.expressions.noData
       ) {
         return svgLength / 2;
       }
@@ -184,7 +183,9 @@ export default defineComponent({
       return paths;
     },
     /**
-     *
+     * Вычисляет координату оси x текстового блока расположенного над треугольной
+     * меткой прогресс бора.
+     * Ограничивает выход блока за пределы основного SVG элемента.
      */
     calcTextBlockMeterPosition(): number {
       const widthText = this.textBlockMeterWidth;
@@ -206,7 +207,8 @@ export default defineComponent({
       );
     },
     /**
-     *
+     * Возвращает список команд пути для рисования треугольной метки
+     * прогресс бора.
      */
     createdTriagle(): string {
       return `M ${-3.5 + this.calcMeterLength} 18 L ${
@@ -216,12 +218,13 @@ export default defineComponent({
   },
   methods: {
     /**
-     *
+     * Функция обработчик вызывается, когда изменяется размер окна страницы.
      */
     resizeBrowserHandler(): void {
       /**
-       *
-       * @param element
+       * Определяет и устанавливает требуемые для отрисовки графика параметры.
+       * @param element - строка содержит ключ ссылку $refs на элемент в шаблоне
+       * компонента.
        */
       const getWidth = (element: string): number => {
         return Math.round(
@@ -233,25 +236,27 @@ export default defineComponent({
       this.textBlockMeterWidth = getWidth("tspan");
     },
     /**
-     *
-     * @param value
+     * Отвечает за отображение блока с дополнительной информацией параметра.
+     * @param def - Дополнительная информация параметра, которая выводится
+     * под его названием.
      */
-    subtitleToProgressName(value: WidgetClimateData): SubtitleToProgressName {
+    subtitleToProgressName({
+      def,
+    }: {
+      def?: string | undefined;
+    }): SubtitleToProgressName {
       return {
-        isShow: !!value.def,
-        text: value.def ? value.def[this.locales] : "",
+        isShow: !!def,
+        text: def ?? "",
       };
     },
     /**
-     *
-     * @param val
+     * Возвращает единицу измерения параметра. Если параметр не задан,
+     * то возвращается пустая строка.
+     * @param val Значение параметра.
      */
     dimension(val: string): string {
-      return snowDimension(
-        val,
-        expression[this.locales].noData,
-        this.value.dim
-      );
+      return snowDimension(val, this.expressions.noData, this.value.dim);
     },
   },
 });

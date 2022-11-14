@@ -7,10 +7,10 @@ import {
   ParamsValue,
   SelectRadioData,
   Locales,
-  ExpressionLocales,
+  ExpressionsLocales,
 } from "@/types/typesClimate";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
-import { radioBtnValue, expression } from "@/constants/climate";
+import { radioBtnValue, expressions } from "@/constants/climate";
 
 type State = {
   /**
@@ -29,6 +29,10 @@ type State = {
    * Языковая метка для определения локали.
    */
   locales: string;
+  /**
+   * Строковые константы с учетом локали.
+   */
+  expressions: ExpressionsLocales;
 };
 
 export const climateModule: Module<State, RootState> = {
@@ -37,6 +41,7 @@ export const climateModule: Module<State, RootState> = {
     timestamp: 0,
     dateFormat: "",
     locales: "ru",
+    expressions: expressions,
   }),
   mutations: {
     /**
@@ -69,28 +74,31 @@ export const climateModule: Module<State, RootState> = {
      * @param locales Языковая метка.
      */
     setLocales(state: State, locales: string): void {
-      console.log("mutation", locales);
       state.locales = locales;
     },
   },
   getters: {
     /**
-     * Возвращает языковую метку для определения локали.
+     * Возвращает языковую метку для определения локали,
+     * предварительно проверяет есть ли такая локаль в
+     * строковых константах.
      * @param state Текущее состояние store.
      * @example
      * "ru"
      */
-    getLocales: (state: State): string => state.locales,
+    getLocales: (state: State): string =>
+      state.locales in state.expressions ? state.locales : "ru",
     /**
      * Возвращает дату в виде строки в заданном формате.
      * @param state Текущее состояние store.
+     * @param getters Другие геттеры их данного модуля.
      * @example "30 сентября"
      */
-    getDate: (state: State): string => {
+    getDate: (state: State, getters): string => {
       const dateStr = HandlerEvent.setTimeFormat(
         state.timestamp,
         state.dateFormat,
-        state.locales
+        getters.getLocales
       );
       return dateStr;
     },
@@ -119,13 +127,14 @@ export const climateModule: Module<State, RootState> = {
      * Возвращает массив объектов с данными передаваемые из
      * store в компоненты для отображения.
      * @param state Текущее состояние store.
+     * @param getters Другие геттеры их данного модуля.
      * @param radio - Содержит значение атрибута value радиокнопки
      * в компоненте Navbar.vue.
      * @param select - Интервал времени, который задается выбором опции
      * элемента select в компоненте Navbar.vue.
      */
     getClimateData:
-      (state: State) =>
+      (state: State, getters) =>
       ({
         radio,
         select,
@@ -139,7 +148,9 @@ export const climateModule: Module<State, RootState> = {
          * @param val - Значение параметра.
          */
         const numRender = (val: string | undefined): string =>
-          val ?? expression[state.locales as keyof ExpressionLocales].noData;
+          val ??
+          state.expressions[getters.getLocales as keyof ExpressionsLocales]
+            .noData;
         /**
          * Функция проверяет требуется ли модификация при отображении размерности
          * параметра. Например добавляет пробел перед "см". Возвращает исходную или
@@ -149,7 +160,7 @@ export const climateModule: Module<State, RootState> = {
          */
         const dimRender = (dim: string): string =>
           dim ===
-          expression[state.locales as keyof ExpressionLocales]
+          state.expressions[getters.getLocales as keyof ExpressionsLocales]
             .changeDimensionLocale[0]
             ? ` ${dim}`
             : dim;
@@ -206,10 +217,11 @@ export const climateModule: Module<State, RootState> = {
                     avg: numRender(dataSelect.avg),
                   };
                 };
-
                 return {
-                  title,
-                  def,
+                  title: title[getters.getLocales as keyof Required<Locales>],
+                  def: def
+                    ? def[getters.getLocales as keyof Required<Locales>]
+                    : undefined,
                   dim: dimRender(dim),
                   data: dataSelectRadio(),
                 };
@@ -222,6 +234,17 @@ export const climateModule: Module<State, RootState> = {
             .filter((i: WidgetClimateData | undefined) => i !== undefined)
         );
       },
+    /**
+     * Возвращает строковые константы с учетом локали.
+     * @param state Текущее состояние store.
+     * @param getters Другие геттеры их данного модуля.
+     */
+    getExpressions(
+      state: State,
+      getters
+    ): ExpressionsLocales[keyof ExpressionsLocales] {
+      return state.expressions[getters.getLocales as keyof ExpressionsLocales];
+    },
   },
   /**
    * Задаем собственное пространство имён для этого модуля.

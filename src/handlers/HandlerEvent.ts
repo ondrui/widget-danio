@@ -1,14 +1,10 @@
-import type {
-  DataAlerts,
-  Datakeys,
-  KeyOptionsDateTimeFormat,
-} from "../types/typesAlerts";
+import type { DataAlerts, Datakeys } from "../types/typesAlerts";
 import {
   CodeEvent,
   defaultOptionsDateTimeFormat,
   formatListDateTime,
 } from "@/constants/alerts";
-import { getField } from "@/constants/functions";
+import { getField, setProperty } from "@/constants/functions";
 /**
  * Класс HandlerEvent модифицирует данные из объекта предупреждения в соответствии с
  * потребностью компоненты.
@@ -65,8 +61,9 @@ export class HandlerEvent implements DataAlerts {
 
   constructor(_event: DataAlerts) {
     for (const prop in _event) {
-      const key = prop as Datakeys;
-      this[prop] = _event[key];
+      // const key = prop as Datakeys;
+      // setProperty(this, prop, _event[key]);
+      this[prop] = _event[prop as Datakeys];
     }
   }
   /**
@@ -116,7 +113,7 @@ export class HandlerEvent implements DataAlerts {
     for (const key in formatListDateTime) {
       const value = getField(formatListDateTime, key);
       if (format.includes(key)) {
-        options[value[0] as KeyOptionsDateTimeFormat] = value[1];
+        setProperty(options, value[0], value[1]);
       }
     }
     /**

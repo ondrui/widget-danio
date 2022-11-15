@@ -16,3 +16,16 @@ export const snowDimension = (val: string, text: string, dim: string): string =>
 export function getField<T, K extends keyof T>(obj: T, key: string): T[K] {
   return obj[key as K];
 }
+/**
+ * Функция присваивает полю объекта значение по ключу.
+ * @param obj - объект
+ * @param key - ключ
+ * @param value - значение
+ */
+export function setProperty<T, K extends keyof T>(
+  obj: T,
+  key: string,
+  value: T[K]
+) {
+  obj[key as K] = value;
+}

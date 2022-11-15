@@ -45,6 +45,11 @@ export interface DataAlerts {
 }
 
 /**
+ * Вспомогательный тип.
+ */
+export type Datakeys = keyof DataAlerts;
+
+/**
  * Интерфейс фильтра.
  */
 export interface Filter {
@@ -112,11 +117,6 @@ export type KeysExpressionsLocales =
   ExpressionsLocales[keyof ExpressionsLocales];
 
 /**
- * Вспомогательный тип.
- */
-export type Datakeys = keyof DataAlerts;
-
-/**
  * Все разрешенные ключи объекта формата отображения времени и даты.
  * @param d День месяца, от 1 до 31. 2 цифры с ведущими нулями.
  * @param D Текстовое представление дня недели, 2 символа.
@@ -152,11 +152,3 @@ export type KeyNameListFormat =
  *  @param second Секунды. Возможные значения: 2-digit.
  */
 export type KeyOptionsDateTimeFormat = keyof Intl.DateTimeFormatOptions;
-
-/**
- * Интерфейс для объекта со свойствами, которые связывают код иконки
- * предупреждения iconCode из объекта event и названием файла иконки.
- */
-export interface IconItem {
-  [index: number]: string;
-}

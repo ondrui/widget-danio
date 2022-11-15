@@ -37,6 +37,7 @@ import {
 } from "@/types/typesAlerts";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
 import { CodeEvent, ALLDAYMS, iconItem } from "@/constants/alerts";
+import { getField } from "@/constants/functions";
 
 export default defineComponent({
   props: {
@@ -105,7 +106,10 @@ export default defineComponent({
      */
     urlIcon(): string {
       return this.event.iconCode
-        ? require(`@/assets/images/${this.iconItem[this.event.iconCode]}.svg`)
+        ? require(`@/assets/images/${getField(
+            this.iconItem,
+            String(this.event.iconCode)
+          )}.svg`)
         : (console.log("нет иконки"), "#");
     },
     /**

@@ -1,8 +1,4 @@
-import {
-  KeyNameListFormat,
-  ExpressionsLocales,
-  IconItem,
-} from "@/types/typesAlerts";
+import { KeyNameListFormat, ExpressionsLocales } from "@/types/typesAlerts";
 /**
  * Enum связывает код типа
  * предупреждения eventType из объекта event
@@ -121,9 +117,7 @@ export const formatListDateTime: Record<KeyNameListFormat, string[]> = {
 /**
  * Объект с дефолтными значениями свойств форматирования даты и времени.
  */
-export const defaultOptionsDateTimeFormat:
-  | Intl.DateTimeFormatOptions
-  | { [index: string]: string } = {
+export const defaultOptionsDateTimeFormat: Intl.DateTimeFormatOptions = {
   weekday: "long",
   year: "numeric",
   month: "long",
@@ -151,7 +145,7 @@ export const filterIcon = {
  * Объект со свойствами, которые связывают код иконки
  * предупреждения iconCode из объекта event и названием файла иконки.
  */
-export const iconItem: IconItem = {
+export const iconItem = {
   2: "wind",
   1: "uv-index",
 };

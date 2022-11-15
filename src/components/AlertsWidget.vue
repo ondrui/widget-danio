@@ -32,7 +32,12 @@
 import { defineComponent } from "vue";
 import AlertsWidgetItem from "./AlertsWidgetItem.vue";
 import AlertsWidgetFilters from "./AlertsWidgetFilters.vue";
-import { DataAlerts, Filters, ExpressionsLocales } from "@/types/typesAlerts";
+import {
+  DataAlerts,
+  Filters,
+  ExpressionsLocales,
+  KeysExpressionsLocales,
+} from "@/types/typesAlerts";
 import { FilterStatus } from "@/constants/alerts";
 
 export default defineComponent({
@@ -71,7 +76,7 @@ export default defineComponent({
     /**
      * Возвращает строковые константы с учетом локали.
      */
-    getExpressions(): ExpressionsLocales[keyof ExpressionsLocales] {
+    getExpressions(): KeysExpressionsLocales {
       return this.$store.getters.getExpressions;
     },
   },

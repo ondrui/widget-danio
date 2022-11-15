@@ -30,7 +30,11 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import { DataAlerts, ExpressionsLocales } from "@/types/typesAlerts";
+import {
+  DataAlerts,
+  ExpressionsLocales,
+  KeysExpressionsLocales,
+} from "@/types/typesAlerts";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
 import { CodeEvent, ALLDAYMS, iconItem } from "@/constants/alerts";
 
@@ -70,7 +74,7 @@ export default defineComponent({
      * Строковые константы с учетом локали.
      */
     expressions: {
-      type: Object as PropType<ExpressionsLocales[keyof ExpressionsLocales]>,
+      type: Object as PropType<KeysExpressionsLocales>,
       required: true,
     },
   },

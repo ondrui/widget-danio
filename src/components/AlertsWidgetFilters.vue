@@ -58,7 +58,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import { Filters, Filter, ExpressionsLocales } from "@/types/typesAlerts";
+import { Filters, Filter, KeysExpressionsLocales } from "@/types/typesAlerts";
 import { FilterStatus, filterIcon, expressions } from "@/constants/alerts";
 
 export default defineComponent({
@@ -89,7 +89,7 @@ export default defineComponent({
      * Строковые константы с учетом локали.
      */
     expressions: {
-      type: Object as PropType<ExpressionsLocales[keyof ExpressionsLocales]>,
+      type: Object as PropType<KeysExpressionsLocales>,
       required: true,
     },
   },

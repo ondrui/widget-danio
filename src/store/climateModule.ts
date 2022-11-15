@@ -4,13 +4,14 @@ import {
   StoreClimateData,
   WidgetClimateData,
   ClimateValue,
-  ParamsValue,
   SelectRadioData,
   Locales,
   ExpressionsLocales,
+  KeysExpressionsLocales,
 } from "@/types/typesClimate";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
 import { radioBtnValue, expressions } from "@/constants/climate";
+import { getField } from "@/constants/functions";
 
 type State = {
   /**
@@ -139,7 +140,7 @@ export const climateModule: Module<State, RootState> = {
         radio,
         select,
       }: {
-        radio: string;
+        radio: keyof typeof radioBtnValue;
         select: string;
       }): Array<WidgetClimateData | undefined> => {
         /**
@@ -148,9 +149,7 @@ export const climateModule: Module<State, RootState> = {
          * @param val - Значение параметра.
          */
         const numRender = (val: string | undefined): string =>
-          val ??
-          state.expressions[getters.getLocales as keyof ExpressionsLocales]
-            .noData;
+          val ?? getField(state.expressions, getters.getLocales).noData;
         /**
          * Функция проверяет требуется ли модификация при отображении размерности
          * параметра. Например добавляет пробел перед "см". Возвращает исходную или
@@ -160,7 +159,7 @@ export const climateModule: Module<State, RootState> = {
          */
         const dimRender = (dim: string): string =>
           dim ===
-          state.expressions[getters.getLocales as keyof ExpressionsLocales]
+          getField(state.expressions, getters.getLocales)
             .changeDimensionLocale[0]
             ? ` ${dim}`
             : dim;
@@ -207,21 +206,17 @@ export const climateModule: Module<State, RootState> = {
                  * Функция возвращает данные соответствующие значению атрибута value радиокнопки в компоненте Navbar.vue.
                  */
                 const dataSelectRadio = (): SelectRadioData => {
-                  const min =
-                    radioBtnValue[radio as keyof typeof radioBtnValue][0];
-                  const max =
-                    radioBtnValue[radio as keyof typeof radioBtnValue][1];
+                  const min = getField(radioBtnValue, radio)[0];
+                  const max = getField(radioBtnValue, radio)[1];
                   return {
-                    min: numRender(dataSelect[min as keyof ParamsValue]),
-                    max: numRender(dataSelect[max as keyof ParamsValue]),
+                    min: numRender(getField(dataSelect, min)),
+                    max: numRender(getField(dataSelect, max)),
                     avg: numRender(dataSelect.avg),
                   };
                 };
                 return {
-                  title: title[getters.getLocales as keyof Required<Locales>],
-                  def: def
-                    ? def[getters.getLocales as keyof Required<Locales>]
-                    : undefined,
+                  title: getField(title, getters.getLocales),
+                  def: def ? getField(def, getters.getLocales) : undefined,
                   dim: dimRender(dim),
                   data: dataSelectRadio(),
                 };
@@ -239,12 +234,8 @@ export const climateModule: Module<State, RootState> = {
      * @param state Текущее состояние store.
      * @param getters Другие геттеры их данного модуля.
      */
-    getExpressions(
-      state: State,
-      getters
-    ): ExpressionsLocales[keyof ExpressionsLocales] {
-      return state.expressions[getters.getLocales as keyof ExpressionsLocales];
-    },
+    getExpressions: (state: State, getters): KeysExpressionsLocales =>
+      getField(state.expressions, getters.getLocales),
   },
   /**
    * Задаем собственное пространство имён для этого модуля.

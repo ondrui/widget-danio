@@ -22,7 +22,11 @@
 import { defineComponent } from "vue";
 import ClimateWidgetNavbar from "./ClimateWidgetNavbar.vue";
 import ClimateWidgetList from "./ClimateWidgetList.vue";
-import { ExpressionsLocales, WidgetClimateData } from "@/types/typesClimate";
+import {
+  ExpressionsLocales,
+  KeysExpressionsLocales,
+  WidgetClimateData,
+} from "@/types/typesClimate";
 
 export default defineComponent({
   components: {
@@ -135,7 +139,7 @@ export default defineComponent({
      *   noData: "н/д",
      *   navBarLink: "подробнее"}
      */
-    getExpressions(): ExpressionsLocales[keyof ExpressionsLocales] {
+    getExpressions(): KeysExpressionsLocales {
       return this.$store.getters["climate/getExpressions"];
     },
   },

@@ -1,7 +1,6 @@
 import type {
   DataAlerts,
   Datakeys,
-  KeyNameListFormat,
   KeyOptionsDateTimeFormat,
 } from "../types/typesAlerts";
 import {
@@ -9,6 +8,7 @@ import {
   defaultOptionsDateTimeFormat,
   formatListDateTime,
 } from "@/constants/alerts";
+import { getField } from "@/constants/functions";
 /**
  * Класс HandlerEvent модифицирует данные из объекта предупреждения в соответствии с
  * потребностью компоненты.
@@ -114,7 +114,7 @@ export class HandlerEvent implements DataAlerts {
      * Формируем объект с заданными свойствами форматирования даты и времени.
      */
     for (const key in formatListDateTime) {
-      const value = formatListDateTime[key as KeyNameListFormat];
+      const value = getField(formatListDateTime, key);
       if (format.includes(key)) {
         options[value[0] as KeyOptionsDateTimeFormat] = value[1];
       }
@@ -148,7 +148,7 @@ export class HandlerEvent implements DataAlerts {
      */
     let dateFormated = format;
     for (const key in formatListDateTime) {
-      const value = formatListDateTime[key as KeyNameListFormat];
+      const value = getField(formatListDateTime, key);
       const item = datePartsArr.find((i) => i.type === value[0]);
       dateFormated = dateFormated.replace(
         key,

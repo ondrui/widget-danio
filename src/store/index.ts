@@ -5,10 +5,12 @@ import type {
   Filters,
   Filter,
   ExpressionsLocales,
+  KeysExpressionsLocales,
 } from "@/types/typesAlerts";
 import { expressions, FilterStatus } from "@/constants/alerts";
 import { HandlerEvent } from "./../handlers/HandlerEvent";
 import { climateModule } from "./climateModule";
+import { getField } from "@/constants/functions";
 
 export interface RootState {
   filters: Filters;
@@ -224,12 +226,8 @@ const store = createStore<RootState>({
      * @param state Текущее состояние store.
      * @param getters Другие геттеры их данного модуля.
      */
-    getExpressions(
-      state: RootState,
-      getters
-    ): ExpressionsLocales[keyof ExpressionsLocales] {
-      return state.expressions[getters.getLocales as keyof ExpressionsLocales];
-    },
+    getExpressions: (state: RootState, getters): KeysExpressionsLocales =>
+      getField(state.expressions, getters.getLocales),
   },
 });
 

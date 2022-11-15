@@ -108,6 +108,12 @@ export interface ExpressionsLocales {
 /**
  * Вспомогательный тип.
  */
+export type KeysExpressionsLocales =
+  ExpressionsLocales[keyof ExpressionsLocales];
+
+/**
+ * Вспомогательный тип.
+ */
 export type Datakeys = keyof DataAlerts;
 
 /**

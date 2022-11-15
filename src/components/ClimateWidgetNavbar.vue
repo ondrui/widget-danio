@@ -34,7 +34,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import { ExpressionsLocales } from "@/types/typesClimate";
+import { KeysExpressionsLocales } from "@/types/typesClimate";
 
 export default defineComponent({
   props: {
@@ -80,7 +80,7 @@ export default defineComponent({
      * Строковые константы с учетом локали.
      */
     expressions: {
-      type: Object as PropType<ExpressionsLocales[keyof ExpressionsLocales]>,
+      type: Object as PropType<KeysExpressionsLocales>,
       required: true,
     },
   },

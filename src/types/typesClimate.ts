@@ -206,3 +206,9 @@ export interface ExpressionsLocales {
     navBarLink: string;
   };
 }
+
+/**
+ * Вспомогательный тип.
+ */
+export type KeysExpressionsLocales =
+  ExpressionsLocales[keyof ExpressionsLocales];

@@ -28,7 +28,7 @@ export const triagleSideLength = 9;
 export const radioBtnValue = {
   usually: ["avgmin", "avgmax"],
   records: ["extmin", "extmax"],
-};
+} as const;
 
 /**
  * Строковые константы с учетом локали.

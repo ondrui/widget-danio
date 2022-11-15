@@ -1,6 +1,5 @@
 <template>
   <div class="app">
-    <router-view></router-view>
     <ClimateWidget />
     <AlertsWidget />
   </div>

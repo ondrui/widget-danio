@@ -8,3 +8,11 @@
  */
 export const snowDimension = (val: string, text: string, dim: string): string =>
   val === text ? "" : dim;
+/**
+ * Функция возвращает значение поля объекта по заданному ключу.
+ * @param obj - объект значение паля которого надо найти.
+ * @param key - ключ для поиска.
+ */
+export function getField<T, K extends keyof T>(obj: T, key: string): T[K] {
+  return obj[key as K];
+}

@@ -33,7 +33,7 @@ import {
   WidgetClimateData,
   PathSVG,
   SubtitleToProgressName,
-  ExpressionsLocales,
+  KeysExpressionsLocales,
 } from "@/types/typesClimate";
 import { defineComponent, PropType } from "vue";
 import {
@@ -63,7 +63,7 @@ export default defineComponent({
      * Строковые константы с учетом локали.
      */
     expressions: {
-      type: Object as PropType<ExpressionsLocales[keyof ExpressionsLocales]>,
+      type: Object as PropType<KeysExpressionsLocales>,
       required: true,
     },
   },

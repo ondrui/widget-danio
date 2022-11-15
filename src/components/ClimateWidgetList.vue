@@ -30,7 +30,10 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import ClimateWidgetItem from "./ClimateWidgetItem.vue";
-import { ExpressionsLocales, WidgetClimateData } from "@/types/typesClimate";
+import {
+  KeysExpressionsLocales,
+  WidgetClimateData,
+} from "@/types/typesClimate";
 import { snowDimension } from "@/constants/functions";
 
 export default defineComponent({
@@ -48,7 +51,7 @@ export default defineComponent({
      * Строковые константы с учетом локали.
      */
     expressions: {
-      type: Object as PropType<ExpressionsLocales[keyof ExpressionsLocales]>,
+      type: Object as PropType<KeysExpressionsLocales>,
       required: true,
     },
   },

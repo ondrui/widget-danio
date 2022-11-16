@@ -17,7 +17,7 @@
       :tabindex="isDisabledFilter(filter) ? '' : 0"
       :title="isLastFilter(filter) ? expressions.messageForOneFilter : ''"
     >
-      <div>{{ filter.name }}</div>
+      <div class="filter-name">{{ filter.name }}</div>
       <span class="filter-count">{{ filter.amount }}</span>
       <div class="filter-icon-block">
         <div :class="filterIconSwitch(filter)[0]">
@@ -178,6 +178,10 @@ export default defineComponent({
     padding: 6px 8px 6px 14px;
     cursor: pointer;
 
+    &::first-letter {
+      text-transform: capitalize;
+    }
+
     &.disable {
       pointer-events: none;
       cursor: none;
@@ -207,6 +211,10 @@ export default defineComponent({
   line-height: 12px;
   color: $color-filter-font-default;
   cursor: pointer;
+
+  & .filter-name::first-letter {
+    text-transform: capitalize;
+  }
 
   &.disable {
     pointer-events: none;

@@ -3,7 +3,7 @@
     <ClimateWidgetNavbar
       :date="getDate"
       :options="getNavbarSelectOptions"
-      :radioValues="radioValues"
+      :radioValues="getRadioValues"
       v-model:radio="options.radio"
       v-model:select="options.select"
       @select="select"
@@ -53,10 +53,6 @@ export default defineComponent({
         select: "",
       },
       /**
-       * Массив с данными для отрисовки радио кнопок.
-       */
-      radioValues: [] as string[][],
-      /**
        * Параметры маршрута, которые передаются через адресную строку.
        * @param locales - определяет языковую локаль.
        * @param addition - дополнительный параметр. Если принимает значение
@@ -70,15 +66,6 @@ export default defineComponent({
         addition?: string;
       },
     };
-  },
-  created() {
-    /**
-     * Задаем настройки отрисовки радио кнопок в компоненте Navbar.vue.
-     */
-    this.radioValues = [
-      ["usually", this.getExpressions.radioBtnCaption[0]],
-      ["records", this.getExpressions.radioBtnCaption[1]],
-    ];
   },
   watch: {
     /**
@@ -141,6 +128,15 @@ export default defineComponent({
      */
     getExpressions(): KeysExpressionsLocales {
       return this.$store.getters["climate/getExpressions"];
+    },
+    /**
+     * Возвращает настройки отрисовки радио кнопок в компоненте Navbar.vue.
+     */
+    getRadioValues(): string[][] {
+      return [
+        ["usually", this.getExpressions.radioBtnCaption[0]],
+        ["records", this.getExpressions.radioBtnCaption[1]],
+      ];
     },
   },
   methods: {

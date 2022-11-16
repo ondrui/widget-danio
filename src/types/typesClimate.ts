@@ -42,12 +42,11 @@ export interface ParamsValue {
  * Вспомогательный интерфейс описывает данные, получаемые с сервера.
  */
 export interface ClimateValue {
-  [index: string]: ParamsValue[] | string;
   /**
    * Единица измерения параметра.
    * @example dim: "°"
    */
-  dim: string;
+  dim: Locales;
   /**
    * Свойство содержит массив с данными за различные
    * интервалы времени. 10, 20 лет и т.д.
@@ -105,16 +104,16 @@ export interface WidgetClimateData {
   /**
    * Название климатических данных на разных языках.
    */
-  title: string | undefined;
+  title?: string;
   /**
    * Дополнительная информация параметра, которая выводится
    * под его названием.
    */
-  def?: string | undefined;
+  def?: string;
   /**
    * Единица измерения параметра.
    */
-  dim: string;
+  dim?: string;
   /**
    * Свойство содержит объект с числовыми значениями
    * параметра в строковом формате.
@@ -174,37 +173,40 @@ export interface SubtitleToProgressName {
  * @property ru.navBarLink - Название ссылки для отображения подробной
  * информации.
  */
+
+export interface ExpressionsList {
+  /**
+   * Массив содержит предлоги, которые
+   * используются в подписи начальной и конечной точки прогресс бара.
+   */
+  prepositions: string[];
+  /**
+   * размерности, которые требуют модификацию при отображении.
+   */
+  changeDimensionLocale: string[];
+  /**
+   * Массив с названиями radio button в компоненте Navbar.vue.
+   */
+  radioBtnCaption: string[];
+  /**
+   * Подписи селекта в компоненте Navbar.vue.
+   */
+  selectCaptions: string[];
+  /**
+   * Фраза при отсутствии данных.
+   */
+  noData: string;
+  /**
+   * Название ссылки для отображения подробной информации.
+   */
+  navBarLink: string;
+}
 export interface ExpressionsLocales {
   /**
    * Объект содержит строковые константы с учетом локали.
    */
-  ru: {
-    /**
-     * Массив содержит предлоги, которые
-     * используются в подписи начальной и конечной точки прогресс бара.
-     */
-    prepositions: string[];
-    /**
-     * размерности, которые требуют модификацию при отображении.
-     */
-    changeDimensionLocale: string[];
-    /**
-     * Массив с названиями radio button в компоненте Navbar.vue.
-     */
-    radioBtnCaption: string[];
-    /**
-     * Подписи селекта в компоненте Navbar.vue.
-     */
-    selectCaptions: string[];
-    /**
-     * Фраза при отсутствии данных.
-     */
-    noData: string;
-    /**
-     * Название ссылки для отображения подробной информации.
-     */
-    navBarLink: string;
-  };
+  ru: ExpressionsList;
+  en: ExpressionsList;
 }
 
 /**

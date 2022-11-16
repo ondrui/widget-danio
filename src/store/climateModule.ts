@@ -157,7 +157,7 @@ export const climateModule: Module<State, RootState> = {
          * @param dim - Строка с размерностью.
          * @example " см"
          */
-        const dimRender = (dim: string): string =>
+        const dimRender = (dim: string | undefined): string | undefined =>
           dim ===
           getField(state.expressions, getters.getLocales)
             .changeDimensionLocale[0]
@@ -217,7 +217,7 @@ export const climateModule: Module<State, RootState> = {
                 return {
                   title: getField(title, getters.getLocales),
                   def: def ? getField(def, getters.getLocales) : undefined,
-                  dim: dimRender(dim),
+                  dim: dimRender(getField(dim, getters.getLocales)),
                   data: dataSelectRadio(),
                 };
               }

@@ -30,11 +30,11 @@ export default defineComponent({
       events: DataAlerts[];
     } = {
       filters: {
-        3: { name: "Общие" },
-        1: { name: "Внимание" },
-        2: { name: "Опасно" },
-        5: { name: "Очень опасно" },
-        6: { name: "Неблагоприятно" },
+        3: { name: "общие" },
+        1: { name: "внимание" },
+        2: { name: "опасно" },
+        5: { name: "очень опасно" },
+        6: { name: "неблагоприятно" },
       },
       events: [
         {
@@ -134,12 +134,12 @@ export default defineComponent({
     const dataClimate: StoreClimateData[] = [
       {
         title: {
-          ru: "Температура",
-          en: "Temperature",
+          ru: "температура",
+          en: "temperature",
         },
         value: [
           {
-            dim: "°",
+            dim: { ru: "°", en: "°" },
             data: [
               {
                 time: "10",
@@ -170,13 +170,13 @@ export default defineComponent({
       },
       {
         title: {
-          ru: "Давление",
-          en: "Pressure",
+          ru: "давление",
+          en: "pressure",
         },
-        def: { ru: "мм рт. ст." },
+        def: { ru: "мм рт. ст.", en: "mmHg" },
         value: [
           {
-            dim: "",
+            dim: { ru: "", en: "" },
             data: [
               {
                 time: "10",
@@ -208,13 +208,13 @@ export default defineComponent({
       },
       {
         title: {
-          ru: "Осадки",
-          en: "Precipitation",
+          ru: "осадки",
+          en: "precipitation",
         },
-        def: { ru: "вероятность" },
+        def: { ru: "вероятность", en: "probability" },
         value: [
           {
-            dim: "%",
+            dim: { ru: "%", en: "%" },
             data: [
               {
                 time: "10",
@@ -246,13 +246,13 @@ export default defineComponent({
       },
       {
         title: {
-          ru: "Высота снега",
-          en: "Snow depth",
+          ru: "высота снега",
+          en: "snow depth",
         },
 
         value: [
           {
-            dim: "см",
+            dim: { ru: "см", en: "sm" },
             data: [
               {
                 time: "10",
@@ -283,12 +283,12 @@ export default defineComponent({
       },
       {
         title: {
-          ru: "Температура",
-          en: "Temperature",
+          ru: "температура",
+          en: "temperature",
         },
         value: [
           {
-            dim: "°",
+            dim: { ru: "°", en: "°" },
             data: [
               {
                 time: "10",
@@ -319,12 +319,12 @@ export default defineComponent({
       },
       {
         title: {
-          ru: "Температура",
-          en: "Temperature",
+          ru: "температура",
+          en: "temperature",
         },
         value: [
           {
-            dim: "°",
+            dim: { ru: "°", en: "°" },
             data: [
               {
                 time: "10",
@@ -355,12 +355,12 @@ export default defineComponent({
       },
       {
         title: {
-          ru: "Температура",
-          en: "Temperature",
+          ru: "температура",
+          en: "temperature",
         },
         value: [
           {
-            dim: "°",
+            dim: { ru: "°", en: "°" },
             data: [
               {
                 time: "10",

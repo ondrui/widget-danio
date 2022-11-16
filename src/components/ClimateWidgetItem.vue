@@ -228,7 +228,7 @@ export default defineComponent({
        */
       const getWidth = (element: string): number => {
         return Math.round(
-          (this.$refs[element] as SVGElement).getBoundingClientRect().width
+          (this.$refs[element] as SVGElement)?.getBoundingClientRect().width
         );
       };
       this.SVGWidth = getWidth("svg");
@@ -255,7 +255,7 @@ export default defineComponent({
      * то возвращается пустая строка.
      * @param val Значение параметра.
      */
-    dimension(val: string): string {
+    dimension(val: string): string | undefined {
       return snowDimension(val, this.expressions.noData, this.value.dim);
     },
   },
@@ -280,6 +280,10 @@ export default defineComponent({
   font-size: 14px;
   line-height: 16px;
   text-align: right;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
 }
 
 .subtitle {

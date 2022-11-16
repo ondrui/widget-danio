@@ -75,4 +75,34 @@ export const expressions: ExpressionsLocales = {
      */
     navBarLink: "подробнее",
   },
+  en: {
+    /**
+     * Массив содержит предлоги, которые используются в
+     * подписи начальной и конечной точки прогресс бара.
+     */
+    prepositions: ["from", "to"],
+    /**
+     * размерности, которые требуют
+     * модификацию при отображении.
+     */
+    changeDimensionLocale: ["sm"],
+    /**
+     * Массив с названиями radio button
+     * в компоненте Navbar.vue.
+     */
+    radioBtnCaption: ["usually", "records"],
+    /**
+     * Подписи селекта в компоненте Navbar.vue.
+     */
+    selectCaptions: ["average", "years"],
+    /**
+     * Выражение отображается при отсутствии данных.
+     */
+    noData: "n/a",
+    /**
+     * Название ссылки для отображения подробной
+     * информации.
+     */
+    navBarLink: "detail",
+  },
 };

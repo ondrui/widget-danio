@@ -55,7 +55,7 @@ export const expressions: ExpressionsLocales = {
     /**
      * Массив содержит слова-указатели времен.
      */
-    timeMarker: ["Вчера", "Сегодня", "Завтра", "Послезавтра", "с", "до"],
+    timeMarker: ["вчера", "сегодня", "завтра", "послезавтра", "с", "до"],
     /**
      * Сообщения, которые отображаются при отсутствии предупреждений.
      */
@@ -66,20 +66,20 @@ export const expressions: ExpressionsLocales = {
     /**
      * Сообщение появляется если остается всего один фильтр.
      */
-    messageForOneFilter: "Нельзя отключить все фильтры!",
+    messageForOneFilter: "нельзя отключить все фильтры!",
     /**
      * Текст кнопки ShowAll.
      */
-    valueButtonShowAll: "Показать все",
+    valueButtonShowAll: "показать все",
     /**
      * Начальные настройки фильтров.
      */
     defaultFilters: {
-      3: { name: "Общие", amount: 0, status: 2 },
-      1: { name: "Внимание", amount: 0, status: 2 },
-      2: { name: "Опасно", amount: 0, status: 2 },
-      5: { name: "Очень опасно", amount: 0, status: 2 },
-      6: { name: "Неблагоприятно", amount: 0, status: 2 },
+      3: { name: "общие", amount: 0, status: 2 },
+      1: { name: "внимание", amount: 0, status: 2 },
+      2: { name: "опасно", amount: 0, status: 2 },
+      5: { name: "очень опасно", amount: 0, status: 2 },
+      6: { name: "неблагоприятно", amount: 0, status: 2 },
     },
   },
 };

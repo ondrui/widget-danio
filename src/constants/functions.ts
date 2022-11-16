@@ -6,8 +6,11 @@
  * @param dim Размерность.
  * @example "%" "н/д"
  */
-export const snowDimension = (val: string, text: string, dim: string): string =>
-  val === text ? "" : dim;
+export const snowDimension = (
+  val: string,
+  text: string,
+  dim?: string
+): string | undefined => (val === text ? "" : dim);
 /**
  * Функция возвращает значение поля объекта по заданному ключу.
  * @param obj - объект значение паля которого надо найти.

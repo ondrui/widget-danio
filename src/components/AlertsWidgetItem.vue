@@ -8,9 +8,7 @@
     :class="'day-info ' + (index !== 0 ? '' : 'day-info-zero-index')"
     v-show="event.isDayShow && calcDayInDayInfo[0]"
   >
-    <span class="day-info-name">
-      <strong>{{ calcDayInDayInfo[0] }}: </strong>
-    </span>
+    <p class="day-info-name">{{ calcDayInDayInfo[0] }}:</p>
     <span class="day-info-number-month">{{ calcDayInDayInfo[1] }}</span>
   </div>
   <div :class="'container-item ' + eventColorScheme">
@@ -144,7 +142,7 @@ export default defineComponent({
         this.locales
       )} ${
         this.getTimeMarker(timeStamp1) === this.expressions.timeMarker[0]
-          ? this.getTimeMarker(timeStamp1).toLocaleLowerCase()
+          ? this.getTimeMarker(timeStamp1)
           : ""
       } ${this.expressions.timeMarker[5]} ${HandlerEvent.setTimeFormat(
         timeStamp2,
@@ -153,7 +151,7 @@ export default defineComponent({
       )} ${
         this.getTimeMarker(timeStamp2) === this.expressions.timeMarker[1]
           ? ""
-          : this.getTimeMarker(timeStamp2).toLocaleLowerCase()
+          : this.getTimeMarker(timeStamp2)
       }`;
     },
     /**
@@ -207,9 +205,19 @@ export default defineComponent({
   background: $color-filters-day-dark;
   color: $color-filters-day-darker;
   border-radius: 4px;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 14px;
   line-height: 16px;
+
+  & .day-info-name {
+    display: inline-block;
+    margin: 0;
+    font-weight: 500;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
+  }
 }
 .day-info-zero-index {
   margin: 5px auto 0 auto;

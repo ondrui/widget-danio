@@ -226,7 +226,10 @@ const store = createStore<RootState>({
      * @param state Текущее состояние store.
      * @param getters Другие геттеры их данного модуля.
      */
-    getExpressions: (state: RootState, getters): KeysExpressionsLocales =>
+    getExpressions: (
+      state: RootState,
+      getters
+    ): KeysExpressionsLocales | undefined =>
       getField(state.expressions, getters.getLocales),
   },
 });

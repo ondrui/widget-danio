@@ -112,7 +112,7 @@ export class HandlerEvent implements DataAlerts {
      */
     for (const key in formatListDateTime) {
       const value = getField(formatListDateTime, key);
-      if (format.includes(key)) {
+      if (format.includes(key) && value) {
         setProperty(options, value[0], value[1]);
       }
     }
@@ -139,20 +139,18 @@ export class HandlerEvent implements DataAlerts {
       locales,
       options
     ).formatToParts(timestamp);
-
     /**
      * Формируем строку дата-время с заданным форматированием.
      */
     let dateFormated = format;
-    for (const key in formatListDateTime) {
-      const value = getField(formatListDateTime, key);
-      const item = datePartsArr.find((i) => i.type === value[0]);
-      dateFormated = dateFormated.replace(
-        key,
-        item === undefined ? "" : item.value
-      );
-    }
 
+    for (const item of format) {
+      const value = getField(formatListDateTime, item);
+      if (value) {
+        const replaceValue = datePartsArr.find((i) => i.type === value[0]);
+        dateFormated = dateFormated.replace(item, replaceValue?.value ?? "");
+      }
+    }
     return dateFormated;
   }
 }

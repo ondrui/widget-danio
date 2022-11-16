@@ -16,7 +16,10 @@ export const snowDimension = (
  * @param obj - объект значение паля которого надо найти.
  * @param key - ключ для поиска.
  */
-export function getField<T, K extends keyof T>(obj: T, key: string): T[K] {
+export function getField<T, K extends keyof T>(
+  obj: T,
+  key: string
+): T[K] | undefined {
   return obj[key as K];
 }
 /**

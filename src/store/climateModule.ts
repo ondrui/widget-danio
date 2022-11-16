@@ -234,7 +234,10 @@ export const climateModule: Module<State, RootState> = {
      * @param state Текущее состояние store.
      * @param getters Другие геттеры их данного модуля.
      */
-    getExpressions: (state: State, getters): KeysExpressionsLocales =>
+    getExpressions: (
+      state: State,
+      getters
+    ): KeysExpressionsLocales | undefined =>
       getField(state.expressions, getters.getLocales),
   },
   /**

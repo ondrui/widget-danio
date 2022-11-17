@@ -19,9 +19,9 @@ export function getField<T, K extends keyof T>(
   def: T[K]
 ): T[K] {
   return typeof key === "string"
-    ? obj[key as K] ??
-        (console.log(`Ключ ${key} не найден в объекте ${obj}`, obj), def)
-    : obj[key];
+    ? (console.log("key as: ", key, obj), obj[key as K]) ??
+        (console.log(`Ключ ${key} не найден в объекте: `, obj), def)
+    : (console.log(`Ключ: `, key), obj[key]);
 }
 /**
  * Функция присваивает полю объекта значение по ключу.

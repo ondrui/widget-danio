@@ -111,8 +111,8 @@ export class HandlerEvent implements DataAlerts {
      * Формируем объект с заданными свойствами форматирования даты и времени.
      */
     for (const key in formatListDateTime) {
-      const value = getField(formatListDateTime, key);
-      if (format.includes(key) && value) {
+      const value = getField(formatListDateTime, key, []);
+      if (format.includes(key) && value.length > 0) {
         setProperty(options, value[0], value[1]);
       }
     }
@@ -145,8 +145,8 @@ export class HandlerEvent implements DataAlerts {
     let dateFormated = format;
 
     for (const item of format) {
-      const value = getField(formatListDateTime, item);
-      if (value) {
+      const value = getField(formatListDateTime, item, []);
+      if (value.length > 0) {
         const replaceValue = datePartsArr.find((i) => i.type === value[0]);
         dateFormated = dateFormated.replace(item, replaceValue?.value ?? "");
       }

@@ -81,33 +81,35 @@ export interface Filters {
 /**
  * Интерфейс для объекта, который определяет строковые константы с учетом локали.
  */
-export interface ExpressionsLocales {
+export interface ExpressionsList {
   /**
-   * Объект содержит строковые константы с учетом локали.
+   * Массив содержит слова-указатели времен.
    */
-  ru: {
-    /**
-     * Массив содержит слова-указатели времен.
-     */
-    timeMarker: string[];
-    /**
-     * Сообщения, которые отображаются при отсутствии предупреждений.
-     */
-    defaultEventMessage: string[];
-    /**
-     * Сообщение появляется если остается всего один фильтр.
-     */
-    messageForOneFilter: string;
-    /**
-     * Текст кнопки ShowAll.
-     */
-    valueButtonShowAll: string;
+  timeMarker: string[];
+  /**
+   * Сообщения, которые отображаются при отсутствии предупреждений.
+   */
+  defaultEventMessage: string[];
+  /**
+   * Сообщение появляется если остается всего один фильтр.
+   */
+  messageForOneFilter: string;
+  /**
+   * Текст кнопки ShowAll.
+   */
+  valueButtonShowAll: string;
+  /**
+   * Начальные настройки фильтров.
+   */
+  defaultFilters: Filters;
+}
 
-    /**
-     * Начальные настройки фильтров.
-     */
-    defaultFilters: Filters;
-  };
+/**
+ * Объект содержит строковые константы с учетом локали.
+ */
+export interface ExpressionsLocales {
+  [key: string]: ExpressionsList;
+  ru: ExpressionsList;
 }
 
 /**

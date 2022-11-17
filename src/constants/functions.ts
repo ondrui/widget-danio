@@ -6,11 +6,8 @@
  * @param dim Размерность.
  * @example "%" "н/д"
  */
-export const snowDimension = (
-  val: string,
-  text: string,
-  dim?: string
-): string | undefined => (val === text ? "" : dim);
+export const snowDimension = (val: string, text: string, dim: string): string =>
+  val === text ? "" : dim;
 /**
  * Функция возвращает значение поля объекта по заданному ключу.
  * @param obj - объект значение паля которого надо найти.
@@ -18,9 +15,13 @@ export const snowDimension = (
  */
 export function getField<T, K extends keyof T>(
   obj: T,
-  key: string
-): T[K] | undefined {
-  return obj[key as K];
+  key: string | K,
+  def: T[K]
+): T[K] {
+  return typeof key === "string"
+    ? obj[key as K] ??
+        (console.log(`Ключ ${key} не найден в объекте ${obj}`, obj), def)
+    : obj[key];
 }
 /**
  * Функция присваивает полю объекта значение по ключу.

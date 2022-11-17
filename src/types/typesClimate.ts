@@ -3,8 +3,7 @@
  * названия параметра.
  */
 export interface Locales {
-  ru?: string;
-  en?: string;
+  [key: string]: string;
 }
 
 /**
@@ -67,7 +66,7 @@ export interface StoreClimateData {
    */
   title: Locales;
   /**
-   * Дополнит ельная информация параметра, которая выводится
+   * Дополнительная информация параметра, которая выводится
    * под его названием.
    * @example
    * def: { ru: "мм рт. ст." }
@@ -104,7 +103,7 @@ export interface WidgetClimateData {
   /**
    * Название климатических данных на разных языках.
    */
-  title?: string;
+  title: string;
   /**
    * Дополнительная информация параметра, которая выводится
    * под его названием.
@@ -113,7 +112,7 @@ export interface WidgetClimateData {
   /**
    * Единица измерения параметра.
    */
-  dim?: string;
+  dim: string;
   /**
    * Свойство содержит объект с числовыми значениями
    * параметра в строковом формате.
@@ -201,12 +200,12 @@ export interface ExpressionsList {
    */
   navBarLink: string;
 }
+/**
+ * Объект содержит строковые константы с учетом локали.
+ */
 export interface ExpressionsLocales {
-  /**
-   * Объект содержит строковые константы с учетом локали.
-   */
+  [key: string]: ExpressionsList;
   ru: ExpressionsList;
-  en: ExpressionsList;
 }
 
 /**

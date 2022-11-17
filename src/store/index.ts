@@ -16,6 +16,7 @@ export interface RootState {
   filters: Filters;
   events: HandlerEvent[];
   locales: string;
+  defaultlocales: string;
   expressions: ExpressionsLocales;
 }
 
@@ -31,6 +32,10 @@ const store = createStore<RootState>({
        * Языковая метка для определения локали.
        */
       locales: "ru",
+      /**
+       * Дефолтная зыковая метка для определения локали.
+       */
+      defaultlocales: "ru",
       /**
        * Строковые константы с учетом локали.
        */
@@ -154,7 +159,7 @@ const store = createStore<RootState>({
      * "ru"
      */
     getLocales: (state: RootState): string =>
-      state.locales in state.expressions ? state.locales : "ru",
+      state.locales in state.expressions ? state.locales : state.defaultlocales,
     /**
      * Возвращает объект с настройками фильтров, полученными из store
      * @param state Текущее состояние store.
@@ -226,11 +231,12 @@ const store = createStore<RootState>({
      * @param state Текущее состояние store.
      * @param getters Другие геттеры их данного модуля.
      */
-    getExpressions: (
-      state: RootState,
-      getters
-    ): KeysExpressionsLocales | undefined =>
-      getField(state.expressions, getters.getLocales),
+    getExpressions: (state: RootState, getters): KeysExpressionsLocales =>
+      getField(
+        state.expressions,
+        getters.getLocales,
+        state.expressions[state.defaultlocales]
+      ),
   },
 });
 

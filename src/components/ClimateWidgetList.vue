@@ -76,7 +76,7 @@ export default defineComponent({
      */
     EndPointText(point: string, value: WidgetClimateData): string {
       const [left] = this.endpoints;
-      const pointNum = point === left ? value.data.max : value.data.min;
+      const pointNum = point === left ? value.data.min : value.data.max;
       return `${pointNum}${snowDimension(
         pointNum,
         this.expressions.noData,

@@ -35,7 +35,6 @@ import AlertsWidgetFilters from "./AlertsWidgetFilters.vue";
 import {
   DataAlerts,
   Filters,
-  ExpressionsLocales,
   KeysExpressionsLocales,
 } from "@/types/typesAlerts";
 import { FilterStatus } from "@/constants/alerts";
@@ -50,7 +49,7 @@ export default defineComponent({
      * Возвращает языковую метку для определения локали.
      * @example "ru"
      */
-    getLocales(): keyof ExpressionsLocales {
+    getLocales(): string {
       return this.$store.getters.getLocales;
     },
     /**

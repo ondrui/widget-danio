@@ -8,8 +8,8 @@
     :class="'day-info ' + (index !== 0 ? '' : 'day-info-zero-index')"
     v-show="event.isDayShow && calcDayInDayInfo[0]"
   >
-    <p class="day-info-name">{{ calcDayInDayInfo[0] }}:</p>
-    <span class="day-info-number-month">{{ calcDayInDayInfo[1] }}</span>
+    <p class="day-info-name">{{ `${calcDayInDayInfo[0]}:` }}</p>
+    <span class="day-info-number-month">{{ " " + calcDayInDayInfo[1] }}</span>
   </div>
   <div :class="'container-item ' + eventColorScheme">
     <div class="top-info">
@@ -28,11 +28,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import {
-  DataAlerts,
-  ExpressionsLocales,
-  KeysExpressionsLocales,
-} from "@/types/typesAlerts";
+import { DataAlerts, KeysExpressionsLocales } from "@/types/typesAlerts";
 import { HandlerEvent } from "@/handlers/HandlerEvent";
 import { CodeEvent, ALLDAYMS, iconItem } from "@/constants/alerts";
 import { getField } from "@/constants/functions";
@@ -65,10 +61,7 @@ export default defineComponent({
      * Языковая метка для определения локали.
      * @example "ru"
      */
-    locales: {
-      type: String as PropType<keyof ExpressionsLocales>,
-      required: true,
-    },
+    locales: { type: String, required: true },
     /**
      * Строковые константы с учетом локали.
      */
@@ -106,7 +99,8 @@ export default defineComponent({
       return this.event.iconCode
         ? require(`@/assets/images/${getField(
             this.iconItem,
-            String(this.event.iconCode)
+            String(this.event.iconCode),
+            ""
           )}.svg`)
         : (console.log("нет иконки"), "#");
     },

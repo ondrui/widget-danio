@@ -31,6 +31,10 @@ type State = {
    */
   locales: string;
   /**
+   * Дефолтная зыковая метка для определения локали.
+   */
+  defaultlocales: string;
+  /**
    * Строковые константы с учетом локали.
    */
   expressions: ExpressionsLocales;
@@ -42,6 +46,7 @@ export const climateModule: Module<State, RootState> = {
     timestamp: 0,
     dateFormat: "",
     locales: "ru",
+    defaultlocales: "ru",
     expressions: expressions,
   }),
   mutations: {
@@ -88,7 +93,7 @@ export const climateModule: Module<State, RootState> = {
      * "ru"
      */
     getLocales: (state: State): string =>
-      state.locales in state.expressions ? state.locales : "ru",
+      state.locales in state.expressions ? state.locales : state.defaultlocales,
     /**
      * Возвращает дату в виде строки в заданном формате.
      * @param state Текущее состояние store.
@@ -149,7 +154,12 @@ export const climateModule: Module<State, RootState> = {
          * @param val - Значение параметра.
          */
         const numRender = (val: string | undefined): string =>
-          val ?? getField(state.expressions, getters.getLocales).noData;
+          val ??
+          getField(
+            state.expressions,
+            getters.getLocales,
+            state.expressions[getters.getDefaultLocales]
+          ).noData;
         /**
          * Функция проверяет требуется ли модификация при отображении размерности
          * параметра. Например добавляет пробел перед "см". Возвращает исходную или
@@ -157,10 +167,13 @@ export const climateModule: Module<State, RootState> = {
          * @param dim - Строка с размерностью.
          * @example " см"
          */
-        const dimRender = (dim: string | undefined): string | undefined =>
+        const dimRender = (dim: string): string =>
           dim ===
-          getField(state.expressions, getters.getLocales)
-            .changeDimensionLocale[0]
+          getField(
+            state.expressions,
+            getters.getLocales,
+            state.expressions[getters.getDefaultLocales]
+          ).changeDimensionLocale[0]
             ? ` ${dim}`
             : dim;
 
@@ -206,18 +219,22 @@ export const climateModule: Module<State, RootState> = {
                  * Функция возвращает данные соответствующие значению атрибута value радиокнопки в компоненте Navbar.vue.
                  */
                 const dataSelectRadio = (): SelectRadioData => {
-                  const min = getField(radioBtnValue, radio)[0];
-                  const max = getField(radioBtnValue, radio)[1];
+                  const min = radioBtnValue[radio][0];
+                  const max = radioBtnValue[radio][1];
                   return {
-                    min: numRender(getField(dataSelect, min)),
-                    max: numRender(getField(dataSelect, max)),
+                    min: numRender(dataSelect[min]),
+                    max: numRender(dataSelect[max]),
                     avg: numRender(dataSelect.avg),
                   };
                 };
                 return {
-                  title: getField(title, getters.getLocales),
-                  def: def ? getField(def, getters.getLocales) : undefined,
-                  dim: dimRender(getField(dim, getters.getLocales)),
+                  title: getField(
+                    title,
+                    getters.getLocales,
+                    title[state.defaultlocales]
+                  ),
+                  def: def ? getField(def, getters.getLocales, "") : undefined,
+                  dim: dimRender(getField(dim, getters.getLocales, "")),
                   data: dataSelectRadio(),
                 };
               }
@@ -234,11 +251,12 @@ export const climateModule: Module<State, RootState> = {
      * @param state Текущее состояние store.
      * @param getters Другие геттеры их данного модуля.
      */
-    getExpressions: (
-      state: State,
-      getters
-    ): KeysExpressionsLocales | undefined =>
-      getField(state.expressions, getters.getLocales),
+    getExpressions: (state: State, getters): KeysExpressionsLocales =>
+      getField(
+        state.expressions,
+        getters.getLocales,
+        state.expressions[state.defaultlocales]
+      ),
   },
   /**
    * Задаем собственное пространство имён для этого модуля.

@@ -146,6 +146,6 @@ export const filterIcon = {
  * предупреждения iconCode из объекта event и названием файла иконки.
  */
 export const iconItem = {
-  2: "wind",
-  1: "uv-index",
+  "2": "wind",
+  "1": "uv-index",
 };

@@ -99,7 +99,7 @@ export default defineComponent({
       return this.event.iconCode
         ? require(`@/assets/images/${getField(
             this.iconItem,
-            String(this.event.iconCode),
+            this.event.iconCode,
             ""
           )}.svg`)
         : (console.log("нет иконки"), "#");

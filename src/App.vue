@@ -46,7 +46,7 @@ export default defineComponent({
           timeFormat: `H:i`,
           titleText: `внимание`,
           eventText: `вчера, 11:00:30 am Максимальный уровень ультрофиолетового излучения за день`,
-          iconCode: 1,
+          iconCode: "1",
         },
         {
           eventType: 2,
@@ -54,7 +54,7 @@ export default defineComponent({
           timeFormat: `H:i`,
           titleText: `сильный ветер`,
           eventText: `завтра, 9:20:00 am 10 сентября 2022 года, с 10 часов до 21 часов в Москве и ТиНАО и в Московской области ожидается сильный ветер с порывами 12 - 15 м/с.`,
-          iconCode: 2,
+          iconCode: "2",
         },
         {
           eventType: 3,
@@ -69,7 +69,7 @@ export default defineComponent({
           timeFormat: `H:i`,
           titleText: `сильный ветер`,
           eventText: `сегодня, 8:00:00 am Сегодня в Москве и области ожидается усиление ветра с порывами до 22 м/с`,
-          iconCode: 2,
+          iconCode: "2",
         },
         {
           eventType: 1,
@@ -80,7 +80,7 @@ export default defineComponent({
           timeFormat: `H:i`,
           titleText: `внимание`,
           eventText: `сегодня, 8:15:00 am Максимальный уровень ультрофиолетового излучения за день.`,
-          iconCode: 1,
+          iconCode: "1",
         },
         {
           eventType: 3,
@@ -95,7 +95,7 @@ export default defineComponent({
           timeFormat: `H:i`,
           titleText: `сильный ветер`,
           eventText: `послезавтра, 7:30:00 pm В Москве и области ожидается усиление ветра с порывами до 22 м/с. Заход солнца сегодня в 20:23, на 5 минут позже чем вчера, продолжительность дня составила 12 ч. 43 мин. (+ 15 мин.)`,
-          iconCode: 2,
+          iconCode: "2",
         },
         {
           eventType: 1,
@@ -106,7 +106,7 @@ export default defineComponent({
           timeFormat: `H:i`,
           titleText: `внимание`,
           eventText: `вчера, 8:00:00 am Максимальный уровень ультрофиолетового излучения за день.`,
-          iconCode: 1,
+          iconCode: "1",
         },
         {
           eventType: 2,
@@ -114,7 +114,7 @@ export default defineComponent({
           timeFormat: `H:i`,
           titleText: `сильный ветер`,
           eventText: `сегодня, 8:40:00 am 9 сентября 2022 года, с 10 часов до 20 часов в Москве и ТиНАО и в Московской области ожидается сильный ветер с порывами 12 - 17 м/с.`,
-          iconCode: 2,
+          iconCode: "2",
         },
         {
           eventType: 2,
@@ -122,7 +122,7 @@ export default defineComponent({
           timeFormat: `H:i`,
           titleText: `сильный ветер`,
           eventText: `вчера, 8:00:00 am в Москве и области ожидается усиление ветра с порывами до 22 м/с`,
-          iconCode: 2,
+          iconCode: "2",
         },
       ],
     };

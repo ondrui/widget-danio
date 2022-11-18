@@ -15,13 +15,10 @@ export const snowDimension = (val: string, text: string, dim: string): string =>
  */
 export function getField<T, K extends keyof T>(
   obj: T,
-  key: string | K,
+  key: string,
   def: T[K]
 ): T[K] {
-  return typeof key === "string"
-    ? (console.log("key as: ", key, obj), obj[key as K]) ??
-        (console.log(`Ключ ${key} не найден в объекте: `, obj), def)
-    : (console.log(`Ключ: `, key), obj[key]);
+  return obj[key as K] ?? def;
 }
 /**
  * Функция присваивает полю объекта значение по ключу.

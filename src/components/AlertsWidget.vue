@@ -8,7 +8,13 @@
       :expressions="getExpressions"
     />
     <div class="wrapper">
-      <div v-if="getEvents.length" class="container-main">
+      <div class="container-main">
+        <div class="default-event" v-if="!getEvents.length">
+          <div>
+            {{ getExpressions.defaultEventMessage[0] }}
+          </div>
+          <div>{{ getExpressions.defaultEventMessage[1] }}</div>
+        </div>
         <AlertsWidgetItem
           v-for="(event, index) in getEvents"
           :key="`wn-${index}`"
@@ -17,12 +23,6 @@
           :locales="getLocales"
           :expressions="getExpressions"
         />
-      </div>
-      <div class="default-event" v-else>
-        <div>
-          {{ getExpressions.defaultEventMessage[0] }}
-        </div>
-        <div>{{ getExpressions.defaultEventMessage[1] }}</div>
       </div>
     </div>
   </div>

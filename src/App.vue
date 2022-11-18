@@ -129,7 +129,7 @@ export default defineComponent({
 
     setTimeout(() => {
       this.$store.commit("setDataAlerts", { filters, events });
-    }, 1000);
+    }, 5000);
 
     const dataClimate: StoreClimateData[] = [
       {

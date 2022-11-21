@@ -12,6 +12,8 @@ export const snowDimension = (val: string, text: string, dim: string): string =>
  * Функция возвращает значение поля объекта по заданному ключу.
  * @param obj - объект значение паля которого надо найти.
  * @param key - ключ для поиска.
+ * @param def - дефолтное значение, которое вернет функция
+ * если ключ не будет найден в объекте.
  */
 export function getField<T, K extends keyof T>(
   obj: T,
